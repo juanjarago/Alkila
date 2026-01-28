@@ -1,0 +1,168 @@
+export type Property = {
+  slug: string;
+  title: string;
+  shortTitle: string;
+  staysListingId: string; // ✅ ahora es string (ObjectId real)
+  capacity: number;
+  rooms: number;
+  baths: number;
+  locationLabel: string;
+  heroImage: string;
+  images?: string[];
+  highlights: string[];
+  petFriendly: boolean;
+  privatePool: boolean;
+  privateJacuzzi: boolean;
+  description: string;
+};
+
+export const properties: Property[] = [
+  {
+    slug: "cabana-privada-anapoima-8-personas",
+    title: "Cabaña privada en Anapoima para 8 personas con piscina y jacuzzi",
+    shortTitle: "Cabaña privada (hasta 8)",
+    staysListingId: "6671fcf283f5440237f5058f",
+	apacity: 8,
+    rooms: 2,
+    baths: 3,
+    locationLabel: "Anapoima · Vereda Las Mercedes",
+    heroImage: "/images/properties/cabana-privada-anapoima-8-personas/01.webp",
+    images: [
+      "/images/properties/cabana-privada-anapoima-8-personas/01.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/02.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/03.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/04.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/05.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/06.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/07.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/08.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/09.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/10.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/11.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/12.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/13.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/14.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/15.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/16.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/17.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/18.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/19.webp",
+      "/images/properties/cabana-privada-anapoima-8-personas/20.webp",
+    ],
+    highlights: [
+      "Piscina privada",
+      "Jacuzzi privado",
+      "BBQ y cocina de leña",
+      "Internet",
+      "Mascotas (tarifa adicional)",
+    ],
+    petFriendly: true,
+    privatePool: true,
+    privateJacuzzi: true,
+    description:
+      "Cabaña privada ideal para familias pequeñas o amigos. Piscina y jacuzzi privados, BBQ con cocina de leña, internet y un entorno natural rodeado de frutales.",
+  },
+  {
+    slug: "casa-campestre-anapoima-16-personas",
+    title: "Casa campestre en Anapoima para 16 personas con piscina y jacuzzi",
+    shortTitle: "Casa campestre (hasta 16)",
+    staysListingId: "6671f7b083f5440237f46564",
+    capacity: 16,
+    rooms: 4,
+    baths: 5,
+    locationLabel: "Anapoima · Vereda Las Mercedes",
+    heroImage: "/images/properties/casa-campestre-anapoima-16-personas/01.webp",
+    images: [
+      "/images/properties/casa-campestre-anapoima-16-personas/01.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/02.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/03.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/04.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/05.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/06.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/07.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/08.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/09.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/10.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/11.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/12.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/13.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/14.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/15.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/16.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/17.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/18.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/19.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/20.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/21.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/22.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/23.webp",
+      "/images/properties/casa-campestre-anapoima-16-personas/24.webp",
+    ],
+    highlights: [
+      "Piscina privada",
+      "Jacuzzi privado",
+      "Aire acondicionado",
+      "BBQ y cocina de leña",
+      "Mascotas (tarifa adicional)",
+    ],
+    petFriendly: true,
+    privatePool: true,
+    privateJacuzzi: true,
+    description:
+      "Casa campestre amplia para familias y grupos de amigos. Piscina/jacuzzi privados, BBQ con cocina de leña, A/C y habitaciones cómodas.",
+  },
+  {
+    slug: "finca-anapoima-22-personas",
+    title: "Finca en Anapoima para 22 personas con piscina, jacuzzi y zonas sociales",
+    shortTitle: "Finca grande (hasta 22)",
+    staysListingId: "6671ff4283f5440237f54aa5",
+    capacity: 22,
+    rooms: 7,
+    baths: 8,
+    locationLabel: "Anapoima · Vereda Las Mercedes",
+    heroImage: "/images/properties/finca-anapoima-22-personas/01.webp",
+    images: [
+      "/images/properties/finca-anapoima-22-personas/01.webp",
+      "/images/properties/finca-anapoima-22-personas/02.webp",
+      "/images/properties/finca-anapoima-22-personas/03.webp",
+      "/images/properties/finca-anapoima-22-personas/04.webp",
+      "/images/properties/finca-anapoima-22-personas/05.webp",
+      "/images/properties/finca-anapoima-22-personas/06.webp",
+      "/images/properties/finca-anapoima-22-personas/07.webp",
+      "/images/properties/finca-anapoima-22-personas/08.webp",
+      "/images/properties/finca-anapoima-22-personas/09.webp",
+      "/images/properties/finca-anapoima-22-personas/10.webp",
+      "/images/properties/finca-anapoima-22-personas/11.webp",
+      "/images/properties/finca-anapoima-22-personas/12.webp",
+      "/images/properties/finca-anapoima-22-personas/13.webp",
+      "/images/properties/finca-anapoima-22-personas/14.webp",
+      "/images/properties/finca-anapoima-22-personas/15.webp",
+      "/images/properties/finca-anapoima-22-personas/16.webp",
+      "/images/properties/finca-anapoima-22-personas/17.webp",
+      "/images/properties/finca-anapoima-22-personas/18.webp",
+      "/images/properties/finca-anapoima-22-personas/19.webp",
+      "/images/properties/finca-anapoima-22-personas/20.webp",
+      "/images/properties/finca-anapoima-22-personas/21.webp",
+      "/images/properties/finca-anapoima-22-personas/22.webp",
+      "/images/properties/finca-anapoima-22-personas/23.webp",
+      "/images/properties/finca-anapoima-22-personas/24.webp",
+      "/images/properties/finca-anapoima-22-personas/25.webp",
+      "/images/properties/finca-anapoima-22-personas/26.webp",
+      "/images/properties/finca-anapoima-22-personas/27.webp",
+      "/images/properties/finca-anapoima-22-personas/28.webp",
+    ],
+    highlights: [
+      "Piscina privada",
+      "Jacuzzi privado",
+      "Billar",
+      "Kiosco con cocina de leña",
+      "Lago de pesca",
+      "Mascotas (tarifa adicional)",
+    ],
+    petFriendly: true,
+    privatePool: true,
+    privateJacuzzi: true,
+    description:
+      "Finca ideal para reuniones grandes. Piscina/jacuzzi privados, billar, kiosco con cocina de leña y amplias zonas verdes para compartir.",
+  },
+];
