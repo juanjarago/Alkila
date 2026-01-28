@@ -99,24 +99,35 @@ export default function BookingBox({ property }: { property: PropertyLike }) {
     }
   }
 
-  const totals = useMemo(() => {
+  const stays = useMemo(() => {
     if (!result) return null;
 
-    const cop =
-      result?.totalCOP ??
-      result?.total_cop ??
-      result?.total?.cop ??
-      result?.total?.COP ??
-      null;
+    // STAYS devuelve array: [ { ... } ]
+    const first = Array.isArray(result) ? result[0] : result;
+    if (!first) return null;
 
-    const usd =
-      result?.totalUSD ??
-      result?.total_usd ??
-      result?.total?.usd ??
-      result?.total?.USD ??
-      null;
+    const totalCOP = first?._mctotal?.COP ?? null;
+    const totalUSD = first?._mctotal?.USD ?? null;
 
-    return { cop, usd };
+    const fees = Array.isArray(first?.fees)
+      ? first.fees.map((f: any) => ({
+          name:
+            f?._mstitle?.es_ES ??
+            f?._mstitle?.en_US ??
+            f?.internalName ??
+            "Cargo",
+          cop: f?._mcval?.COP ?? null,
+          usd: f?._mcval?.USD ?? null,
+        }))
+      : [];
+
+    return {
+      totalCOP,
+      totalUSD,
+      fees,
+      currency: first?.mainCurrency ?? null,
+      raw: first,
+    };
   }, [result]);
 
   return (
@@ -192,20 +203,51 @@ export default function BookingBox({ property }: { property: PropertyLike }) {
           <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-gray-800">
             <div className="font-bold">Respuesta STAYS:</div>
 
-            {totals?.cop != null || totals?.usd != null ? (
+            {stays?.totalCOP != null || stays?.totalUSD != null ? (
               <div className="mt-2 space-y-1">
-                {totals?.usd != null ? (
+                {stays?.totalUSD != null && (
                   <div>
                     <span className="font-semibold">Total USD:</span>{" "}
-                    {formatUSD(Number(totals.usd))}
+                    {formatUSD(Number(stays.totalUSD))}
                   </div>
-                ) : null}
-                {totals?.cop != null ? (
+                )}
+
+                {stays?.totalCOP != null && (
                   <div>
                     <span className="font-semibold">Total COP:</span>{" "}
-                    {formatCOP(Number(totals.cop))}
+                    {formatCOP(Number(stays.totalCOP))}
                   </div>
-                ) : null}
+                )}
+
+                {stays?.fees?.length > 0 && (
+                  <div className="mt-3">
+                    <div className="font-semibold text-gray-900">Desglose</div>
+
+                    <div className="mt-2 space-y-2">
+                      {stays.fees.map((f: any, idx: number) => (
+                        <div
+                          key={`${f.name}-${idx}`}
+                          className="flex items-start justify-between gap-3 rounded-lg bg-white/70 p-2"
+                        >
+                          <div className="text-gray-800">{f.name}</div>
+
+                          <div className="text-right text-gray-900">
+                            {f.usd != null && (
+                              <div className="font-semibold">
+                                {formatUSD(Number(f.usd))}
+                              </div>
+                            )}
+                            {f.cop != null && (
+                              <div className="text-xs text-gray-600">
+                                {formatCOP(Number(f.cop))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <pre className="mt-2 max-h-60 max-w-full overflow-auto rounded-lg bg-white p-2 text-xs whitespace-pre-wrap break-words">
