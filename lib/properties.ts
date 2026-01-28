@@ -22,7 +22,7 @@ export const properties: Property[] = [
     title: "Cabaña privada en Anapoima para 8 personas con piscina y jacuzzi",
     shortTitle: "Cabaña privada (hasta 8)",
     staysListingId: "6671fcf283f5440237f5058f",
-	apacity: 8,
+    capacity: 8,
     rooms: 2,
     baths: 3,
     locationLabel: "Anapoima · Vereda Las Mercedes",
