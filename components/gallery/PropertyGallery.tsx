@@ -28,7 +28,8 @@ export default function PropertyGallery({ images, title }: Props) {
   return (
     <div className="space-y-4">
       {/* Imagen principal: tamaño controlado para que no “explote” en pantallas grandes */}
-      <div className="relative w-full overflow-hidden rounded-2xl border border-orange-200 bg-gray-200 aspect-[16/10] max-h-[520px]">
+      <div className="relative w-full overflow-hidden rounded-2xl border border-orange-200 bg-gray-200 aspect-[16/9]">
+
         <Image
           src={current}
           alt={title}

@@ -65,11 +65,11 @@ export default async function Page({
                 </span>
               ))}
             </div>
-
-            <div className="mt-6">
-              <PropertyGallery images={images} title={property.title} />
-            </div>
-
+<div className="mt-6">
+  <div className="mx-auto max-w-4xl">
+    <PropertyGallery images={images} title={property.title} />
+  </div>
+</div>
             <div className="mt-8">
               <h2 className="text-xl font-extrabold text-gray-900">
                 Descripción
