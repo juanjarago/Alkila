@@ -6,6 +6,7 @@ type PropertyLike = {
   title: string;
   capacity: number;
   staysListingId: string; // "JF02" | "JF06" | "JF08"
+  slug?: string;
 };
 
 function formatCOP(value: number) {
@@ -24,7 +25,13 @@ function formatUSD(value: number) {
   }).format(value);
 }
 
-export default function BookingBox({ property }: { property: PropertyLike }) {
+export default function BookingBox({
+  property,
+  extras = [],
+}: {
+  property: PropertyLike;
+  extras?: string[];
+}) {
   const [checkIn, setCheckIn] = useState<string>("");
   const [checkOut, setCheckOut] = useState<string>("");
   const [guests, setGuests] = useState<number>(Math.min(8, property.capacity));
@@ -47,12 +54,10 @@ export default function BookingBox({ property }: { property: PropertyLike }) {
       setError("Completa check-in y check-out.");
       return;
     }
-
     if (new Date(checkOut) <= new Date(checkIn)) {
       setError("Check-out debe ser posterior a check-in.");
       return;
     }
-
     if (!Number.isFinite(guests) || guests <= 0) {
       setError("Ingresa un número válido de personas.");
       return;
@@ -102,33 +107,46 @@ export default function BookingBox({ property }: { property: PropertyLike }) {
   const stays = useMemo(() => {
     if (!result) return null;
 
-    // STAYS devuelve array: [ { ... } ]
     const first = Array.isArray(result) ? result[0] : result;
     if (!first) return null;
 
     const totalCOP = first?._mctotal?.COP ?? null;
     const totalUSD = first?._mctotal?.USD ?? null;
 
-    const fees = Array.isArray(first?.fees)
-      ? first.fees.map((f: any) => ({
-          name:
-            f?._mstitle?.es_ES ??
-            f?._mstitle?.en_US ??
-            f?.internalName ??
-            "Cargo",
-          cop: f?._mcval?.COP ?? null,
-          usd: f?._mcval?.USD ?? null,
-        }))
-      : [];
-
     return {
       totalCOP,
       totalUSD,
-      fees,
       currency: first?.mainCurrency ?? null,
-      raw: first,
     };
   }, [result]);
+
+  // WhatsApp (solo se usa cuando hay result)
+  const whatsappHref = useMemo(() => {
+    if (!result) return "";
+
+    const extrasText =
+      extras.length > 0 ? `\n➕ Extras:\n- ${extras.join("\n- ")}` : "";
+
+    const totalCOPText =
+      stays?.totalCOP != null ? formatCOP(Number(stays.totalCOP)) : "N/D";
+
+    const totalUSDText =
+      stays?.totalUSD != null ? formatUSD(Number(stays.totalUSD)) : "N/D";
+
+    const whatsappMessage = `Hola 👋
+Estoy interesado en *${property.title}* en Anapoima.
+
+📅 Fechas: ${checkIn} a ${checkOut}
+👥 Personas: ${guests}
+💰 Valor estimado: ${totalCOPText}${
+      stays?.totalUSD != null ? ` (${totalUSDText})` : ""
+    }${extrasText}
+
+¿Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
+
+    const phone = "573014000436"; // <-- cámbialo
+    return `https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
+  }, [result, extras, stays, property.title, checkIn, checkOut, guests]);
 
   return (
     <div className="rounded-3xl border border-orange-200 bg-white p-6 shadow-sm">
@@ -199,63 +217,54 @@ export default function BookingBox({ property }: { property: PropertyLike }) {
           </div>
         ) : null}
 
-        {result ? (
-          <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-gray-800">
-            <div className="font-bold">Respuesta STAYS:</div>
-
-            {stays?.totalCOP != null || stays?.totalUSD != null ? (
-              <div className="mt-2 space-y-1">
-                {stays?.totalUSD != null && (
+        {result && stays ? (
+          <>
+            <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-gray-800">
+              <div className="space-y-1">
+                {stays.totalUSD != null && (
                   <div>
                     <span className="font-semibold">Total USD:</span>{" "}
                     {formatUSD(Number(stays.totalUSD))}
                   </div>
                 )}
-
-                {stays?.totalCOP != null && (
+                {stays.totalCOP != null && (
                   <div>
                     <span className="font-semibold">Total COP:</span>{" "}
                     {formatCOP(Number(stays.totalCOP))}
                   </div>
                 )}
-
-                {stays?.fees?.length > 0 && (
-                  <div className="mt-3">
-                    <div className="font-semibold text-gray-900">Desglose</div>
-
-                    <div className="mt-2 space-y-2">
-                      {stays.fees.map((f: any, idx: number) => (
-                        <div
-                          key={`${f.name}-${idx}`}
-                          className="flex items-start justify-between gap-3 rounded-lg bg-white/70 p-2"
-                        >
-                          <div className="text-gray-800">{f.name}</div>
-
-                          <div className="text-right text-gray-900">
-                            {f.usd != null && (
-                              <div className="font-semibold">
-                                {formatUSD(Number(f.usd))}
-                              </div>
-                            )}
-                            {f.cop != null && (
-                              <div className="text-xs text-gray-600">
-                                {formatCOP(Number(f.cop))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
-            ) : (
-              <pre className="mt-2 max-h-60 max-w-full overflow-auto rounded-lg bg-white p-2 text-xs whitespace-pre-wrap break-words">
-                {JSON.stringify(result, null, 2)}
-              </pre>
-            )}
+            </div>
+
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 block w-full rounded-2xl bg-green-600 px-4 py-3 text-center text-sm font-extrabold text-white hover:opacity-90"
+            >
+              Confirmar por WhatsApp
+            </a>
+
+            <a
+              href={`/checkout?slug=${encodeURIComponent(
+                property.slug ?? ""
+              )}&title=${encodeURIComponent(property.title)}&checkIn=${encodeURIComponent(
+                checkIn
+              )}&checkOut=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(
+                String(guests)
+              )}&totalCOP=${encodeURIComponent(
+                String(stays.totalCOP ?? 0)
+              )}`}
+              className="mt-3 block w-full rounded-2xl bg-[#1F3D2B] px-4 py-3 text-center text-sm font-extrabold text-white hover:opacity-90"
+            >
+              Pagar anticipo y reservar
+            </a>
+          </>
+        ) : (
+          <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-3 text-xs text-gray-600">
+            Para continuar, primero consulta la disponibilidad.
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Header } from "@/components/Header";
+import WhatsAppFloating from "../components/whatsapp/WhatsAppFloating";
 
 export const metadata: Metadata = {
   title: "Alkila | Fincas en Anapoima",
@@ -13,6 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="text-gray-900">
         <Header />
         {children}
+	<WhatsAppFloating />
       </body>
     </html>
   );

@@ -11,14 +11,7 @@ export function Header() {
           <a className="hover:opacity-80" href="/destinos/anapoima">Anapoima</a>
         </nav>
 
-        <a
-          className="rounded-xl bg-[#E76F51] px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
-          href="https://wa.me/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          WhatsApp
-        </a>
+
       </div>
     </header>
   );

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PropertyGallery from "@/components/gallery/PropertyGallery";
-import BookingBox from "./BookingBox";
 import { properties } from "@/lib/properties";
+import ReservationSidebar from "./ReservationSidebar";
 
 export default async function Page({
   params,
@@ -65,11 +65,16 @@ export default async function Page({
                 </span>
               ))}
             </div>
-<div className="mt-6">
-  <div className="mx-auto max-w-4xl">
-    <PropertyGallery images={images} title={property.title} />
-  </div>
-</div>
+
+            {/* Galería */}
+            {images.length > 0 && (
+              <div className="mt-6">
+                <div className="mx-auto max-w-4xl">
+                  <PropertyGallery images={images} title={property.title} />
+                </div>
+              </div>
+            )}
+
             <div className="mt-8">
               <h2 className="text-xl font-extrabold text-gray-900">
                 Descripción
@@ -83,7 +88,8 @@ export default async function Page({
 
           {/* Columna derecha */}
           <aside id="reserva" className="lg:sticky lg:top-6">
-            <BookingBox
+            <ReservationSidebar
+              slug={property.slug}
               property={{
                 title: property.title,
                 capacity: property.capacity,
