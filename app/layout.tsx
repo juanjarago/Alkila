@@ -8,13 +8,12 @@ export const metadata: Metadata = {
   description: "Fincas privadas en Anapoima según el tamaño de tu grupo. Piscina y jacuzzi privados. Pet friendly con tarifa adicional."
 };
 
+// app/layout.tsx
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className="text-gray-900">
-        <Header />
+      <body className="min-h-screen bg-[#FFF7ED] text-gray-900">
         {children}
-	<WhatsAppFloating />
       </body>
     </html>
   );

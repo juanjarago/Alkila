@@ -12,4 +12,5 @@ html, body {
 
 body {
   background: var(--bg);
+  color: #111827; /* ✅ fuerza texto oscuro (gray-900) */
 }

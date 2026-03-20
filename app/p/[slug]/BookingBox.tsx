@@ -39,6 +39,16 @@ export default function BookingBox({
   const [error, setError] = useState<string>("");
   const [result, setResult] = useState<any>(null);
 
+const minDate = useMemo(() => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}, []);
+
+
   const canSearch = useMemo(() => {
     if (!checkIn || !checkOut) return false;
     if (!Number.isFinite(guests) || guests <= 0) return false;
@@ -54,6 +64,17 @@ export default function BookingBox({
       setError("Completa check-in y check-out.");
       return;
     }
+const today = new Date(minDate);
+today.setHours(0,0,0,0);
+
+const inDate = new Date(checkIn);
+inDate.setHours(0,0,0,0);
+
+if (inDate < today) {
+  setError("No puedes reservar en fechas pasadas.");
+  return;
+}
+
     if (new Date(checkOut) <= new Date(checkIn)) {
       setError("Check-out debe ser posterior a check-in.");
       return;
@@ -106,6 +127,7 @@ export default function BookingBox({
 
   const stays = useMemo(() => {
     if (!result) return null;
+if (new Date(checkIn) < new Date(minDate)) return false;
 
     const first = Array.isArray(result) ? result[0] : result;
     if (!first) return null;
@@ -170,6 +192,7 @@ Estoy interesado en *${property.title}* en Anapoima.
             Check-in
             <input
               type="date"
+       	 min={minDate}
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
               className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
@@ -180,6 +203,7 @@ Estoy interesado en *${property.title}* en Anapoima.
             Check-out
             <input
               type="date"
+min={checkIn || minDate}
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
               className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
