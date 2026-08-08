@@ -87,13 +87,13 @@ if (inDate < today) {
     setLoading(true);
     try {
       const payload = {
+        propertySlug: property.slug,
         from: checkIn,
         to: checkOut,
-        listingIds: [property.staysListingId],
         guests,
       };
 
-      const res = await fetch("/api/reserva/calcular-precio", {
+      const res = await fetch("/api/booking/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -127,18 +127,15 @@ if (inDate < today) {
 
   const stays = useMemo(() => {
     if (!result) return null;
-if (new Date(checkIn) < new Date(minDate)) return false;
-
-    const first = Array.isArray(result) ? result[0] : result;
-    if (!first) return null;
-
-    const totalCOP = first?._mctotal?.COP ?? null;
-    const totalUSD = first?._mctotal?.USD ?? null;
 
     return {
-      totalCOP,
-      totalUSD,
-      currency: first?.mainCurrency ?? null,
+      totalCOP: result?.totalCOP ?? null,
+      totalUSD: null,
+      currency: "COP",
+      nights: result?.nights ?? null,
+      subtotalCOP: result?.subtotalCOP ?? null,
+      cleaningFeeCOP: result?.cleaningFeeCOP ?? null,
+      extraGuestFeeCOP: result?.extraGuestFeeCOP ?? null,
     };
   }, [result]);
 
@@ -257,6 +254,28 @@ min={checkIn || minDate}
                     {formatCOP(Number(stays.totalCOP))}
                   </div>
                 )}
+                {stays.nights != null && (
+                  <div className="pt-2 text-xs text-gray-700">
+                    {stays.nights} noche{Number(stays.nights) === 1 ? "" : "s"}
+                  </div>
+                )}
+                {stays.subtotalCOP != null && (
+                  <div className="text-xs text-gray-700">
+                    Estadía: {formatCOP(Number(stays.subtotalCOP))}
+                  </div>
+                )}
+                {stays.cleaningFeeCOP != null && Number(stays.cleaningFeeCOP) > 0 && (
+                  <div className="text-xs text-gray-700">
+                    Limpieza: {formatCOP(Number(stays.cleaningFeeCOP))}
+                  </div>
+                )}
+                {stays.extraGuestFeeCOP != null &&
+                  Number(stays.extraGuestFeeCOP) > 0 && (
+                    <div className="text-xs text-gray-700">
+                      Huéspedes adicionales:{" "}
+                      {formatCOP(Number(stays.extraGuestFeeCOP))}
+                    </div>
+                  )}
               </div>
             </div>
 

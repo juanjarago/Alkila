@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
+import { blockedEventsForRange, fetchIcalBlockedEvents } from "@/lib/ical";
 
 // Mapa JFxx -> ObjectId real de STAYS
 const STAYS_LISTING_ID_MAP: Record<string, string> = {
   JF08: "6671fcf283f5440237f5058f", // Cabaña 8
   JF06: "6671ff4283f5440237f54aa5", // Casa 16
   JF02: "669c05fb930a3f38680ebda",  // Finca 22
+};
+const LISTING_ID_TO_AIRBNB_ENV: Record<string, string> = {
+  "6671fcf283f5440237f5058f": "AIRBNB_ICAL_JF08_URL",
+  "6671ff4283f5440237f54aa5": "AIRBNB_ICAL_JF06_URL",
+  "669c05fb930a3f38680ebda": "AIRBNB_ICAL_JF02_URL",
 };
 
 function resolveStaysListingId(input: string): string {
@@ -17,6 +23,11 @@ function resolveStaysListingId(input: string): string {
   const mapped = STAYS_LISTING_ID_MAP[v];
   if (!mapped) throw new Error(`listingId desconocido: "${input}"`);
   return mapped;
+}
+
+function getAirbnbIcalUrl(listingId: string): string | undefined {
+  const envName = LISTING_ID_TO_AIRBNB_ENV[listingId];
+  return envName ? process.env[envName] : undefined;
 }
 
 function formatYMD(d: Date) {
@@ -123,9 +134,12 @@ async function fetchCalendarOrThrow(opts: {
       }
 
       if (!r.ok) {
-        lastErr = new Error(
+        const err = new Error(
           data?.error || data?.message || `Calendar error (${r.status})`
-        );
+        ) as Error & { status?: number; data?: any };
+        err.status = r.status;
+        err.data = data;
+        lastErr = err;
         continue;
       }
 
@@ -238,24 +252,75 @@ export async function POST(req: Request) {
     const toYMD = formatYMD(toDate);
 
     for (const listingId of resolvedListingIds) {
-      const calendarData = await fetchCalendarOrThrow({
-        baseUrl,
-        authHeader,
-        listingId,
-        from: fromYMD,
-        to: toYMD,
-      });
+      const airbnbIcalUrl = getAirbnbIcalUrl(listingId);
+      if (!airbnbIcalUrl) continue;
 
-      const ok = isRangeAvailableFromCalendar(calendarData);
+      try {
+        const airbnbEvents = await fetchIcalBlockedEvents(airbnbIcalUrl);
+        const conflicts = blockedEventsForRange(airbnbEvents, fromYMD, toYMD);
 
-      if (!ok) {
+        if (conflicts.length > 0) {
+          return NextResponse.json(
+            {
+              error: "La propiedad no esta disponible para esas fechas en Airbnb.",
+              conflicts,
+            },
+            { status: 409 }
+          );
+        }
+      } catch (airbnbError: any) {
         return NextResponse.json(
+          {
+            error: "No fue posible validar disponibilidad en Airbnb.",
+            debug: airbnbError?.message,
+          },
+          { status: 502 }
+        );
+      }
+    }
+
+    for (const listingId of resolvedListingIds) {
+      try {
+        const calendarData = await fetchCalendarOrThrow({
+          baseUrl,
+          authHeader,
+          listingId,
+          from: fromYMD,
+          to: toYMD,
+        });
+
+        const ok = isRangeAvailableFromCalendar(calendarData);
+
+        if (!ok) {
+          return NextResponse.json(
           {
             error:
               "La propiedad no está disponible para esas fechas (validación calendario STAYS).",
             calendar: calendarData,
-          },
-          { status: 409 }
+            },
+            { status: 409 }
+          );
+        }
+      } catch (calendarError: any) {
+        const status = calendarError?.status;
+        const message = String(calendarError?.message ?? "").toLowerCase();
+        const calendarNotAvailable =
+          status === 404 || message.includes("not found");
+
+        if (!calendarNotAvailable) {
+          return NextResponse.json(
+            {
+              error: "No fue posible validar disponibilidad en STAYS (calendario).",
+              status,
+              debug: calendarError?.data ?? calendarError?.message,
+            },
+            { status: 502 }
+          );
+        }
+
+        console.warn(
+          "STAYS Calendar API no disponible; se continua con calculate-price.",
+          { listingId, status, message: calendarError?.message }
         );
       }
     }
