@@ -168,12 +168,12 @@ Estoy interesado en *${property.title}* en Anapoima.
   }, [result, extras, stays, property.title, checkIn, checkOut, guests]);
 
   return (
-    <div className="rounded-3xl border border-orange-200 bg-white p-6 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div className="text-lg font-extrabold text-gray-900">
+    <div className="rounded-3xl border border-orange-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div className="max-w-[12rem] text-lg font-extrabold leading-tight text-gray-900">
           Consulta tu estadía
         </div>
-        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800">
+        <span className="shrink-0 rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800">
           Reserva segura
         </span>
       </div>
@@ -184,7 +184,7 @@ Estoy interesado en *${property.title}* en Anapoima.
       </p>
 
       <div className="mt-4 space-y-3">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(9.5rem,1fr))] gap-3">
           <label className="text-sm font-semibold text-gray-700">
             Check-in
             <input
@@ -192,7 +192,7 @@ Estoy interesado en *${property.title}* en Anapoima.
        	 min={minDate}
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
+              className="mt-1 min-h-11 w-full min-w-0 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
             />
           </label>
 
@@ -203,7 +203,7 @@ Estoy interesado en *${property.title}* en Anapoima.
 min={checkIn || minDate}
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
+              className="mt-1 min-h-11 w-full min-w-0 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
             />
           </label>
         </div>
@@ -219,7 +219,7 @@ min={checkIn || minDate}
               const n = Number(e.target.value);
               setGuests(Number.isFinite(n) ? n : 0);
             }}
-            className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
+            className="mt-1 min-h-11 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
           />
         </label>
 

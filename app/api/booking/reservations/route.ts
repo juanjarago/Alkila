@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { adminStatus, assertAdmin } from "@/lib/admin/auth";
 import { properties } from "@/lib/properties";
 import { collectAvailabilityConflicts } from "@/lib/booking/availability";
 import { quoteDirectStay } from "@/lib/booking/pricing";
@@ -11,13 +12,6 @@ function makeId() {
   return `res_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
-function assertAdmin(req: Request) {
-  const adminToken = process.env.ADMIN_TOKEN;
-  if (!adminToken) return;
-  const token = req.headers.get("x-admin-token");
-  if (token !== adminToken) throw new Error("No autorizado.");
-}
-
 export async function GET(req: Request) {
   try {
     assertAdmin(req);
@@ -28,7 +22,7 @@ export async function GET(req: Request) {
   } catch (error: any) {
     return NextResponse.json(
       { error: error?.message ?? "No fue posible listar reservas." },
-      { status: error?.message === "No autorizado." ? 401 : 500 }
+      { status: adminStatus(error) }
     );
   }
 }

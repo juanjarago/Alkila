@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { properties } from "@/lib/properties";
 import { DEFAULT_PRICING_RULES } from "@/lib/booking/pricing";
 import type { ManualBlock, PricingRule, SeasonalRate } from "@/lib/booking/types";
@@ -31,6 +31,7 @@ function numberValue(value: string) {
 
 export default function AdminClient() {
   const [token, setToken] = useState("");
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [reservations, setReservations] = useState<ReservationRow[]>([]);
   const [rules, setRules] = useState<PricingRule[]>(DEFAULT_PRICING_RULES);
   const [blocks, setBlocks] = useState<ManualBlock[]>([]);
@@ -58,14 +59,51 @@ export default function AdminClient() {
     return window.location.origin;
   }, []);
 
+  useEffect(() => {
+    const storedToken = window.sessionStorage.getItem("alkila_admin_token");
+    if (storedToken) setToken(storedToken);
+  }, []);
+
   function authHeaders() {
     return token ? { "x-admin-token": token } : {};
   }
 
-  async function loadAdminData() {
+  async function validateAdmin() {
     setError("");
     setMessage("");
+    setIsAuthorized(false);
+
+    if (!token.trim()) {
+      setError("Ingresa el token de admin.");
+      return;
+    }
+
     setLoading(true);
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: authHeaders(),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error ?? "No autorizado.");
+
+      window.sessionStorage.setItem("alkila_admin_token", token);
+      setIsAuthorized(true);
+      const loaded = await loadAdminData(true);
+      if (!loaded) return;
+      setMessage("Acceso admin validado.");
+    } catch (e: any) {
+      window.sessionStorage.removeItem("alkila_admin_token");
+      setError(e?.message ?? "No fue posible validar el acceso.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function loadAdminData(skipLoading = false) {
+    setError("");
+    setMessage("");
+    if (!skipLoading) setLoading(true);
     try {
       const [reservationsRes, pricingRes, blocksRes, seasonalRatesRes] =
         await Promise.all([
@@ -90,10 +128,13 @@ export default function AdminClient() {
       setBlocks(blocksData.blocks ?? []);
       setSeasonalRates(seasonsData.rates ?? []);
       setMessage("Datos cargados.");
+      return true;
     } catch (e: any) {
+      setIsAuthorized(false);
       setError(e?.message ?? "Error inesperado");
+      return false;
     } finally {
-      setLoading(false);
+      if (!skipLoading) setLoading(false);
     }
   }
 
@@ -101,6 +142,7 @@ export default function AdminClient() {
     setError("");
     setMessage("");
     try {
+      if (!isAuthorized) throw new Error("Valida el acceso admin antes de guardar.");
       const res = await fetch("/api/admin/pricing", {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeaders() },
@@ -123,6 +165,7 @@ export default function AdminClient() {
     setError("");
     setMessage("");
     try {
+      if (!isAuthorized) throw new Error("Valida el acceso admin antes de guardar.");
       const res = await fetch("/api/admin/blocks", {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeaders() },
@@ -141,6 +184,7 @@ export default function AdminClient() {
     setError("");
     setMessage("");
     try {
+      if (!isAuthorized) throw new Error("Valida el acceso admin antes de guardar.");
       const res = await fetch("/api/admin/seasonal-rates", {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeaders() },
@@ -174,20 +218,23 @@ export default function AdminClient() {
             </h1>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <input
               type="password"
               value={token}
-              onChange={(e) => setToken(e.target.value)}
+              onChange={(e) => {
+                setToken(e.target.value);
+                setIsAuthorized(false);
+              }}
               placeholder="ADMIN_TOKEN"
               className="w-44 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
             />
             <button
               type="button"
-              onClick={loadAdminData}
+              onClick={validateAdmin}
               className="rounded-xl bg-[#1F3D2B] px-4 py-2 text-sm font-bold text-white"
             >
-              {loading ? "Cargando..." : "Cargar admin"}
+              {loading ? "Validando..." : isAuthorized ? "Admin validado" : "Validar admin"}
             </button>
           </div>
         </div>
@@ -227,78 +274,84 @@ export default function AdminClient() {
                     Noche base
                     <input
                       type="number"
+                      disabled={!isAuthorized}
                       value={rule.baseNightCOP}
                       onChange={(e) =>
                         updateRule(property.slug, {
                           baseNightCOP: numberValue(e.target.value),
                         })
                       }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2"
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
                     />
                   </label>
                   <label className="font-semibold text-gray-700">
                     Fin de semana
                     <input
                       type="number"
+                      disabled={!isAuthorized}
                       value={rule.weekendNightCOP ?? 0}
                       onChange={(e) =>
                         updateRule(property.slug, {
                           weekendNightCOP: numberValue(e.target.value),
                         })
                       }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2"
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
                     />
                   </label>
                   <label className="font-semibold text-gray-700">
                     Limpieza
                     <input
                       type="number"
+                      disabled={!isAuthorized}
                       value={rule.cleaningFeeCOP}
                       onChange={(e) =>
                         updateRule(property.slug, {
                           cleaningFeeCOP: numberValue(e.target.value),
                         })
                       }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2"
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
                     />
                   </label>
                   <label className="font-semibold text-gray-700">
                     Minimo noches
                     <input
                       type="number"
+                      disabled={!isAuthorized}
                       value={rule.minNights}
                       onChange={(e) =>
                         updateRule(property.slug, {
                           minNights: numberValue(e.target.value),
                         })
                       }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2"
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
                     />
                   </label>
                   <label className="font-semibold text-gray-700">
                     Huespedes incluidos
                     <input
                       type="number"
+                      disabled={!isAuthorized}
                       value={rule.includedGuests}
                       onChange={(e) =>
                         updateRule(property.slug, {
                           includedGuests: numberValue(e.target.value),
                         })
                       }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2"
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
                     />
                   </label>
                   <label className="font-semibold text-gray-700">
                     Adicional por noche
                     <input
                       type="number"
+                      disabled={!isAuthorized}
                       value={rule.extraGuestFeeCOP ?? 0}
                       onChange={(e) =>
                         updateRule(property.slug, {
                           extraGuestFeeCOP: numberValue(e.target.value),
                         })
                       }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2"
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
                     />
                   </label>
                 </div>
@@ -306,7 +359,8 @@ export default function AdminClient() {
                 <button
                   type="button"
                   onClick={() => saveRule(rule)}
-                  className="mt-4 w-full rounded-xl bg-[#E76F51] px-4 py-2 text-sm font-bold text-white"
+                  disabled={!isAuthorized}
+                  className="mt-4 w-full rounded-xl bg-[#E76F51] px-4 py-2 text-sm font-bold text-white disabled:opacity-50"
                 >
                   Guardar precio
                 </button>
@@ -330,6 +384,7 @@ export default function AdminClient() {
 
           <div className="mt-4 grid gap-3 md:grid-cols-[1.3fr,1fr,1fr,1fr,1fr,1fr,auto]">
             <select
+              disabled={!isAuthorized}
               value={seasonDraft.propertySlug}
               onChange={(e) =>
                 setSeasonDraft((current) => ({
@@ -337,7 +392,7 @@ export default function AdminClient() {
                   propertySlug: e.target.value,
                 }))
               }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             >
               {properties.map((property) => (
                 <option key={property.slug} value={property.slug}>
@@ -346,30 +401,34 @@ export default function AdminClient() {
               ))}
             </select>
             <input
+              disabled={!isAuthorized}
               value={seasonDraft.name}
               onChange={(e) =>
                 setSeasonDraft((current) => ({ ...current, name: e.target.value }))
               }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             />
             <input
               type="date"
+              disabled={!isAuthorized}
               value={seasonDraft.from}
               onChange={(e) =>
                 setSeasonDraft((current) => ({ ...current, from: e.target.value }))
               }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="min-h-11 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             />
             <input
               type="date"
+              disabled={!isAuthorized}
               value={seasonDraft.to}
               onChange={(e) =>
                 setSeasonDraft((current) => ({ ...current, to: e.target.value }))
               }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="min-h-11 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             />
             <input
               type="number"
+              disabled={!isAuthorized}
               value={seasonDraft.nightCOP}
               onChange={(e) =>
                 setSeasonDraft((current) => ({
@@ -378,10 +437,11 @@ export default function AdminClient() {
                 }))
               }
               placeholder="Precio noche"
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             />
             <input
               type="number"
+              disabled={!isAuthorized}
               value={seasonDraft.minNights}
               onChange={(e) =>
                 setSeasonDraft((current) => ({
@@ -390,12 +450,13 @@ export default function AdminClient() {
                 }))
               }
               placeholder="Min noches"
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             />
             <button
               type="button"
               onClick={createSeasonalRate}
-              className="rounded-xl bg-[#E76F51] px-4 py-2 text-sm font-bold text-white"
+              disabled={!isAuthorized}
+              className="rounded-xl bg-[#E76F51] px-4 py-2 text-sm font-bold text-white disabled:opacity-50"
             >
               Crear
             </button>
@@ -422,6 +483,7 @@ export default function AdminClient() {
           <h2 className="text-xl font-extrabold text-gray-900">Bloqueos manuales</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-[1.5fr,1fr,1fr,1.2fr,auto]">
             <select
+              disabled={!isAuthorized}
               value={blockDraft.propertySlug}
               onChange={(e) =>
                 setBlockDraft((current) => ({
@@ -429,7 +491,7 @@ export default function AdminClient() {
                   propertySlug: e.target.value,
                 }))
               }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             >
               {properties.map((property) => (
                 <option key={property.slug} value={property.slug}>
@@ -439,31 +501,35 @@ export default function AdminClient() {
             </select>
             <input
               type="date"
+              disabled={!isAuthorized}
               value={blockDraft.from}
               onChange={(e) =>
                 setBlockDraft((current) => ({ ...current, from: e.target.value }))
               }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="min-h-11 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             />
             <input
               type="date"
+              disabled={!isAuthorized}
               value={blockDraft.to}
               onChange={(e) =>
                 setBlockDraft((current) => ({ ...current, to: e.target.value }))
               }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="min-h-11 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             />
             <input
+              disabled={!isAuthorized}
               value={blockDraft.reason}
               onChange={(e) =>
                 setBlockDraft((current) => ({ ...current, reason: e.target.value }))
               }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm"
+              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
             />
             <button
               type="button"
               onClick={createBlock}
-              className="rounded-xl bg-[#1F3D2B] px-4 py-2 text-sm font-bold text-white"
+              disabled={!isAuthorized}
+              className="rounded-xl bg-[#1F3D2B] px-4 py-2 text-sm font-bold text-white disabled:opacity-50"
             >
               Bloquear
             </button>

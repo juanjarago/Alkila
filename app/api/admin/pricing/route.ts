@@ -1,17 +1,10 @@
 import { NextResponse } from "next/server";
+import { adminStatus, assertAdmin } from "@/lib/admin/auth";
 import { DEFAULT_PRICING_RULES } from "@/lib/booking/pricing";
 import { listPricingRules, upsertPricingRule } from "@/lib/booking/store";
 import type { PricingRule } from "@/lib/booking/types";
 
 export const runtime = "nodejs";
-
-function assertAdmin(req: Request) {
-  const adminToken = process.env.ADMIN_TOKEN;
-  if (!adminToken) return;
-  if (req.headers.get("x-admin-token") !== adminToken) {
-    throw new Error("No autorizado.");
-  }
-}
 
 export async function GET(req: Request) {
   try {
@@ -25,7 +18,7 @@ export async function GET(req: Request) {
   } catch (error: any) {
     return NextResponse.json(
       { error: error?.message ?? "No fue posible cargar precios." },
-      { status: error?.message === "No autorizado." ? 401 : 500 }
+      { status: adminStatus(error) }
     );
   }
 }
@@ -59,7 +52,7 @@ export async function POST(req: Request) {
   } catch (error: any) {
     return NextResponse.json(
       { error: error?.message ?? "No fue posible guardar precios." },
-      { status: error?.message === "No autorizado." ? 401 : 500 }
+      { status: adminStatus(error) }
     );
   }
 }
