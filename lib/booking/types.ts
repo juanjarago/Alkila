@@ -14,6 +14,10 @@ export type PricingRule = {
   extraGuestFeeCOP?: number;
   includedGuests: number;
   minNights: number;
+  petFeeCOP: number;
+  domesticServiceFeePerDayCOP: number;
+  earlyCheckInPercent: number;
+  lateCheckoutPercent: number;
 };
 
 export type SeasonalRate = {

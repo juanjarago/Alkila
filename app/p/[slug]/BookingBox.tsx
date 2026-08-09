@@ -5,6 +5,7 @@ import {
   BOOKING_EXTRA_DEFINITIONS,
   getBookingExtraLabel,
 } from "@/lib/booking/extras";
+import type { PricingRule } from "@/lib/booking/types";
 
 type PropertyLike = {
   title: string;
@@ -78,8 +79,10 @@ function availabilityMessage(data: any, from: string, to: string) {
 
 export default function BookingBox({
   property,
+  pricingRule,
 }: {
   property: PropertyLike;
+  pricingRule?: PricingRule;
 }) {
   const [checkIn, setCheckIn] = useState<string>("");
   const [checkOut, setCheckOut] = useState<string>("");
@@ -224,6 +227,21 @@ export default function BookingBox({
     [selectedExtras]
   );
 
+  function priceLabelFor(extraId: string, fallback: string) {
+    if (!pricingRule) return fallback;
+    if (extraId === "pets") return formatCOP(pricingRule.petFeeCOP);
+    if (extraId === "domestic_service") {
+      return `${formatCOP(pricingRule.domesticServiceFeePerDayCOP)} por dia`;
+    }
+    if (extraId === "early_checkin") {
+      return `${pricingRule.earlyCheckInPercent}% de una noche`;
+    }
+    if (extraId === "late_checkout") {
+      return `${pricingRule.lateCheckoutPercent}% de una noche`;
+    }
+    return fallback;
+  }
+
   const whatsappHref = useMemo(() => {
     if (!result) return "";
 
@@ -333,7 +351,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
                       {extra.label}
                     </span>
                     <span className="mt-1 block text-base font-bold text-[#66752F]">
-                      {extra.priceLabel}
+                      {priceLabelFor(extra.id, extra.priceLabel)}
                     </span>
                     <span className="mt-1 block text-base font-medium leading-6 text-[#4B544D]">
                       {extra.description}

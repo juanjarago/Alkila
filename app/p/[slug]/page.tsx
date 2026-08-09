@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PropertyGallery from "@/components/gallery/PropertyGallery";
+import { getEffectivePricingRule, getPricingRule } from "@/lib/booking/pricing";
 import { propertyDetails } from "@/lib/propertyDetails";
 import { properties } from "@/lib/properties";
 import ReservationSidebar from "./ReservationSidebar";
+
+export const dynamic = "force-dynamic";
 
 function InfoDisclosure({
   title,
@@ -51,6 +54,9 @@ export default async function Page({
         ? [property.heroImage]
         : [];
   const details = propertyDetails[property.slug];
+  const pricingRule = await getEffectivePricingRule(property.slug).catch(() =>
+    getPricingRule(property.slug)
+  );
 
   return (
     <main className="property-detail-page">
@@ -126,6 +132,7 @@ export default async function Page({
           <aside id="reserva" className="min-w-0">
             <ReservationSidebar
               slug={property.slug}
+              pricingRule={pricingRule}
               property={{
                 title: property.title,
                 capacity: property.capacity,

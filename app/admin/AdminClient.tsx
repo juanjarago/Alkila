@@ -387,6 +387,62 @@ export default function AdminClient() {
                       className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
                     />
                   </label>
+                  <label className="font-semibold text-gray-700">
+                    Mascotas por estadia
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.petFeeCOP}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          petFeeCOP: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                  </label>
+                  <label className="font-semibold text-gray-700">
+                    Servicio domestico dia
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.domesticServiceFeePerDayCOP}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          domesticServiceFeePerDayCOP: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                  </label>
+                  <label className="font-semibold text-gray-700">
+                    Early check-in %
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.earlyCheckInPercent}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          earlyCheckInPercent: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                  </label>
+                  <label className="font-semibold text-gray-700">
+                    Late check-out %
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.lateCheckoutPercent}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          lateCheckoutPercent: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                  </label>
                 </div>
 
                 <button

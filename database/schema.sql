@@ -34,8 +34,18 @@ create table if not exists pricing_rules (
   extra_guest_fee_cop integer not null default 0,
   included_guests integer not null default 1,
   min_nights integer not null default 1,
+  pet_fee_cop integer not null default 50000,
+  domestic_service_fee_per_day_cop integer not null default 90000,
+  early_checkin_percent integer not null default 50,
+  late_checkout_percent integer not null default 50,
   updated_at timestamptz not null default now()
 );
+
+alter table pricing_rules
+  add column if not exists pet_fee_cop integer not null default 50000,
+  add column if not exists domestic_service_fee_per_day_cop integer not null default 90000,
+  add column if not exists early_checkin_percent integer not null default 50,
+  add column if not exists late_checkout_percent integer not null default 50;
 
 create table if not exists manual_blocks (
   id text primary key,

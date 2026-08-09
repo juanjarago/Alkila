@@ -12,6 +12,10 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     includedGuests: 6,
     extraGuestFeeCOP: 100000,
     minNights: 2,
+    petFeeCOP: 50000,
+    domesticServiceFeePerDayCOP: 90000,
+    earlyCheckInPercent: 50,
+    lateCheckoutPercent: 50,
   },
   {
     propertySlug: "casa-campestre-anapoima-16-personas",
@@ -21,6 +25,10 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     includedGuests: 12,
     extraGuestFeeCOP: 120000,
     minNights: 2,
+    petFeeCOP: 50000,
+    domesticServiceFeePerDayCOP: 90000,
+    earlyCheckInPercent: 50,
+    lateCheckoutPercent: 50,
   },
   {
     propertySlug: "finca-anapoima-22-personas",
@@ -30,6 +38,10 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     includedGuests: 16,
     extraGuestFeeCOP: 150000,
     minNights: 2,
+    petFeeCOP: 50000,
+    domesticServiceFeePerDayCOP: 90000,
+    earlyCheckInPercent: 50,
+    lateCheckoutPercent: 50,
   },
 ];
 
@@ -125,17 +137,17 @@ export async function quoteDirectStay(input: {
   const hasExtra = (extra: BookingExtra) => selectedExtras.includes(extra);
   const firstNight = nightsList[0];
   const lastNight = nightsList[nightsList.length - 1];
-  const petFeeCOP = hasExtra("pets") ? 50000 : 0;
+  const petFeeCOP = hasExtra("pets") ? rule.petFeeCOP : 0;
   const domesticServiceFeeCOP = hasExtra("domestic_service")
-    ? 90000 * nightsList.length
+    ? rule.domesticServiceFeePerDayCOP * nightsList.length
     : 0;
   const earlyCheckInFeeCOP =
     hasExtra("early_checkin") && firstNight
-      ? Math.round(nightPriceFor(firstNight) * 0.5)
+      ? Math.round(nightPriceFor(firstNight) * (rule.earlyCheckInPercent / 100))
       : 0;
   const lateCheckoutFeeCOP =
     hasExtra("late_checkout") && lastNight
-      ? Math.round(nightPriceFor(lastNight) * 0.5)
+      ? Math.round(nightPriceFor(lastNight) * (rule.lateCheckoutPercent / 100))
       : 0;
   const extrasFeeCOP =
     petFeeCOP + domesticServiceFeeCOP + earlyCheckInFeeCOP + lateCheckoutFeeCOP;

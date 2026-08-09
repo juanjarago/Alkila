@@ -97,6 +97,10 @@ function asPricingRule(row: any): PricingRule {
     extraGuestFeeCOP: row.extra_guest_fee_cop ?? undefined,
     includedGuests: row.included_guests,
     minNights: row.min_nights,
+    petFeeCOP: row.pet_fee_cop ?? 50000,
+    domesticServiceFeePerDayCOP: row.domestic_service_fee_per_day_cop ?? 90000,
+    earlyCheckInPercent: row.early_checkin_percent ?? 50,
+    lateCheckoutPercent: row.late_checkout_percent ?? 50,
   };
 }
 
@@ -109,6 +113,10 @@ function pricingRuleToRow(rule: PricingRule) {
     extra_guest_fee_cop: rule.extraGuestFeeCOP ?? 0,
     included_guests: rule.includedGuests,
     min_nights: rule.minNights,
+    pet_fee_cop: rule.petFeeCOP,
+    domestic_service_fee_per_day_cop: rule.domesticServiceFeePerDayCOP,
+    early_checkin_percent: rule.earlyCheckInPercent,
+    late_checkout_percent: rule.lateCheckoutPercent,
   };
 }
 
