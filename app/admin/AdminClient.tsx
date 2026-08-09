@@ -130,6 +130,7 @@ export default function AdminClient() {
   const [previewPropertySlug, setPreviewPropertySlug] = useState(
     properties[0]?.slug ?? ""
   );
+  const [previewMonthPage, setPreviewMonthPage] = useState(0);
   const [blockDraft, setBlockDraft] = useState({
     propertySlug: properties[0]?.slug ?? "",
     from: "",
@@ -635,24 +636,42 @@ export default function AdminClient() {
                 Calendario Colombia y temporadas automaticas
               </h2>
               <p className="mt-1 text-sm text-gray-600">
-                Vista de 4 meses con festivos, temporadas altas, incremento aplicado y
-                minimo de noches segun la propiedad.
+                Vista de 4 meses simultaneos. Puedes avanzar hasta completar 12 meses y
+                ver incremento, minimo de noches y periodos de alta demanda.
               </p>
             </div>
-            <label className="text-sm font-semibold text-gray-700">
-              Propiedad
-              <select
-                value={previewPropertySlug}
-                onChange={(e) => setPreviewPropertySlug(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm md:w-60"
-              >
-                {properties.map((property) => (
-                  <option key={property.slug} value={property.slug}>
-                    {property.shortTitle}
-                  </option>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+              <label className="text-sm font-semibold text-gray-700">
+                Propiedad
+                <select
+                  value={previewPropertySlug}
+                  onChange={(e) => setPreviewPropertySlug(e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm sm:w-60"
+                >
+                  {properties.map((property) => (
+                    <option key={property.slug} value={property.slug}>
+                      {property.shortTitle}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="flex rounded-xl border border-orange-200 bg-orange-50 p-1">
+                {[0, 1, 2].map((page) => (
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={() => setPreviewMonthPage(page)}
+                    className={`rounded-lg px-3 py-2 text-xs font-extrabold ${
+                      previewMonthPage === page
+                        ? "bg-[#1F3D2B] text-white"
+                        : "text-[#1F3D2B]"
+                    }`}
+                  >
+                    {page * 4 + 1}-{page * 4 + 4} meses
+                  </button>
                 ))}
-              </select>
-            </label>
+              </div>
+            </div>
           </div>
 
           {(() => {
@@ -665,14 +684,29 @@ export default function AdminClient() {
             const today = new Date();
             const years = [today.getFullYear(), today.getFullYear() + 1];
             const windows = years.flatMap(colombiaSeasonWindows);
+            const visibleMonths = Array.from({ length: 4 }, (_, index) =>
+              addMonths(today, previewMonthPage * 4 + index)
+            );
 
             return (
               <>
+                <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold">
+                  <span className="rounded-full border border-[#8F3F2A] bg-[#8F3F2A] px-3 py-1 text-white">
+                    Alta +40% o mas
+                  </span>
+                  <span className="rounded-full border border-[#D08A5B] bg-[#F4D6B8] px-3 py-1 text-[#1F3D2B]">
+                    Temporada / puente
+                  </span>
+                  <span className="rounded-full border border-orange-100 bg-white px-3 py-1 text-gray-700">
+                    Tarifa normal
+                  </span>
+                </div>
+
                 <div className="mt-4 grid gap-2 text-xs sm:grid-cols-2 lg:grid-cols-4">
-                  {windows.slice(0, 8).map((window) => (
+                  {windows.map((window) => (
                     <div
                       key={`${window.kind}-${window.from}`}
-                      className="rounded-xl border border-orange-100 bg-orange-50 px-3 py-2 text-gray-700"
+                      className="rounded-xl border border-orange-100 bg-[#FFF7ED] px-3 py-2 text-gray-700"
                     >
                       <div className="font-extrabold text-gray-900">{window.label}</div>
                       <div>
@@ -682,9 +716,31 @@ export default function AdminClient() {
                   ))}
                 </div>
 
-                <div className="mt-5 grid gap-4 xl:grid-cols-4">
-                  {Array.from({ length: 4 }, (_, index) => addMonths(today, index)).map(
-                    (monthDate) => {
+                <div className="mt-5 flex items-center justify-between border-y border-orange-100 py-3">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewMonthPage((page) => Math.max(0, page - 1))}
+                    disabled={previewMonthPage === 0}
+                    className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-extrabold text-[#1F3D2B] disabled:opacity-40"
+                  >
+                    Anteriores
+                  </button>
+                  <div className="text-center text-sm font-extrabold text-gray-900">
+                    Mostrando meses {previewMonthPage * 4 + 1} al{" "}
+                    {previewMonthPage * 4 + 4} de los proximos 12
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewMonthPage((page) => Math.min(2, page + 1))}
+                    disabled={previewMonthPage === 2}
+                    className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-extrabold text-[#1F3D2B] disabled:opacity-40"
+                  >
+                    Siguientes
+                  </button>
+                </div>
+
+                <div className="mt-5 grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+                  {visibleMonths.map((monthDate) => {
                       const year = monthDate.getFullYear();
                       const month = monthDate.getMonth();
                       const firstDay = new Date(year, month, 1).getDay();
@@ -694,19 +750,24 @@ export default function AdminClient() {
                       return (
                         <div
                           key={`${year}-${month}`}
-                          className="rounded-2xl border border-orange-100 bg-[#FFF7ED] p-3"
+                          className="rounded-2xl border border-orange-100 bg-[#FFF7ED] p-4 shadow-sm"
                         >
-                          <div className="text-sm font-extrabold capitalize text-[#1F3D2B]">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="text-base font-extrabold capitalize text-[#1F3D2B]">
                             {monthLabel(monthDate)}
+                            </div>
+                            <div className="rounded-full bg-white px-2 py-1 text-[10px] font-bold text-gray-500">
+                              {year}
+                            </div>
                           </div>
-                          <div className="mt-3 grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-[#6B7D2D]">
+                          <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[11px] font-black text-[#6B7D2D]">
                             {["L", "M", "M", "J", "V", "S", "D"].map((day, dayIndex) => (
                               <div key={`${day}-${dayIndex}`}>{day}</div>
                             ))}
                           </div>
-                          <div className="mt-1 grid grid-cols-7 gap-1">
+                          <div className="mt-2 grid grid-cols-7 gap-1">
                             {Array.from({ length: blanks }).map((_, blank) => (
-                              <div key={`blank-${blank}`} className="min-h-12" />
+                              <div key={`blank-${blank}`} className="min-h-14" />
                             ))}
                             {Array.from({ length: days }, (_, dayIndex) => {
                               const day = dayIndex + 1;
@@ -724,15 +785,17 @@ export default function AdminClient() {
                                 <div
                                   key={ymd}
                                   title={status.label || "Tarifa normal"}
-                                  className={`min-h-12 rounded-lg border p-1 text-left ${className}`}
+                                  className={`min-h-14 rounded-xl border p-1.5 text-left ${className}`}
                                 >
-                                  <div className="text-xs font-extrabold">{day}</div>
+                                  <div className="text-sm font-extrabold leading-none">
+                                    {day}
+                                  </div>
                                   {status.percent > 0 && (
                                     <div className="mt-1 leading-tight">
-                                      <div className="text-[10px] font-black">
+                                      <div className="text-[11px] font-black">
                                         +{status.percent}%
                                       </div>
-                                      <div className="text-[9px] font-bold">
+                                      <div className="text-[10px] font-bold">
                                         min {status.minNights}n
                                       </div>
                                     </div>
@@ -743,8 +806,7 @@ export default function AdminClient() {
                           </div>
                         </div>
                       );
-                    }
-                  )}
+                    })}
                 </div>
               </>
             );
