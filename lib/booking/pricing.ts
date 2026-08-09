@@ -20,10 +20,15 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     earlyCheckInPercent: 50,
     lateCheckoutPercent: 50,
     holidayWeekendIncreasePercent: 20,
+    holidayWeekendMinNights: 3,
     holyWeekIncreasePercent: 40,
+    holyWeekMinNights: 4,
     schoolBreakIncreasePercent: 25,
+    schoolBreakMinNights: 4,
     christmasIncreasePercent: 35,
+    christmasMinNights: 4,
     newYearIncreasePercent: 45,
+    newYearMinNights: 4,
   },
   {
     propertySlug: "casa-campestre-anapoima-16-personas",
@@ -40,10 +45,15 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     earlyCheckInPercent: 50,
     lateCheckoutPercent: 50,
     holidayWeekendIncreasePercent: 20,
+    holidayWeekendMinNights: 3,
     holyWeekIncreasePercent: 40,
+    holyWeekMinNights: 4,
     schoolBreakIncreasePercent: 25,
+    schoolBreakMinNights: 4,
     christmasIncreasePercent: 35,
+    christmasMinNights: 4,
     newYearIncreasePercent: 45,
+    newYearMinNights: 4,
   },
   {
     propertySlug: "finca-anapoima-22-personas",
@@ -60,10 +70,15 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     earlyCheckInPercent: 50,
     lateCheckoutPercent: 50,
     holidayWeekendIncreasePercent: 20,
+    holidayWeekendMinNights: 3,
     holyWeekIncreasePercent: 40,
+    holyWeekMinNights: 4,
     schoolBreakIncreasePercent: 25,
+    schoolBreakMinNights: 4,
     christmasIncreasePercent: 35,
+    christmasMinNights: 4,
     newYearIncreasePercent: 45,
+    newYearMinNights: 4,
   },
 ];
 
@@ -123,6 +138,19 @@ function automaticIncreasePercent(rule: PricingRule, ymd: string) {
   return Math.max(0, ...percentages);
 }
 
+function automaticMinNights(rule: PricingRule, ymd: string) {
+  const minimums = colombiaSeasonMatches(ymd).map((match) => {
+    if (match.kind === "holiday_weekend") return rule.holidayWeekendMinNights;
+    if (match.kind === "holy_week") return rule.holyWeekMinNights;
+    if (match.kind === "school_break") return rule.schoolBreakMinNights;
+    if (match.kind === "christmas") return rule.christmasMinNights;
+    if (match.kind === "new_year") return rule.newYearMinNights;
+    return 0;
+  });
+
+  return Math.max(0, ...minimums);
+}
+
 export async function quoteDirectStay(input: {
   propertySlug: string;
   from: string;
@@ -144,7 +172,14 @@ export async function quoteDirectStay(input: {
   const baseMinNights = usesWeekendRate
     ? rule.minWeekendNights
     : rule.minWeekdayNights;
-  const minNights = Math.max(baseMinNights, ...seasonalMinNights);
+  const automaticSeasonMinNights = nightsList.map((night) =>
+    automaticMinNights(rule, night)
+  );
+  const minNights = Math.max(
+    baseMinNights,
+    ...seasonalMinNights,
+    ...automaticSeasonMinNights
+  );
 
   if (nightsList.length < minNights) {
     throw new Error(`La estadia minima es de ${minNights} noches.`);

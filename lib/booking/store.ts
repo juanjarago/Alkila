@@ -104,10 +104,15 @@ function asPricingRule(row: any): PricingRule {
     earlyCheckInPercent: row.early_checkin_percent ?? 50,
     lateCheckoutPercent: row.late_checkout_percent ?? 50,
     holidayWeekendIncreasePercent: row.holiday_weekend_increase_percent ?? 20,
+    holidayWeekendMinNights: row.holiday_weekend_min_nights ?? 3,
     holyWeekIncreasePercent: row.holy_week_increase_percent ?? 40,
+    holyWeekMinNights: row.holy_week_min_nights ?? 4,
     schoolBreakIncreasePercent: row.school_break_increase_percent ?? 25,
+    schoolBreakMinNights: row.school_break_min_nights ?? 4,
     christmasIncreasePercent: row.christmas_increase_percent ?? 35,
+    christmasMinNights: row.christmas_min_nights ?? 4,
     newYearIncreasePercent: row.new_year_increase_percent ?? 45,
+    newYearMinNights: row.new_year_min_nights ?? 4,
   };
 }
 
@@ -127,10 +132,15 @@ function pricingRuleToRow(rule: PricingRule) {
     early_checkin_percent: rule.earlyCheckInPercent,
     late_checkout_percent: rule.lateCheckoutPercent,
     holiday_weekend_increase_percent: rule.holidayWeekendIncreasePercent,
+    holiday_weekend_min_nights: rule.holidayWeekendMinNights,
     holy_week_increase_percent: rule.holyWeekIncreasePercent,
+    holy_week_min_nights: rule.holyWeekMinNights,
     school_break_increase_percent: rule.schoolBreakIncreasePercent,
+    school_break_min_nights: rule.schoolBreakMinNights,
     christmas_increase_percent: rule.christmasIncreasePercent,
+    christmas_min_nights: rule.christmasMinNights,
     new_year_increase_percent: rule.newYearIncreasePercent,
+    new_year_min_nights: rule.newYearMinNights,
   };
 }
 

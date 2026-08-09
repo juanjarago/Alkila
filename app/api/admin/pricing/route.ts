@@ -42,10 +42,15 @@ export async function POST(req: Request) {
       earlyCheckInPercent: Number(body?.earlyCheckInPercent ?? 0),
       lateCheckoutPercent: Number(body?.lateCheckoutPercent ?? 0),
       holidayWeekendIncreasePercent: Number(body?.holidayWeekendIncreasePercent ?? 0),
+      holidayWeekendMinNights: Number(body?.holidayWeekendMinNights ?? 3),
       holyWeekIncreasePercent: Number(body?.holyWeekIncreasePercent ?? 0),
+      holyWeekMinNights: Number(body?.holyWeekMinNights ?? 4),
       schoolBreakIncreasePercent: Number(body?.schoolBreakIncreasePercent ?? 0),
+      schoolBreakMinNights: Number(body?.schoolBreakMinNights ?? 4),
       christmasIncreasePercent: Number(body?.christmasIncreasePercent ?? 0),
+      christmasMinNights: Number(body?.christmasMinNights ?? 4),
       newYearIncreasePercent: Number(body?.newYearIncreasePercent ?? 0),
+      newYearMinNights: Number(body?.newYearMinNights ?? 4),
     };
 
     const autoIncreases = [
@@ -54,6 +59,13 @@ export async function POST(req: Request) {
       rule.schoolBreakIncreasePercent,
       rule.christmasIncreasePercent,
       rule.newYearIncreasePercent,
+    ];
+    const autoMinimums = [
+      rule.holidayWeekendMinNights,
+      rule.holyWeekMinNights,
+      rule.schoolBreakMinNights,
+      rule.christmasMinNights,
+      rule.newYearMinNights,
     ];
 
     if (
@@ -69,7 +81,8 @@ export async function POST(req: Request) {
       rule.earlyCheckInPercent > 100 ||
       rule.lateCheckoutPercent < 0 ||
       rule.lateCheckoutPercent > 100 ||
-      autoIncreases.some((percent) => percent < 0 || percent > 300)
+      autoIncreases.some((percent) => percent < 0 || percent > 300) ||
+      autoMinimums.some((nights) => nights < 1)
     ) {
       return NextResponse.json({ error: "Regla de precios invalida." }, { status: 400 });
     }

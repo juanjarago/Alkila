@@ -41,10 +41,15 @@ create table if not exists pricing_rules (
   early_checkin_percent integer not null default 50,
   late_checkout_percent integer not null default 50,
   holiday_weekend_increase_percent integer not null default 20,
+  holiday_weekend_min_nights integer not null default 3,
   holy_week_increase_percent integer not null default 40,
+  holy_week_min_nights integer not null default 4,
   school_break_increase_percent integer not null default 25,
+  school_break_min_nights integer not null default 4,
   christmas_increase_percent integer not null default 35,
+  christmas_min_nights integer not null default 4,
   new_year_increase_percent integer not null default 45,
+  new_year_min_nights integer not null default 4,
   updated_at timestamptz not null default now()
 );
 
@@ -56,10 +61,15 @@ alter table pricing_rules
   add column if not exists early_checkin_percent integer not null default 50,
   add column if not exists late_checkout_percent integer not null default 50,
   add column if not exists holiday_weekend_increase_percent integer not null default 20,
+  add column if not exists holiday_weekend_min_nights integer not null default 3,
   add column if not exists holy_week_increase_percent integer not null default 40,
+  add column if not exists holy_week_min_nights integer not null default 4,
   add column if not exists school_break_increase_percent integer not null default 25,
+  add column if not exists school_break_min_nights integer not null default 4,
   add column if not exists christmas_increase_percent integer not null default 35,
-  add column if not exists new_year_increase_percent integer not null default 45;
+  add column if not exists christmas_min_nights integer not null default 4,
+  add column if not exists new_year_increase_percent integer not null default 45,
+  add column if not exists new_year_min_nights integer not null default 4;
 
 update pricing_rules
 set

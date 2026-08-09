@@ -21,10 +21,15 @@ export type PricingRule = {
   earlyCheckInPercent: number;
   lateCheckoutPercent: number;
   holidayWeekendIncreasePercent: number;
+  holidayWeekendMinNights: number;
   holyWeekIncreasePercent: number;
+  holyWeekMinNights: number;
   schoolBreakIncreasePercent: number;
+  schoolBreakMinNights: number;
   christmasIncreasePercent: number;
+  christmasMinNights: number;
   newYearIncreasePercent: number;
+  newYearMinNights: number;
 };
 
 export type SeasonalRate = {

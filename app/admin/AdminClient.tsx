@@ -2,6 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { properties } from "@/lib/properties";
+import {
+  colombiaSeasonMatches,
+  colombiaSeasonWindows,
+  type ColombiaSeasonKind,
+} from "@/lib/booking/colombiaCalendar";
 import { DEFAULT_PRICING_RULES } from "@/lib/booking/pricing";
 import type { ManualBlock, PricingRule, SeasonalRate } from "@/lib/booking/types";
 
@@ -30,6 +35,91 @@ function numberValue(value: string) {
   return Number.isFinite(n) ? n : 0;
 }
 
+const automaticSeasonFields: Array<{
+  kind: ColombiaSeasonKind;
+  title: string;
+  dates: string;
+  percentKey: keyof PricingRule;
+  minKey: keyof PricingRule;
+  suggestedPercent: number;
+  suggestedMin: number;
+}> = [
+  {
+    kind: "holiday_weekend",
+    title: "Festivo / puente",
+    dates: "Viernes a lunes cuando hay festivo",
+    percentKey: "holidayWeekendIncreasePercent",
+    minKey: "holidayWeekendMinNights",
+    suggestedPercent: 20,
+    suggestedMin: 3,
+  },
+  {
+    kind: "holy_week",
+    title: "Semana Santa",
+    dates: "Domingo de Ramos a Domingo de Pascua",
+    percentKey: "holyWeekIncreasePercent",
+    minKey: "holyWeekMinNights",
+    suggestedPercent: 40,
+    suggestedMin: 4,
+  },
+  {
+    kind: "school_break",
+    title: "Semana de receso",
+    dates: "Semana anterior al festivo del 12 de octubre",
+    percentKey: "schoolBreakIncreasePercent",
+    minKey: "schoolBreakMinNights",
+    suggestedPercent: 25,
+    suggestedMin: 4,
+  },
+  {
+    kind: "christmas",
+    title: "Navidad",
+    dates: "20 al 27 de diciembre",
+    percentKey: "christmasIncreasePercent",
+    minKey: "christmasMinNights",
+    suggestedPercent: 35,
+    suggestedMin: 4,
+  },
+  {
+    kind: "new_year",
+    title: "Ano Nuevo",
+    dates: "28 de diciembre al 5 de enero",
+    percentKey: "newYearIncreasePercent",
+    minKey: "newYearMinNights",
+    suggestedPercent: 45,
+    suggestedMin: 4,
+  },
+];
+
+function ymdFromParts(year: number, month: number, day: number) {
+  return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function addMonths(date: Date, months: number) {
+  return new Date(date.getFullYear(), date.getMonth() + months, 1);
+}
+
+function monthLabel(date: Date) {
+  return new Intl.DateTimeFormat("es-CO", {
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+
+function seasonValue(rule: PricingRule, kind: ColombiaSeasonKind, field: "percent" | "min") {
+  const config = automaticSeasonFields.find((item) => item.kind === kind);
+  if (!config) return 0;
+  return Number(rule[field === "percent" ? config.percentKey : config.minKey] ?? 0);
+}
+
+function seasonDay(rule: PricingRule, ymd: string) {
+  const matches = colombiaSeasonMatches(ymd);
+  const percent = Math.max(0, ...matches.map((match) => seasonValue(rule, match.kind, "percent")));
+  const minNights = Math.max(0, ...matches.map((match) => seasonValue(rule, match.kind, "min")));
+  const label = matches.map((match) => match.label).join(" + ");
+  return { matches, percent, minNights, label };
+}
+
 export default function AdminClient() {
   const [token, setToken] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -37,6 +127,9 @@ export default function AdminClient() {
   const [rules, setRules] = useState<PricingRule[]>(DEFAULT_PRICING_RULES);
   const [blocks, setBlocks] = useState<ManualBlock[]>([]);
   const [seasonalRates, setSeasonalRates] = useState<SeasonalRate[]>([]);
+  const [previewPropertySlug, setPreviewPropertySlug] = useState(
+    properties[0]?.slug ?? ""
+  );
   const [blockDraft, setBlockDraft] = useState({
     propertySlug: properties[0]?.slug ?? "",
     from: "",
@@ -464,95 +557,57 @@ export default function AdminClient() {
                     </div>
                     <p className="mt-1 text-xs leading-5 text-gray-600">
                       El sistema reconoce festivos, Semana Santa, semana de receso,
-                      Navidad y Ano Nuevo. Si hay temporada especial manual con precio
-                      fijo, se respeta ese precio.
+                      Navidad y Ano Nuevo. Puedes definir incremento y minimo de noches.
+                      Si hay temporada especial manual con precio fijo, se respeta ese precio.
                     </p>
                   </div>
-                  <label className="font-semibold text-gray-700">
-                    Festivo / puente %
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.holidayWeekendIncreasePercent}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          holidayWeekendIncreasePercent: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                    <span className="mt-1 block text-xs font-normal text-gray-500">
-                      Sugerido 20%
-                    </span>
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Semana Santa %
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.holyWeekIncreasePercent}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          holyWeekIncreasePercent: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                    <span className="mt-1 block text-xs font-normal text-gray-500">
-                      Sugerido 40%
-                    </span>
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Semana de receso %
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.schoolBreakIncreasePercent}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          schoolBreakIncreasePercent: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                    <span className="mt-1 block text-xs font-normal text-gray-500">
-                      Sugerido 25%
-                    </span>
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Navidad %
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.christmasIncreasePercent}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          christmasIncreasePercent: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                    <span className="mt-1 block text-xs font-normal text-gray-500">
-                      Sugerido 35%
-                    </span>
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Ano Nuevo %
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.newYearIncreasePercent}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          newYearIncreasePercent: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                    <span className="mt-1 block text-xs font-normal text-gray-500">
-                      Sugerido 45%
-                    </span>
-                  </label>
+                  {automaticSeasonFields.map((season) => (
+                    <div
+                      key={season.kind}
+                      className="col-span-2 rounded-xl border border-orange-100 bg-orange-50 p-3"
+                    >
+                      <div className="font-extrabold text-gray-900">{season.title}</div>
+                      <div className="mt-1 text-xs font-normal text-gray-600">
+                        {season.dates}
+                      </div>
+                      <div className="mt-3 grid grid-cols-2 gap-3">
+                        <label className="font-semibold text-gray-700">
+                          Incremento %
+                          <input
+                            type="number"
+                            disabled={!isAuthorized}
+                            value={Number(rule[season.percentKey] ?? 0)}
+                            onChange={(e) =>
+                              updateRule(property.slug, {
+                                [season.percentKey]: numberValue(e.target.value),
+                              } as Partial<PricingRule>)
+                            }
+                            className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 disabled:opacity-60"
+                          />
+                          <span className="mt-1 block text-xs font-normal text-gray-500">
+                            Sugerido {season.suggestedPercent}%
+                          </span>
+                        </label>
+                        <label className="font-semibold text-gray-700">
+                          Minimo noches
+                          <input
+                            type="number"
+                            disabled={!isAuthorized}
+                            value={Number(rule[season.minKey] ?? 1)}
+                            onChange={(e) =>
+                              updateRule(property.slug, {
+                                [season.minKey]: numberValue(e.target.value),
+                              } as Partial<PricingRule>)
+                            }
+                            className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 disabled:opacity-60"
+                          />
+                          <span className="mt-1 block text-xs font-normal text-gray-500">
+                            Sugerido {season.suggestedMin} noches
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <button
@@ -571,6 +626,129 @@ export default function AdminClient() {
               </article>
             );
           })}
+        </section>
+
+        <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-xl font-extrabold text-gray-900">
+                Calendario Colombia y temporadas automaticas
+              </h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Vista de 4 meses con festivos, temporadas altas, incremento aplicado y
+                minimo de noches segun la propiedad.
+              </p>
+            </div>
+            <label className="text-sm font-semibold text-gray-700">
+              Propiedad
+              <select
+                value={previewPropertySlug}
+                onChange={(e) => setPreviewPropertySlug(e.target.value)}
+                className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm md:w-60"
+              >
+                {properties.map((property) => (
+                  <option key={property.slug} value={property.slug}>
+                    {property.shortTitle}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          {(() => {
+            const previewRule =
+              rules.find((item) => item.propertySlug === previewPropertySlug) ??
+              DEFAULT_PRICING_RULES.find(
+                (item) => item.propertySlug === previewPropertySlug
+              ) ??
+              DEFAULT_PRICING_RULES[0];
+            const today = new Date();
+            const years = [today.getFullYear(), today.getFullYear() + 1];
+            const windows = years.flatMap(colombiaSeasonWindows);
+
+            return (
+              <>
+                <div className="mt-4 grid gap-2 text-xs sm:grid-cols-2 lg:grid-cols-4">
+                  {windows.slice(0, 8).map((window) => (
+                    <div
+                      key={`${window.kind}-${window.from}`}
+                      className="rounded-xl border border-orange-100 bg-orange-50 px-3 py-2 text-gray-700"
+                    >
+                      <div className="font-extrabold text-gray-900">{window.label}</div>
+                      <div>
+                        {window.from} a {window.to}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-5 grid gap-4 xl:grid-cols-4">
+                  {Array.from({ length: 4 }, (_, index) => addMonths(today, index)).map(
+                    (monthDate) => {
+                      const year = monthDate.getFullYear();
+                      const month = monthDate.getMonth();
+                      const firstDay = new Date(year, month, 1).getDay();
+                      const blanks = (firstDay + 6) % 7;
+                      const days = new Date(year, month + 1, 0).getDate();
+
+                      return (
+                        <div
+                          key={`${year}-${month}`}
+                          className="rounded-2xl border border-orange-100 bg-[#FFF7ED] p-3"
+                        >
+                          <div className="text-sm font-extrabold capitalize text-[#1F3D2B]">
+                            {monthLabel(monthDate)}
+                          </div>
+                          <div className="mt-3 grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-[#6B7D2D]">
+                            {["L", "M", "M", "J", "V", "S", "D"].map((day, dayIndex) => (
+                              <div key={`${day}-${dayIndex}`}>{day}</div>
+                            ))}
+                          </div>
+                          <div className="mt-1 grid grid-cols-7 gap-1">
+                            {Array.from({ length: blanks }).map((_, blank) => (
+                              <div key={`blank-${blank}`} className="min-h-12" />
+                            ))}
+                            {Array.from({ length: days }, (_, dayIndex) => {
+                              const day = dayIndex + 1;
+                              const ymd = ymdFromParts(year, month, day);
+                              const status = seasonDay(previewRule, ymd);
+                              const isHot = status.percent >= 40;
+                              const isWarm = status.percent > 0;
+                              const className = isHot
+                                ? "border-[#8F3F2A] bg-[#8F3F2A] text-white"
+                                : isWarm
+                                ? "border-[#D08A5B] bg-[#F4D6B8] text-[#1F3D2B]"
+                                : "border-orange-100 bg-white text-gray-700";
+
+                              return (
+                                <div
+                                  key={ymd}
+                                  title={status.label || "Tarifa normal"}
+                                  className={`min-h-12 rounded-lg border p-1 text-left ${className}`}
+                                >
+                                  <div className="text-xs font-extrabold">{day}</div>
+                                  {status.percent > 0 && (
+                                    <div className="mt-1 leading-tight">
+                                      <div className="text-[10px] font-black">
+                                        +{status.percent}%
+                                      </div>
+                                      <div className="text-[9px] font-bold">
+                                        min {status.minNights}n
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+              </>
+            );
+          })()}
         </section>
 
         <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm">

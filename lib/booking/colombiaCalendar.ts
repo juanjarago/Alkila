@@ -10,6 +10,13 @@ export type ColombiaSeasonMatch = {
   label: string;
 };
 
+export type ColombiaSeasonWindow = {
+  kind: ColombiaSeasonKind;
+  label: string;
+  from: string;
+  to: string;
+};
+
 function addDays(date: Date, days: number) {
   const next = new Date(date);
   next.setDate(next.getDate() + days);
@@ -123,16 +130,48 @@ export function colombiaSeasonMatches(ymd: string): ColombiaSeasonMatch[] {
     matches.push({ kind: "school_break", label: "Semana de receso" });
   }
 
-  if (isWithin(ymd, dateFromYMD(year, 12, 20), dateFromYMD(year, 12, 26))) {
+  if (isWithin(ymd, dateFromYMD(year, 12, 20), dateFromYMD(year, 12, 27))) {
     matches.push({ kind: "christmas", label: "Navidad" });
   }
 
   if (
-    isWithin(ymd, dateFromYMD(year, 12, 27), dateFromYMD(year, 12, 31)) ||
-    isWithin(ymd, dateFromYMD(year, 1, 1), dateFromYMD(year, 1, 6))
+    isWithin(ymd, dateFromYMD(year, 12, 28), dateFromYMD(year, 12, 31)) ||
+    isWithin(ymd, dateFromYMD(year, 1, 1), dateFromYMD(year, 1, 5))
   ) {
     matches.push({ kind: "new_year", label: "Ano nuevo" });
   }
 
   return matches;
+}
+
+export function colombiaSeasonWindows(year: number): ColombiaSeasonWindow[] {
+  const easter = easterSunday(year);
+  const recesoHoliday = nextMonday(dateFromYMD(year, 10, 12));
+
+  return [
+    {
+      kind: "holy_week",
+      label: "Semana Santa",
+      from: toYMD(addDays(easter, -7)),
+      to: toYMD(easter),
+    },
+    {
+      kind: "school_break",
+      label: "Semana de receso",
+      from: toYMD(addDays(recesoHoliday, -7)),
+      to: toYMD(addDays(recesoHoliday, -1)),
+    },
+    {
+      kind: "christmas",
+      label: "Navidad",
+      from: toYMD(dateFromYMD(year, 12, 20)),
+      to: toYMD(dateFromYMD(year, 12, 27)),
+    },
+    {
+      kind: "new_year",
+      label: "Ano nuevo",
+      from: toYMD(dateFromYMD(year, 12, 28)),
+      to: toYMD(dateFromYMD(year + 1, 1, 5)),
+    },
+  ];
 }
