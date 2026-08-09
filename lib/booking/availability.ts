@@ -4,7 +4,10 @@ import { dateRangesOverlap } from "@/lib/ical";
 import { listManualBlocks, listReservations } from "./store";
 import type { QuoteResult } from "./types";
 
-const PROPERTY_TO_CHANNEL_ENV: Record<string, { airbnb?: string; booking?: string }> = {
+export const PROPERTY_TO_CHANNEL_ENV: Record<
+  string,
+  { airbnb?: string; booking?: string }
+> = {
   "cabana-privada-anapoima-8-personas": {
     airbnb: "AIRBNB_ICAL_JF08_URL",
     booking: "BOOKING_ICAL_JF08_URL",
@@ -17,6 +20,16 @@ const PROPERTY_TO_CHANNEL_ENV: Record<string, { airbnb?: string; booking?: strin
     airbnb: "AIRBNB_ICAL_JF02_URL",
     booking: "BOOKING_ICAL_JF02_URL",
   },
+};
+
+export type ExternalChannelReservation = {
+  id: string;
+  propertySlug: string;
+  propertyTitle: string;
+  source: "airbnb" | "booking";
+  start: string;
+  end: string;
+  summary?: string;
 };
 
 async function channelConflicts(input: {
@@ -77,4 +90,40 @@ export async function collectAvailabilityConflicts(input: {
     }));
 
   return [...airbnb, ...booking, ...direct, ...manual];
+}
+
+export async function listExternalChannelReservations(input: {
+  from: string;
+  to: string;
+}): Promise<ExternalChannelReservation[]> {
+  const items = await Promise.all(
+    properties.flatMap((property) => {
+      const channelEnv = PROPERTY_TO_CHANNEL_ENV[property.slug] ?? {};
+
+      return (["airbnb", "booking"] as const).map(async (source) => {
+        const envName = channelEnv[source];
+        const url = envName ? process.env[envName] : undefined;
+        if (!url) return [];
+
+        try {
+          const events = await fetchIcalBlockedEvents(url);
+          return blockedEventsForRange(events, input.from, input.to).map((event) => ({
+            id: `${property.slug}-${source}-${event.uid ?? event.start}-${event.end}`,
+            propertySlug: property.slug,
+            propertyTitle: property.shortTitle,
+            source,
+            start: event.start,
+            end: event.end,
+            summary: event.summary,
+          }));
+        } catch {
+          return [];
+        }
+      });
+    })
+  );
+
+  return items
+    .flat()
+    .sort((a, b) => a.start.localeCompare(b.start) || a.propertyTitle.localeCompare(b.propertyTitle));
 }

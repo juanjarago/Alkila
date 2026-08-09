@@ -22,6 +22,15 @@ type ReservationRow = {
   status: string;
 };
 
+type ExternalReservationRow = {
+  id: string;
+  propertyTitle: string;
+  source: "airbnb" | "booking";
+  start: string;
+  end: string;
+  summary?: string;
+};
+
 function formatCOP(value: number) {
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
@@ -160,6 +169,9 @@ export default function AdminClient() {
   const [token, setToken] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [reservations, setReservations] = useState<ReservationRow[]>([]);
+  const [externalReservations, setExternalReservations] = useState<
+    ExternalReservationRow[]
+  >([]);
   const [rules, setRules] = useState<PricingRule[]>(DEFAULT_PRICING_RULES);
   const [blocks, setBlocks] = useState<ManualBlock[]>([]);
   const [seasonalRates, setSeasonalRates] = useState<SeasonalRate[]>([]);
@@ -236,25 +248,37 @@ export default function AdminClient() {
     setMessage("");
     if (!skipLoading) setLoading(true);
     try {
-      const [reservationsRes, pricingRes, blocksRes, seasonalRatesRes] =
+      const [
+        reservationsRes,
+        pricingRes,
+        blocksRes,
+        seasonalRatesRes,
+        externalReservationsRes,
+      ] =
         await Promise.all([
         fetch("/api/booking/reservations", { headers: authHeaders() }),
         fetch("/api/admin/pricing", { headers: authHeaders() }),
         fetch("/api/admin/blocks", { headers: authHeaders() }),
         fetch("/api/admin/seasonal-rates", { headers: authHeaders() }),
+        fetch("/api/admin/external-reservations", { headers: authHeaders() }),
       ]);
 
       const reservationsData = await reservationsRes.json();
       const pricingData = await pricingRes.json();
       const blocksData = await blocksRes.json();
       const seasonsData = await seasonalRatesRes.json();
+      const externalReservationsData = await externalReservationsRes.json();
 
       if (!reservationsRes.ok) throw new Error(reservationsData?.error);
       if (!pricingRes.ok) throw new Error(pricingData?.error);
       if (!blocksRes.ok) throw new Error(blocksData?.error);
       if (!seasonalRatesRes.ok) throw new Error(seasonsData?.error);
+      if (!externalReservationsRes.ok) {
+        throw new Error(externalReservationsData?.error);
+      }
 
       setReservations(reservationsData.reservations ?? []);
+      setExternalReservations(externalReservationsData.reservations ?? []);
       setRules(pricingData.rules ?? DEFAULT_PRICING_RULES);
       setBlocks(blocksData.blocks ?? []);
       setSeasonalRates(seasonsData.rates ?? []);
@@ -1026,7 +1050,61 @@ export default function AdminClient() {
         </section>
 
         <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-extrabold text-gray-900">Reservas</h2>
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-xl font-extrabold text-gray-900">
+                Reservas externas
+              </h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Fechas bloqueadas que llegan desde los calendarios iCal de Airbnb y
+                Booking para los proximos 12 meses.
+              </p>
+            </div>
+            <div className="rounded-full bg-orange-50 px-3 py-1 text-xs font-black text-[#8F3F2A]">
+              {externalReservations.length} eventos
+            </div>
+          </div>
+
+          <div className="mt-4 grid gap-3 lg:grid-cols-3">
+            {externalReservations.map((reservation) => (
+              <div
+                key={reservation.id}
+                className="rounded-2xl border border-orange-100 bg-[#FFF7ED] p-3"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-[11px] font-black uppercase tracking-wide text-[#6B7D2D]">
+                    {reservation.propertyTitle}
+                  </div>
+                  <span
+                    className={`rounded-full px-2 py-1 text-[10px] font-black uppercase ${
+                      reservation.source === "airbnb"
+                        ? "bg-[#FF385C] text-white"
+                        : "bg-[#003B95] text-white"
+                    }`}
+                  >
+                    {reservation.source}
+                  </span>
+                </div>
+                <div className="mt-2 text-lg font-extrabold text-[#1F3D2B]">
+                  {reservation.start} a {reservation.end}
+                </div>
+                <div className="mt-1 text-xs font-semibold text-gray-500">
+                  {reservation.summary || "Reserva / bloqueo del canal"}
+                </div>
+              </div>
+            ))}
+
+            {externalReservations.length === 0 && (
+              <div className="rounded-2xl border border-orange-100 bg-orange-50 p-4 text-sm text-gray-500">
+                No hay reservas externas cargadas para los proximos 12 meses, o no hay
+                calendarios iCal configurados.
+              </div>
+            )}
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm">
+          <h2 className="text-xl font-extrabold text-gray-900">Reservas directas</h2>
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[760px] text-left text-sm">
               <thead className="border-b text-xs uppercase text-gray-500">
