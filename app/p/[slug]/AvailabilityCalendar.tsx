@@ -134,7 +134,7 @@ export default function AvailabilityCalendar({ slug }: { slug: string }) {
         </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-7 gap-1 text-center text-sm font-black uppercase text-[#66752F]">
+      <div className="property-calendar-weekdays mt-5 grid grid-cols-7 gap-1 text-center text-sm font-black uppercase text-[#66752F]">
         {dayLabels.map((label, index) => (
           <div key={`${label}-${index}`}>{label}</div>
         ))}
@@ -175,7 +175,7 @@ export default function AvailabilityCalendar({ slug }: { slug: string }) {
         </div>
       ) : null}
 
-      <div className="mt-4 flex flex-wrap gap-3 text-base font-bold text-[#4B544D]">
+      <div className="property-calendar-legend mt-4 flex flex-wrap gap-3 text-base font-bold text-[#4B544D]">
         <span className="inline-flex items-center gap-2">
           <span className="h-3 w-3 rounded-full border border-[#D8D5C9] bg-white" />
           Libre
