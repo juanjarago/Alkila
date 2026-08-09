@@ -3,14 +3,51 @@
 @tailwind utilities;
 
 :root {
-  --bg: #fff7ed; /* arena */
+  --bg: #fffaf0;
+  --leaf: #2f6f4e;
+  --deep-leaf: #1f3d2b;
+  --water: #2a9db0;
+  --sun: #f7b955;
+  --clay: #e76f51;
+  --line: #e9d8a6;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
 body {
   background: var(--bg);
-  color: #111827; /* ✅ fuerza texto oscuro (gray-900) */
+  color: #111827;
+}
+
+.site-nature-bg {
+  background:
+    radial-gradient(circle at 8% 4%, rgba(247, 185, 85, 0.24), transparent 28rem),
+    radial-gradient(circle at 88% 12%, rgba(42, 157, 176, 0.16), transparent 26rem),
+    linear-gradient(180deg, #fffaf0 0%, #f4f8e9 46%, #fffaf0 100%);
+}
+
+.nature-band {
+  position: relative;
+  overflow: hidden;
+}
+
+.nature-band::before {
+  content: "";
+  position: absolute;
+  inset: auto -8% -1px -8%;
+  height: 28%;
+  background:
+    linear-gradient(135deg, transparent 0 42%, rgba(47, 111, 78, 0.22) 42% 58%, transparent 58%),
+    linear-gradient(45deg, transparent 0 46%, rgba(123, 182, 97, 0.2) 46% 60%, transparent 60%);
+  pointer-events: none;
+}
+
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  background: rgba(255, 252, 242, 0.88);
+  box-shadow: 0 24px 70px rgba(31, 61, 43, 0.14);
+  backdrop-filter: blur(18px);
 }

@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 type PropertyLike = {
   title: string;
   capacity: number;
-  staysListingId: string; // "JF02" | "JF06" | "JF08"
+  staysListingId: string;
   slug?: string;
 };
 
@@ -39,15 +39,14 @@ export default function BookingBox({
   const [error, setError] = useState<string>("");
   const [result, setResult] = useState<any>(null);
 
-const minDate = useMemo(() => {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
-}, []);
-
+  const minDate = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }, []);
 
   const canSearch = useMemo(() => {
     if (!checkIn || !checkOut) return false;
@@ -64,21 +63,23 @@ const minDate = useMemo(() => {
       setError("Completa check-in y check-out.");
       return;
     }
-const today = new Date(minDate);
-today.setHours(0,0,0,0);
 
-const inDate = new Date(checkIn);
-inDate.setHours(0,0,0,0);
+    const today = new Date(minDate);
+    today.setHours(0, 0, 0, 0);
 
-if (inDate < today) {
-  setError("No puedes reservar en fechas pasadas.");
-  return;
-}
+    const inDate = new Date(checkIn);
+    inDate.setHours(0, 0, 0, 0);
+
+    if (inDate < today) {
+      setError("No puedes reservar en fechas pasadas.");
+      return;
+    }
 
     if (new Date(checkOut) <= new Date(checkIn)) {
       setError("Check-out debe ser posterior a check-in.");
       return;
     }
+
     if (!Number.isFinite(guests) || guests <= 0) {
       setError("Ingresa un número válido de personas.");
       return;
@@ -139,12 +140,11 @@ if (inDate < today) {
     };
   }, [result]);
 
-  // WhatsApp (solo se usa cuando hay result)
   const whatsappHref = useMemo(() => {
     if (!result) return "";
 
     const extrasText =
-      extras.length > 0 ? `\n➕ Extras:\n- ${extras.join("\n- ")}` : "";
+      extras.length > 0 ? `\nExtras:\n- ${extras.join("\n- ")}` : "";
 
     const totalCOPText =
       stays?.totalCOP != null ? formatCOP(Number(stays.totalCOP)) : "N/D";
@@ -152,63 +152,63 @@ if (inDate < today) {
     const totalUSDText =
       stays?.totalUSD != null ? formatUSD(Number(stays.totalUSD)) : "N/D";
 
-    const whatsappMessage = `Hola 👋
-Estoy interesado en *${property.title}* en Anapoima.
+    const whatsappMessage = `Hola.
+Estoy interesado en ${property.title} en Anapoima.
 
-📅 Fechas: ${checkIn} a ${checkOut}
-👥 Personas: ${guests}
-💰 Valor estimado: ${totalCOPText}${
+Fechas: ${checkIn} a ${checkOut}
+Personas: ${guests}
+Valor estimado: ${totalCOPText}${
       stays?.totalUSD != null ? ` (${totalUSDText})` : ""
     }${extrasText}
 
-¿Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
+Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
 
-    const phone = "573014000436"; // <-- cámbialo
+    const phone = "573014000436";
     return `https://wa.me/${phone}?text=${encodeURIComponent(whatsappMessage)}`;
   }, [result, extras, stays, property.title, checkIn, checkOut, guests]);
 
   return (
-    <div className="rounded-3xl border border-orange-200 bg-white p-5 shadow-sm sm:p-6">
+    <div className="rounded-[2rem] border border-[#E9D8A6] bg-[#FFFCF2] p-5 shadow-sm sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <div className="max-w-[12rem] text-lg font-extrabold leading-tight text-gray-900">
+        <div className="max-w-[13rem] text-lg font-black leading-tight text-[#1F3D2B]">
           Consulta tu estadía
         </div>
-        <span className="shrink-0 rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800">
+        <span className="shrink-0 rounded-full bg-[#DDF3D1] px-3 py-1 text-xs font-black text-[#1F3D2B]">
           Reserva segura
         </span>
       </div>
 
-      <p className="mt-2 text-sm text-gray-600">
+      <p className="mt-2 text-sm leading-6 text-gray-600">
         Selecciona fechas y número de personas para ver disponibilidad y precio
         estimado.
       </p>
 
       <div className="mt-4 space-y-3">
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(9.5rem,1fr))] gap-3">
-          <label className="text-sm font-semibold text-gray-700">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-3">
+          <label className="min-w-0 text-sm font-bold text-[#1F3D2B]">
             Check-in
             <input
               type="date"
-       	 min={minDate}
+              min={minDate}
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
-              className="mt-1 min-h-11 w-full min-w-0 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
+              className="mt-1 min-h-12 w-full min-w-0 appearance-none rounded-2xl border border-[#E9D8A6] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#F7B955]"
             />
           </label>
 
-          <label className="text-sm font-semibold text-gray-700">
+          <label className="min-w-0 text-sm font-bold text-[#1F3D2B]">
             Check-out
             <input
               type="date"
-min={checkIn || minDate}
+              min={checkIn || minDate}
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
-              className="mt-1 min-h-11 w-full min-w-0 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
+              className="mt-1 min-h-12 w-full min-w-0 appearance-none rounded-2xl border border-[#E9D8A6] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#F7B955]"
             />
           </label>
         </div>
 
-        <label className="text-sm font-semibold text-gray-700">
+        <label className="text-sm font-bold text-[#1F3D2B]">
           Personas
           <input
             type="number"
@@ -219,7 +219,7 @@ min={checkIn || minDate}
               const n = Number(e.target.value);
               setGuests(Number.isFinite(n) ? n : 0);
             }}
-            className="mt-1 min-h-11 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-200"
+            className="mt-1 min-h-12 w-full rounded-2xl border border-[#E9D8A6] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#F7B955]"
           />
         </label>
 
@@ -227,20 +227,20 @@ min={checkIn || minDate}
           type="button"
           onClick={onSearch}
           disabled={loading || !canSearch}
-          className="w-full rounded-2xl bg-[#E76F51] px-4 py-3 text-sm font-extrabold text-white hover:opacity-90 disabled:opacity-60"
+          className="w-full rounded-2xl bg-[#E76F51] px-4 py-3 text-sm font-black text-white shadow-lg shadow-[#E76F51]/20 transition hover:-translate-y-0.5 disabled:opacity-60"
         >
           {loading ? "Consultando..." : "Ver disponibilidad"}
         </button>
 
         {error ? (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 break-words">
+          <div className="break-words rounded-2xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
             {error}
           </div>
         ) : null}
 
         {result && stays ? (
           <>
-            <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-gray-800">
+            <div className="rounded-2xl border border-[#E9D8A6] bg-[#FDF2D0]/70 p-3 text-sm text-gray-800">
               <div className="space-y-1">
                 {stays.totalUSD != null && (
                   <div>
@@ -264,11 +264,12 @@ min={checkIn || minDate}
                     Estadía: {formatCOP(Number(stays.subtotalCOP))}
                   </div>
                 )}
-                {stays.cleaningFeeCOP != null && Number(stays.cleaningFeeCOP) > 0 && (
-                  <div className="text-xs text-gray-700">
-                    Limpieza: {formatCOP(Number(stays.cleaningFeeCOP))}
-                  </div>
-                )}
+                {stays.cleaningFeeCOP != null &&
+                  Number(stays.cleaningFeeCOP) > 0 && (
+                    <div className="text-xs text-gray-700">
+                      Limpieza: {formatCOP(Number(stays.cleaningFeeCOP))}
+                    </div>
+                  )}
                 {stays.extraGuestFeeCOP != null &&
                   Number(stays.extraGuestFeeCOP) > 0 && (
                     <div className="text-xs text-gray-700">
@@ -283,7 +284,7 @@ min={checkIn || minDate}
               href={whatsappHref}
               target="_blank"
               rel="noreferrer"
-              className="mt-3 block w-full rounded-2xl bg-green-600 px-4 py-3 text-center text-sm font-extrabold text-white hover:opacity-90"
+              className="mt-3 block w-full rounded-2xl bg-green-600 px-4 py-3 text-center text-sm font-black text-white transition hover:-translate-y-0.5"
             >
               Confirmar por WhatsApp
             </a>
@@ -295,16 +296,14 @@ min={checkIn || minDate}
                 checkIn
               )}&checkOut=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(
                 String(guests)
-              )}&totalCOP=${encodeURIComponent(
-                String(stays.totalCOP ?? 0)
-              )}`}
-              className="mt-3 block w-full rounded-2xl bg-[#1F3D2B] px-4 py-3 text-center text-sm font-extrabold text-white hover:opacity-90"
+              )}&totalCOP=${encodeURIComponent(String(stays.totalCOP ?? 0))}`}
+              className="mt-3 block w-full rounded-2xl bg-[#1F3D2B] px-4 py-3 text-center text-sm font-black text-white transition hover:-translate-y-0.5"
             >
               Pagar anticipo y reservar
             </a>
           </>
         ) : (
-          <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-3 text-xs text-gray-600">
+          <div className="mt-3 rounded-2xl border border-gray-200 bg-white p-3 text-xs text-gray-600">
             Para continuar, primero consulta la disponibilidad.
           </div>
         )}

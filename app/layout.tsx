@@ -1,19 +1,18 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Header } from "@/components/Header";
-import WhatsAppFloating from "../components/whatsapp/WhatsAppFloating";
+import { SiteChrome } from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "Alkila | Fincas en Anapoima",
-  description: "Fincas privadas en Anapoima según el tamaño de tu grupo. Piscina y jacuzzi privados. Pet friendly con tarifa adicional."
+  description:
+    "Fincas privadas en Anapoima según el tamaño de tu grupo. Piscina, jacuzzi, naturaleza y espacios pet friendly.",
 };
 
-// app/layout.tsx
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className="min-h-screen bg-[#FFF7ED] text-gray-900">
-        {children}
+      <body className="site-nature-bg min-h-screen text-gray-900">
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

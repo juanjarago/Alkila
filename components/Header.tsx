@@ -1,17 +1,19 @@
+import { BrandLogo } from "./BrandLogo";
+
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-orange-200 bg-[#FFF7ED]/90 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-[#E9D8A6]/70 bg-[#FFFCF2]/88 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <a href="/" className="text-lg font-extrabold tracking-tight">
-          Alkila<span className="text-[#E76F51]">.</span>
-        </a>
+        <BrandLogo compact />
 
-        <nav className="hidden gap-6 text-sm font-semibold md:flex">
-          <a className="hover:opacity-80" href="/propiedades">Propiedades</a>
-          <a className="hover:opacity-80" href="/destinos/anapoima">Anapoima</a>
+        <nav className="hidden items-center gap-6 text-sm font-bold text-[#1F3D2B] md:flex">
+          <a className="transition hover:text-[#2A9DB0]" href="/propiedades">
+            Propiedades
+          </a>
+          <a className="transition hover:text-[#2A9DB0]" href="/destinos/anapoima">
+            Anapoima
+          </a>
         </nav>
-
-
       </div>
     </header>
   );
