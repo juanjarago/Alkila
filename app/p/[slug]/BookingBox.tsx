@@ -243,32 +243,32 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
         estimado.
       </p>
 
-      <div className="mt-5 space-y-4 lg:mt-4 lg:space-y-3">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-3">
-          <label className="block min-w-0 text-base font-bold text-[#17332A] lg:text-sm">
+      <div className="mt-5 space-y-4">
+        <div className="grid grid-cols-1 gap-4">
+          <label className="block min-w-0 text-base font-bold text-[#17332A]">
             Check-in
             <input
               type="date"
               min={minDate}
               value={checkIn}
               onChange={(e) => updateCheckIn(e.target.value)}
-              className="mt-2 block min-h-14 w-full min-w-0 appearance-none rounded-2xl border border-[#C6C0B1] bg-white px-4 py-3 text-lg font-bold text-[#17332A] outline-none focus:ring-2 focus:ring-[#B8794A] lg:mt-1 lg:min-h-12 lg:px-3 lg:py-2 lg:text-base"
+              className="mt-2 block min-h-14 w-full min-w-0 appearance-none rounded-2xl border border-[#C6C0B1] bg-white px-4 py-3 text-lg font-bold text-[#17332A] outline-none focus:ring-2 focus:ring-[#B8794A]"
             />
           </label>
 
-          <label className="block min-w-0 text-base font-bold text-[#17332A] lg:text-sm">
+          <label className="block min-w-0 text-base font-bold text-[#17332A]">
             Check-out
             <input
               type="date"
               min={checkIn ? nextDay(checkIn) : minDate}
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
-              className="mt-2 block min-h-14 w-full min-w-0 appearance-none rounded-2xl border border-[#C6C0B1] bg-white px-4 py-3 text-lg font-bold text-[#17332A] outline-none focus:ring-2 focus:ring-[#B8794A] lg:mt-1 lg:min-h-12 lg:px-3 lg:py-2 lg:text-base"
+              className="mt-2 block min-h-14 w-full min-w-0 appearance-none rounded-2xl border border-[#C6C0B1] bg-white px-4 py-3 text-lg font-bold text-[#17332A] outline-none focus:ring-2 focus:ring-[#B8794A]"
             />
           </label>
         </div>
 
-        <label className="block text-base font-bold text-[#17332A] lg:text-sm">
+        <label className="block text-base font-bold text-[#17332A]">
           Personas
           <input
             type="number"
@@ -279,7 +279,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
               const n = Number(e.target.value);
               setGuests(Number.isFinite(n) ? n : 0);
             }}
-            className="mt-2 block min-h-14 w-full rounded-2xl border border-[#C6C0B1] bg-white px-4 py-3 text-lg font-bold text-[#17332A] outline-none focus:ring-2 focus:ring-[#B8794A] lg:mt-1 lg:min-h-12 lg:px-3 lg:py-2 lg:text-base"
+            className="mt-2 block min-h-14 w-full rounded-2xl border border-[#C6C0B1] bg-white px-4 py-3 text-lg font-bold text-[#17332A] outline-none focus:ring-2 focus:ring-[#B8794A]"
           />
         </label>
 
@@ -287,7 +287,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
           type="button"
           onClick={onSearch}
           disabled={loading || !canSearch}
-          className="min-h-14 w-full rounded-2xl bg-[#B85F3B] px-4 py-3 text-base font-black text-white shadow-sm transition hover:-translate-y-0.5 disabled:opacity-60 lg:min-h-0 lg:text-sm"
+          className="min-h-14 w-full rounded-2xl bg-[#B85F3B] px-4 py-3 text-base font-black text-white shadow-sm transition hover:-translate-y-0.5 disabled:opacity-60"
         >
           {loading ? "Consultando..." : "Ver disponibilidad"}
         </button>
