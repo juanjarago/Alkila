@@ -14,6 +14,8 @@ export type PricingRule = {
   extraGuestFeeCOP?: number;
   includedGuests: number;
   minNights: number;
+  minWeekdayNights: number;
+  minWeekendNights: number;
   petFeeCOP: number;
   domesticServiceFeePerDayCOP: number;
   earlyCheckInPercent: number;

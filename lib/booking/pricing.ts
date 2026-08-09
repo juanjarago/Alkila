@@ -12,6 +12,8 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     includedGuests: 6,
     extraGuestFeeCOP: 100000,
     minNights: 2,
+    minWeekdayNights: 2,
+    minWeekendNights: 2,
     petFeeCOP: 50000,
     domesticServiceFeePerDayCOP: 90000,
     earlyCheckInPercent: 50,
@@ -25,6 +27,8 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     includedGuests: 12,
     extraGuestFeeCOP: 120000,
     minNights: 2,
+    minWeekdayNights: 2,
+    minWeekendNights: 2,
     petFeeCOP: 50000,
     domesticServiceFeePerDayCOP: 90000,
     earlyCheckInPercent: 50,
@@ -38,6 +42,8 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     includedGuests: 16,
     extraGuestFeeCOP: 150000,
     minNights: 2,
+    minWeekdayNights: 2,
+    minWeekendNights: 2,
     petFeeCOP: 50000,
     domesticServiceFeePerDayCOP: 90000,
     earlyCheckInPercent: 50,
@@ -105,7 +111,11 @@ export async function quoteDirectStay(input: {
   const seasonalMinNights = seasonalRates
     .filter((rate) => nightsList.some((night) => night >= rate.from && night < rate.to))
     .map((rate) => rate.minNights ?? 0);
-  const minNights = Math.max(rule.minNights, ...seasonalMinNights);
+  const usesWeekendRate = nightsList.some(isWeekendNight);
+  const baseMinNights = usesWeekendRate
+    ? rule.minWeekendNights
+    : rule.minWeekdayNights;
+  const minNights = Math.max(baseMinNights, ...seasonalMinNights);
 
   if (nightsList.length < minNights) {
     throw new Error(`La estadia minima es de ${minNights} noches.`);

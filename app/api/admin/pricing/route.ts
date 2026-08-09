@@ -34,7 +34,9 @@ export async function POST(req: Request) {
       cleaningFeeCOP: Number(body?.cleaningFeeCOP ?? 0),
       extraGuestFeeCOP: Number(body?.extraGuestFeeCOP ?? 0),
       includedGuests: Number(body?.includedGuests ?? 1),
-      minNights: Number(body?.minNights ?? 1),
+      minNights: Number(body?.minWeekdayNights ?? body?.minNights ?? 1),
+      minWeekdayNights: Number(body?.minWeekdayNights ?? body?.minNights ?? 1),
+      minWeekendNights: Number(body?.minWeekendNights ?? body?.minNights ?? 1),
       petFeeCOP: Number(body?.petFeeCOP ?? 0),
       domesticServiceFeePerDayCOP: Number(body?.domesticServiceFeePerDayCOP ?? 0),
       earlyCheckInPercent: Number(body?.earlyCheckInPercent ?? 0),
@@ -46,11 +48,14 @@ export async function POST(req: Request) {
       rule.baseNightCOP <= 0 ||
       rule.cleaningFeeCOP < 0 ||
       rule.includedGuests < 1 ||
-      rule.minNights < 1 ||
+      rule.minWeekdayNights < 1 ||
+      rule.minWeekendNights < 1 ||
       rule.petFeeCOP < 0 ||
       rule.domesticServiceFeePerDayCOP < 0 ||
       rule.earlyCheckInPercent < 0 ||
-      rule.lateCheckoutPercent < 0
+      rule.earlyCheckInPercent > 100 ||
+      rule.lateCheckoutPercent < 0 ||
+      rule.lateCheckoutPercent > 100
     ) {
       return NextResponse.json({ error: "Regla de precios invalida." }, { status: 400 });
     }

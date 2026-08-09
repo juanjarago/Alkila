@@ -346,14 +346,29 @@ export default function AdminClient() {
                     />
                   </label>
                   <label className="font-semibold text-gray-700">
-                    Minimo noches
+                    Min noches entre semana
                     <input
                       type="number"
                       disabled={!isAuthorized}
-                      value={rule.minNights}
+                      value={rule.minWeekdayNights}
                       onChange={(e) =>
                         updateRule(property.slug, {
                           minNights: numberValue(e.target.value),
+                          minWeekdayNights: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                  </label>
+                  <label className="font-semibold text-gray-700">
+                    Min noches fin de semana
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.minWeekendNights}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          minWeekendNights: numberValue(e.target.value),
                         })
                       }
                       className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
@@ -471,81 +486,100 @@ export default function AdminClient() {
             Usa esto para festivos, vacaciones, fin de ano y fechas de alta demanda.
           </p>
 
-          <div className="mt-4 grid gap-3 md:grid-cols-[1.3fr,1fr,1fr,1fr,1fr,1fr,auto]">
-            <select
-              disabled={!isAuthorized}
-              value={seasonDraft.propertySlug}
-              onChange={(e) =>
-                setSeasonDraft((current) => ({
-                  ...current,
-                  propertySlug: e.target.value,
-                }))
-              }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
-            >
-              {properties.map((property) => (
-                <option key={property.slug} value={property.slug}>
-                  {property.shortTitle}
-                </option>
-              ))}
-            </select>
-            <input
-              disabled={!isAuthorized}
-              value={seasonDraft.name}
-              onChange={(e) =>
-                setSeasonDraft((current) => ({ ...current, name: e.target.value }))
-              }
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
-            />
-            <input
-              type="date"
-              disabled={!isAuthorized}
-              value={seasonDraft.from}
-              onChange={(e) =>
-                setSeasonDraft((current) => ({ ...current, from: e.target.value }))
-              }
-              className="min-h-11 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
-            />
-            <input
-              type="date"
-              disabled={!isAuthorized}
-              value={seasonDraft.to}
-              onChange={(e) =>
-                setSeasonDraft((current) => ({ ...current, to: e.target.value }))
-              }
-              className="min-h-11 rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
-            />
-            <input
-              type="number"
-              disabled={!isAuthorized}
-              value={seasonDraft.nightCOP}
-              onChange={(e) =>
-                setSeasonDraft((current) => ({
-                  ...current,
-                  nightCOP: numberValue(e.target.value),
-                }))
-              }
-              placeholder="Precio noche"
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
-            />
-            <input
-              type="number"
-              disabled={!isAuthorized}
-              value={seasonDraft.minNights}
-              onChange={(e) =>
-                setSeasonDraft((current) => ({
-                  ...current,
-                  minNights: numberValue(e.target.value),
-                }))
-              }
-              placeholder="Min noches"
-              className="rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
-            />
+          <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+            <label className="text-sm font-semibold text-gray-700">
+              Propiedad
+              <select
+                disabled={!isAuthorized}
+                value={seasonDraft.propertySlug}
+                onChange={(e) =>
+                  setSeasonDraft((current) => ({
+                    ...current,
+                    propertySlug: e.target.value,
+                  }))
+                }
+                className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
+              >
+                {properties.map((property) => (
+                  <option key={property.slug} value={property.slug}>
+                    {property.shortTitle}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-sm font-semibold text-gray-700">
+              Nombre de la temporada
+              <input
+                disabled={!isAuthorized}
+                value={seasonDraft.name}
+                onChange={(e) =>
+                  setSeasonDraft((current) => ({ ...current, name: e.target.value }))
+                }
+                placeholder="Ej: Fin de ano"
+                className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
+              />
+            </label>
+            <label className="text-sm font-semibold text-gray-700">
+              Fecha inicial
+              <input
+                type="date"
+                disabled={!isAuthorized}
+                value={seasonDraft.from}
+                onChange={(e) =>
+                  setSeasonDraft((current) => ({ ...current, from: e.target.value }))
+                }
+                className="mt-1 min-h-11 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
+              />
+            </label>
+            <label className="text-sm font-semibold text-gray-700">
+              Fecha final
+              <input
+                type="date"
+                disabled={!isAuthorized}
+                value={seasonDraft.to}
+                onChange={(e) =>
+                  setSeasonDraft((current) => ({ ...current, to: e.target.value }))
+                }
+                className="mt-1 min-h-11 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
+              />
+            </label>
+            <label className="text-sm font-semibold text-gray-700">
+              Precio por noche en esta temporada
+              <input
+                type="number"
+                disabled={!isAuthorized}
+                value={seasonDraft.nightCOP}
+                onChange={(e) =>
+                  setSeasonDraft((current) => ({
+                    ...current,
+                    nightCOP: numberValue(e.target.value),
+                  }))
+                }
+                placeholder="Ej: 3200000"
+                className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
+              />
+            </label>
+            <label className="text-sm font-semibold text-gray-700">
+              Minimo de noches en esta temporada
+              <input
+                type="number"
+                disabled={!isAuthorized}
+                value={seasonDraft.minNights}
+                onChange={(e) =>
+                  setSeasonDraft((current) => ({
+                    ...current,
+                    minNights: numberValue(e.target.value),
+                  }))
+                }
+                placeholder="Ej: 3"
+                className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm disabled:opacity-60"
+              />
+            </label>
             <button
               type="button"
               onClick={createSeasonalRate}
               disabled={!isAuthorized}
-              className="rounded-xl bg-[#E76F51] px-4 py-2 text-sm font-bold text-white disabled:opacity-50"
+              className="self-end rounded-xl bg-[#E76F51] px-4 py-2 text-sm font-bold text-white disabled:opacity-50"
             >
               Crear
             </button>

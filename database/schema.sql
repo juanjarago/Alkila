@@ -34,6 +34,8 @@ create table if not exists pricing_rules (
   extra_guest_fee_cop integer not null default 0,
   included_guests integer not null default 1,
   min_nights integer not null default 1,
+  min_weekday_nights integer not null default 2,
+  min_weekend_nights integer not null default 2,
   pet_fee_cop integer not null default 50000,
   domestic_service_fee_per_day_cop integer not null default 90000,
   early_checkin_percent integer not null default 50,
@@ -42,10 +44,23 @@ create table if not exists pricing_rules (
 );
 
 alter table pricing_rules
+  add column if not exists min_weekday_nights integer,
+  add column if not exists min_weekend_nights integer,
   add column if not exists pet_fee_cop integer not null default 50000,
   add column if not exists domestic_service_fee_per_day_cop integer not null default 90000,
   add column if not exists early_checkin_percent integer not null default 50,
   add column if not exists late_checkout_percent integer not null default 50;
+
+update pricing_rules
+set
+  min_weekday_nights = coalesce(min_weekday_nights, min_nights, 2),
+  min_weekend_nights = coalesce(min_weekend_nights, min_nights, 2);
+
+alter table pricing_rules
+  alter column min_weekday_nights set default 2,
+  alter column min_weekday_nights set not null,
+  alter column min_weekend_nights set default 2,
+  alter column min_weekend_nights set not null;
 
 create table if not exists manual_blocks (
   id text primary key,
