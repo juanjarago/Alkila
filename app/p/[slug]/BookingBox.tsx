@@ -36,6 +36,18 @@ function formatDate(value: string) {
   }).format(new Date(year, month - 1, day));
 }
 
+function nextDay(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+  if (!year || !month || !day) return "";
+
+  const date = new Date(year, month - 1, day);
+  date.setDate(date.getDate() + 1);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 function sourceLabel(source?: string) {
   if (source === "airbnb") return "Airbnb";
   if (source === "booking") return "Booking";
@@ -89,6 +101,18 @@ export default function BookingBox({
     if (new Date(checkOut) <= new Date(checkIn)) return false;
     return true;
   }, [checkIn, checkOut, guests]);
+
+  function updateCheckIn(value: string) {
+    setCheckIn(value);
+    setError("");
+    setResult(null);
+    if (!value) return;
+
+    const suggestedCheckOut = nextDay(value);
+    if (!checkOut || checkOut <= value) {
+      setCheckOut(suggestedCheckOut);
+    }
+  }
 
   async function onSearch() {
     setError("");
@@ -227,7 +251,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
               type="date"
               min={minDate}
               value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
+              onChange={(e) => updateCheckIn(e.target.value)}
               className="mt-1 min-h-12 w-full min-w-0 appearance-none rounded-2xl border border-[#C6C0B1] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
             />
           </label>
@@ -236,7 +260,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
             Check-out
             <input
               type="date"
-              min={checkIn || minDate}
+              min={checkIn ? nextDay(checkIn) : minDate}
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
               className="mt-1 min-h-12 w-full min-w-0 appearance-none rounded-2xl border border-[#C6C0B1] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"

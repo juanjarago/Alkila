@@ -3,11 +3,33 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+function nextDay(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+  if (!year || !month || !day) return "";
+
+  const date = new Date(year, month - 1, day);
+  date.setDate(date.getDate() + 1);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 export function SearchBar() {
   const router = useRouter();
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(8);
+
+  function updateCheckIn(value: string) {
+    setCheckIn(value);
+    if (!value) return;
+
+    const suggestedCheckOut = nextDay(value);
+    if (!checkOut || checkOut <= value) {
+      setCheckOut(suggestedCheckOut);
+    }
+  }
 
   function go() {
     const params = new URLSearchParams();
@@ -40,7 +62,7 @@ export function SearchBar() {
             className="mt-1 min-h-12 w-full min-w-0 rounded-2xl border border-[#C6C0B1] bg-white px-4 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
             type="date"
             value={checkIn}
-            onChange={(e) => setCheckIn(e.target.value)}
+            onChange={(e) => updateCheckIn(e.target.value)}
           />
         </label>
 
@@ -49,6 +71,7 @@ export function SearchBar() {
           <input
             className="mt-1 min-h-12 w-full min-w-0 rounded-2xl border border-[#C6C0B1] bg-white px-4 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
             type="date"
+            min={checkIn ? nextDay(checkIn) : undefined}
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
           />
