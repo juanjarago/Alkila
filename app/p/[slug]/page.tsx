@@ -40,25 +40,25 @@ export default async function Page({
           </a>
         </div>
 
-        <div className="mt-4 grid gap-4 min-[900px]:mt-6 min-[900px]:gap-6 lg:grid-cols-[1.3fr,0.7fr]">
-          <section className="rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-4 shadow-sm min-[900px]:rounded-[2rem] min-[900px]:p-6">
-            <div className="text-base font-bold text-[#66752F] min-[900px]:text-sm">
+        <div className="mt-4 grid gap-5 min-[900px]:mt-6">
+          <section className="rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm min-[900px]:rounded-[2rem] min-[900px]:p-6">
+            <div className="text-lg font-black text-[#66752F]">
               {property.locationLabel ?? "Anapoima"}
             </div>
 
-            <h1 className="mt-2 text-[1.7rem] font-black leading-[1.08] tracking-tight text-[#17332A] min-[900px]:text-4xl">
+            <h1 className="mt-2 text-[2.15rem] font-black leading-[1.04] tracking-tight text-[#17332A] min-[900px]:text-[2.7rem]">
               {property.title}
             </h1>
 
             <div className="mt-4 flex gap-2 overflow-x-auto pb-2 min-[900px]:flex-wrap min-[900px]:overflow-visible min-[900px]:pb-0">
-              <span className="shrink-0 rounded-full bg-[#D8D5C9] px-3 py-2 text-sm font-black text-[#17332A] min-[900px]:py-1">
+              <span className="shrink-0 rounded-full bg-[#D8D5C9] px-4 py-2.5 text-base font-black text-[#17332A]">
                 Hasta {property.capacity} personas
               </span>
 
               {(property.highlights ?? []).slice(0, 6).map((h: string) => (
                 <span
                   key={h}
-                  className="shrink-0 rounded-full border border-[#C6C0B1] bg-white px-3 py-2 text-sm font-bold text-[#3F4741] min-[900px]:py-1"
+                  className="shrink-0 rounded-full border border-[#C6C0B1] bg-white px-4 py-2.5 text-base font-bold text-[#3F4741]"
                 >
                   {h}
                 </span>
@@ -74,17 +74,17 @@ export default async function Page({
             )}
 
             <div className="mt-6 min-[900px]:mt-8">
-              <h2 className="text-2xl font-black text-[#17332A] min-[900px]:text-xl">
+              <h2 className="text-[1.75rem] font-black text-[#17332A]">
                 Descripción
               </h2>
-              <p className="mt-2 text-base leading-7 text-[#4B544D]">
+              <p className="mt-3 text-lg leading-8 text-[#4B544D]">
                 {property.description ??
                   "Un espacio ideal para disfrutar en familia y con amigos, rodeado de naturaleza y con todas las comodidades."}
               </p>
             </div>
           </section>
 
-          <aside id="reserva" className="lg:sticky lg:top-6">
+          <aside id="reserva">
             <ReservationSidebar
               slug={property.slug}
               property={{

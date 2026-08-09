@@ -103,13 +103,13 @@ export default function AvailabilityCalendar({ slug }: { slug: string }) {
   }, [data?.days, month]);
 
   return (
-    <section className="mt-4 rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-4 shadow-sm min-[900px]:rounded-[2rem] min-[900px]:p-6">
+    <section className="mt-4 rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm min-[900px]:rounded-[2rem] min-[900px]:p-6">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-black uppercase tracking-[0.18em] text-[#66752F] min-[900px]:text-xs">
+          <p className="text-base font-black uppercase tracking-[0.18em] text-[#66752F]">
             Calendario
           </p>
-          <h2 className="mt-1 text-2xl font-black capitalize leading-tight text-[#17332A] min-[900px]:text-lg">
+          <h2 className="mt-1 text-[1.85rem] font-black capitalize leading-tight text-[#17332A]">
             {monthTitle(month)}
           </h2>
         </div>
@@ -118,7 +118,7 @@ export default function AvailabilityCalendar({ slug }: { slug: string }) {
           <button
             type="button"
             onClick={() => setMonth((value) => moveMonth(value, -1))}
-            className="grid h-12 w-12 place-items-center rounded-full border border-[#C6C0B1] bg-white text-xl font-black text-[#17332A] transition hover:-translate-y-0.5 min-[900px]:h-10 min-[900px]:w-10 min-[900px]:text-lg"
+            className="grid h-14 w-14 place-items-center rounded-full border border-[#C6C0B1] bg-white text-2xl font-black text-[#17332A] transition hover:-translate-y-0.5"
             aria-label="Mes anterior"
           >
             {"<"}
@@ -126,7 +126,7 @@ export default function AvailabilityCalendar({ slug }: { slug: string }) {
           <button
             type="button"
             onClick={() => setMonth((value) => moveMonth(value, 1))}
-            className="grid h-12 w-12 place-items-center rounded-full border border-[#C6C0B1] bg-white text-xl font-black text-[#17332A] transition hover:-translate-y-0.5 min-[900px]:h-10 min-[900px]:w-10 min-[900px]:text-lg"
+            className="grid h-14 w-14 place-items-center rounded-full border border-[#C6C0B1] bg-white text-2xl font-black text-[#17332A] transition hover:-translate-y-0.5"
             aria-label="Mes siguiente"
           >
             {">"}
@@ -134,20 +134,20 @@ export default function AvailabilityCalendar({ slug }: { slug: string }) {
         </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-7 gap-1 text-center text-xs font-black uppercase text-[#66752F] min-[900px]:mt-4 min-[900px]:text-[0.7rem]">
+      <div className="mt-5 grid grid-cols-7 gap-1 text-center text-sm font-black uppercase text-[#66752F]">
         {dayLabels.map((label, index) => (
           <div key={`${label}-${index}`}>{label}</div>
         ))}
       </div>
 
-      <div className="mt-2 grid grid-cols-7 gap-1.5 min-[900px]:gap-1">
+      <div className="mt-2 grid grid-cols-7 gap-1.5">
         {cells.map((day, index) =>
           day ? (
             <div
               key={day.date}
               title={sourceText(day)}
               className={[
-                "grid aspect-square min-h-11 place-items-center rounded-xl text-base font-black min-[900px]:min-h-9 min-[900px]:text-sm",
+                "grid aspect-square min-h-12 place-items-center rounded-xl text-lg font-black",
                 day.available
                   ? "border border-[#D8D5C9] bg-white text-[#17332A]"
                   : day.past
@@ -158,24 +158,24 @@ export default function AvailabilityCalendar({ slug }: { slug: string }) {
               {dayNumber(day.date)}
             </div>
           ) : (
-            <div key={`empty-${index}`} className="aspect-square min-h-11 min-[900px]:min-h-9" />
+            <div key={`empty-${index}`} className="aspect-square min-h-12" />
           )
         )}
       </div>
 
       {loading ? (
-        <div className="mt-3 rounded-2xl border border-[#C6C0B1] bg-white p-4 text-sm font-semibold text-[#4B544D] min-[900px]:p-3 min-[900px]:text-xs">
+        <div className="mt-3 rounded-2xl border border-[#C6C0B1] bg-white p-4 text-base font-semibold text-[#4B544D]">
           Cargando disponibilidad...
         </div>
       ) : null}
 
       {error ? (
-        <div className="mt-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700 min-[900px]:p-3 min-[900px]:text-xs">
+        <div className="mt-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-base font-semibold text-red-700">
           {error}
         </div>
       ) : null}
 
-      <div className="mt-4 flex flex-wrap gap-3 text-sm font-bold text-[#4B544D] min-[900px]:gap-2 min-[900px]:text-xs">
+      <div className="mt-4 flex flex-wrap gap-3 text-base font-bold text-[#4B544D]">
         <span className="inline-flex items-center gap-2">
           <span className="h-3 w-3 rounded-full border border-[#D8D5C9] bg-white" />
           Libre
