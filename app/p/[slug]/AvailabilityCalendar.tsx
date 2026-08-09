@@ -103,7 +103,7 @@ export default function AvailabilityCalendar({ slug }: { slug: string }) {
   }, [data?.days, month]);
 
   return (
-    <section className="mt-4 rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm min-[900px]:rounded-[2rem] min-[900px]:p-6">
+    <section className="property-calendar mt-4 rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm min-[900px]:rounded-[2rem] min-[900px]:p-6">
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-base font-black uppercase tracking-[0.18em] text-[#66752F]">
@@ -147,7 +147,7 @@ export default function AvailabilityCalendar({ slug }: { slug: string }) {
               key={day.date}
               title={sourceText(day)}
               className={[
-                "grid aspect-square min-h-12 place-items-center rounded-xl text-lg font-black",
+                "property-calendar-day grid aspect-square min-h-12 place-items-center rounded-xl text-lg font-black",
                 day.available
                   ? "border border-[#D8D5C9] bg-white text-[#17332A]"
                   : day.past

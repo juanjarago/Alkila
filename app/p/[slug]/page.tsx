@@ -22,7 +22,7 @@ export default async function Page({
         : [];
 
   return (
-    <main>
+    <main className="property-detail-page">
       <div className="mx-auto max-w-6xl px-3 pt-4 min-[900px]:px-4 min-[900px]:pt-8">
         <div className="grid grid-cols-2 items-stretch gap-3 min-[900px]:flex min-[900px]:items-center min-[900px]:justify-between min-[900px]:gap-4">
           <Link
@@ -50,7 +50,7 @@ export default async function Page({
               {property.title}
             </h1>
 
-            <div className="mt-4 flex gap-2 overflow-x-auto pb-2 min-[900px]:flex-wrap min-[900px]:overflow-visible min-[900px]:pb-0">
+            <div className="property-highlights mt-4 flex gap-2 overflow-x-auto pb-2 min-[900px]:flex-wrap min-[900px]:overflow-visible min-[900px]:pb-0">
               <span className="shrink-0 rounded-full bg-[#D8D5C9] px-4 py-2.5 text-base font-black text-[#17332A]">
                 Hasta {property.capacity} personas
               </span>

@@ -34,3 +34,65 @@ body {
   box-shadow: 0 20px 55px rgba(23, 51, 42, 0.12);
   backdrop-filter: blur(18px);
 }
+
+@media (pointer: coarse) {
+  .property-detail-page {
+    font-size: 20px;
+  }
+
+  .property-detail-page > div {
+    max-width: none;
+    padding: 18px 10px 96px;
+  }
+
+  .property-detail-page section,
+  .property-booking-box,
+  .property-calendar {
+    border-radius: 28px;
+    padding: 22px 18px;
+  }
+
+  .property-detail-page h1 {
+    font-size: clamp(2.65rem, 7vw, 3.35rem);
+    line-height: 1.04;
+  }
+
+  .property-detail-page h2,
+  .property-booking-title {
+    font-size: 2.25rem;
+    line-height: 1.08;
+  }
+
+  .property-detail-page p {
+    font-size: 1.25rem;
+    line-height: 1.75;
+  }
+
+  .property-detail-page label {
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .property-detail-page input {
+    min-height: 78px;
+    border-radius: 22px;
+    font-size: 1.6rem;
+    padding: 18px 20px;
+  }
+
+  .property-detail-page a,
+  .property-detail-page button {
+    min-height: 62px;
+    font-size: 1.15rem;
+  }
+
+  .property-highlights span {
+    font-size: 1.1rem;
+    padding: 12px 18px;
+  }
+
+  .property-calendar-day {
+    min-height: 64px;
+    font-size: 1.35rem;
+  }
+}

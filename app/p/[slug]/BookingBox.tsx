@@ -228,9 +228,9 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
   }, [result, extras, stays, property.title, checkIn, checkOut, guests]);
 
   return (
-    <div className="rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm lg:rounded-[2rem]">
+    <div className="property-booking-box rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm lg:rounded-[2rem]">
       <div className="flex items-start justify-between gap-3">
-        <div className="text-[1.85rem] font-black leading-tight text-[#17332A]">
+        <div className="property-booking-title text-[1.85rem] font-black leading-tight text-[#17332A]">
           Consulta tu estadía
         </div>
         <span className="shrink-0 rounded-full bg-white px-3 py-2 text-sm font-black text-[#17332A]">
