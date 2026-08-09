@@ -130,4 +130,13 @@ body {
   .property-calendar-legend {
     font-size: 0.95rem;
   }
+
+  .property-detail-page details summary {
+    font-size: 1.1rem;
+  }
+
+  .property-detail-page details li {
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
 }

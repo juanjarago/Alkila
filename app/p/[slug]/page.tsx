@@ -1,8 +1,38 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PropertyGallery from "@/components/gallery/PropertyGallery";
+import { propertyDetails } from "@/lib/propertyDetails";
 import { properties } from "@/lib/properties";
 import ReservationSidebar from "./ReservationSidebar";
+
+function InfoDisclosure({
+  title,
+  items,
+}: {
+  title: string;
+  items: string[];
+}) {
+  if (!items.length) return null;
+
+  return (
+    <details className="group rounded-2xl border border-[#C6C0B1] bg-white/60 px-4 py-3">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-base font-black text-[#17332A]">
+        {title}
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#F4EFE2] text-lg leading-none transition group-open:rotate-45">
+          +
+        </span>
+      </summary>
+      <ul className="mt-3 space-y-2 text-base leading-7 text-[#4B544D]">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[#66752F]" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
 
 export default async function Page({
   params,
@@ -20,6 +50,7 @@ export default async function Page({
       : property.heroImage
         ? [property.heroImage]
         : [];
+  const details = propertyDetails[property.slug];
 
   return (
     <main className="property-detail-page">
@@ -81,6 +112,14 @@ export default async function Page({
                 {property.description ??
                   "Un espacio ideal para disfrutar en familia y con amigos, rodeado de naturaleza y con todas las comodidades."}
               </p>
+
+              {details ? (
+                <div className="mt-5 grid gap-3 min-[900px]:grid-cols-3">
+                  <InfoDisclosure title="Mas informacion" items={details.moreInfo} />
+                  <InfoDisclosure title="Servicios" items={details.amenities} />
+                  <InfoDisclosure title="Condiciones" items={details.rules} />
+                </div>
+              ) : null}
             </div>
           </section>
 
