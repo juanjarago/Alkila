@@ -168,47 +168,47 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
   }, [result, extras, stays, property.title, checkIn, checkOut, guests]);
 
   return (
-    <div className="rounded-[2rem] border border-[#E9D8A6] bg-[#FFFCF2] p-5 shadow-sm sm:p-6">
+    <div className="rounded-[2rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <div className="max-w-[13rem] text-lg font-black leading-tight text-[#1F3D2B]">
+        <div className="max-w-[13rem] text-lg font-black leading-tight text-[#17332A]">
           Consulta tu estadía
         </div>
-        <span className="shrink-0 rounded-full bg-[#DDF3D1] px-3 py-1 text-xs font-black text-[#1F3D2B]">
+        <span className="shrink-0 rounded-full bg-white px-3 py-1 text-xs font-black text-[#17332A]">
           Reserva segura
         </span>
       </div>
 
-      <p className="mt-2 text-sm leading-6 text-gray-600">
+      <p className="mt-2 text-sm leading-6 text-[#4B544D]">
         Selecciona fechas y número de personas para ver disponibilidad y precio
         estimado.
       </p>
 
       <div className="mt-4 space-y-3">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-3">
-          <label className="min-w-0 text-sm font-bold text-[#1F3D2B]">
+          <label className="min-w-0 text-sm font-bold text-[#17332A]">
             Check-in
             <input
               type="date"
               min={minDate}
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
-              className="mt-1 min-h-12 w-full min-w-0 appearance-none rounded-2xl border border-[#E9D8A6] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#F7B955]"
+              className="mt-1 min-h-12 w-full min-w-0 appearance-none rounded-2xl border border-[#C6C0B1] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
             />
           </label>
 
-          <label className="min-w-0 text-sm font-bold text-[#1F3D2B]">
+          <label className="min-w-0 text-sm font-bold text-[#17332A]">
             Check-out
             <input
               type="date"
               min={checkIn || minDate}
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
-              className="mt-1 min-h-12 w-full min-w-0 appearance-none rounded-2xl border border-[#E9D8A6] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#F7B955]"
+              className="mt-1 min-h-12 w-full min-w-0 appearance-none rounded-2xl border border-[#C6C0B1] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
             />
           </label>
         </div>
 
-        <label className="text-sm font-bold text-[#1F3D2B]">
+        <label className="text-sm font-bold text-[#17332A]">
           Personas
           <input
             type="number"
@@ -219,7 +219,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
               const n = Number(e.target.value);
               setGuests(Number.isFinite(n) ? n : 0);
             }}
-            className="mt-1 min-h-12 w-full rounded-2xl border border-[#E9D8A6] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#F7B955]"
+            className="mt-1 min-h-12 w-full rounded-2xl border border-[#C6C0B1] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
           />
         </label>
 
@@ -227,7 +227,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
           type="button"
           onClick={onSearch}
           disabled={loading || !canSearch}
-          className="w-full rounded-2xl bg-[#E76F51] px-4 py-3 text-sm font-black text-white shadow-lg shadow-[#E76F51]/20 transition hover:-translate-y-0.5 disabled:opacity-60"
+          className="w-full rounded-2xl bg-[#B85F3B] px-4 py-3 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 disabled:opacity-60"
         >
           {loading ? "Consultando..." : "Ver disponibilidad"}
         </button>
@@ -240,7 +240,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
 
         {result && stays ? (
           <>
-            <div className="rounded-2xl border border-[#E9D8A6] bg-[#FDF2D0]/70 p-3 text-sm text-gray-800">
+            <div className="rounded-2xl border border-[#C6C0B1] bg-white/72 p-3 text-sm text-[#3F4741]">
               <div className="space-y-1">
                 {stays.totalUSD != null && (
                   <div>
@@ -255,24 +255,24 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
                   </div>
                 )}
                 {stays.nights != null && (
-                  <div className="pt-2 text-xs text-gray-700">
+                  <div className="pt-2 text-xs text-[#4B544D]">
                     {stays.nights} noche{Number(stays.nights) === 1 ? "" : "s"}
                   </div>
                 )}
                 {stays.subtotalCOP != null && (
-                  <div className="text-xs text-gray-700">
+                  <div className="text-xs text-[#4B544D]">
                     Estadía: {formatCOP(Number(stays.subtotalCOP))}
                   </div>
                 )}
                 {stays.cleaningFeeCOP != null &&
                   Number(stays.cleaningFeeCOP) > 0 && (
-                    <div className="text-xs text-gray-700">
+                    <div className="text-xs text-[#4B544D]">
                       Limpieza: {formatCOP(Number(stays.cleaningFeeCOP))}
                     </div>
                   )}
                 {stays.extraGuestFeeCOP != null &&
                   Number(stays.extraGuestFeeCOP) > 0 && (
-                    <div className="text-xs text-gray-700">
+                    <div className="text-xs text-[#4B544D]">
                       Huéspedes adicionales:{" "}
                       {formatCOP(Number(stays.extraGuestFeeCOP))}
                     </div>
@@ -284,7 +284,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
               href={whatsappHref}
               target="_blank"
               rel="noreferrer"
-              className="mt-3 block w-full rounded-2xl bg-green-600 px-4 py-3 text-center text-sm font-black text-white transition hover:-translate-y-0.5"
+              className="mt-3 block w-full rounded-2xl bg-[#66752F] px-4 py-3 text-center text-sm font-black text-white transition hover:-translate-y-0.5"
             >
               Confirmar por WhatsApp
             </a>
@@ -297,13 +297,13 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
               )}&checkOut=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(
                 String(guests)
               )}&totalCOP=${encodeURIComponent(String(stays.totalCOP ?? 0))}`}
-              className="mt-3 block w-full rounded-2xl bg-[#1F3D2B] px-4 py-3 text-center text-sm font-black text-white transition hover:-translate-y-0.5"
+              className="mt-3 block w-full rounded-2xl bg-[#17332A] px-4 py-3 text-center text-sm font-black text-white transition hover:-translate-y-0.5"
             >
               Pagar anticipo y reservar
             </a>
           </>
         ) : (
-          <div className="mt-3 rounded-2xl border border-gray-200 bg-white p-3 text-xs text-gray-600">
+          <div className="mt-3 rounded-2xl border border-[#C6C0B1] bg-white p-3 text-xs text-[#4B544D]">
             Para continuar, primero consulta la disponibilidad.
           </div>
         )}

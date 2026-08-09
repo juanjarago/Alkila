@@ -14,14 +14,14 @@ export default function PropiedadesPage({
   return (
     <main>
       <section className="mx-auto max-w-6xl px-4 py-12">
-        <div className="rounded-[2rem] border border-[#E9D8A6] bg-[#FFFCF2]/86 p-6 shadow-sm backdrop-blur md:p-8">
-          <p className="text-sm font-black uppercase tracking-[0.18em] text-[#2A9DB0]">
+        <div className="rounded-[2rem] border border-[#C6C0B1] bg-[#F4EFE2]/88 p-6 shadow-sm backdrop-blur md:p-8">
+          <p className="text-sm font-black uppercase tracking-[0.18em] text-[#66752F]">
             Fincas Alkila
           </p>
-          <h1 className="mt-2 max-w-3xl text-4xl font-black tracking-tight text-[#1F3D2B] md:text-5xl">
+          <h1 className="mt-2 max-w-3xl text-4xl font-black tracking-tight text-[#17332A] md:text-5xl">
             Elige el espacio ideal para tu grupo
           </h1>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-gray-700">
+          <p className="mt-4 max-w-2xl text-base leading-7 text-[#4B544D]">
             Todas las propiedades están en Anapoima, con piscina privada,
             jacuzzi y zonas verdes para descansar en familia o con amigos.
           </p>
@@ -36,13 +36,13 @@ export default function PropiedadesPage({
               <Link
                 key={href}
                 href={href}
-                className="rounded-full border border-[#E9D8A6] bg-white px-4 py-2 text-sm font-black text-[#1F3D2B] transition hover:border-[#2A9DB0] hover:text-[#2A9DB0]"
+                className="rounded-full border border-[#C6C0B1] bg-white px-4 py-2 text-sm font-black text-[#17332A] transition hover:border-[#66752F] hover:text-[#66752F]"
               >
                 {label}
               </Link>
             ))}
 
-            <div className="text-sm font-semibold text-gray-700 md:ml-2">
+            <div className="text-sm font-semibold text-[#4B544D] md:ml-2">
               {guests > 0 ? `Mostrando grupos de ${guests}+` : "Sin filtro"}
             </div>
           </div>

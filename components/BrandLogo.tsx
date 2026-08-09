@@ -7,40 +7,46 @@ export function BrandLogo({ compact = false }: { compact?: boolean }) {
       className="group inline-flex items-center gap-3"
       aria-label="Alkila"
     >
-      <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#FDF2D0] shadow-sm ring-1 ring-[#E9D8A6] transition group-hover:-translate-y-0.5">
+      <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-[1.05rem] bg-[#D8D5C9] shadow-sm ring-1 ring-[#A9A59A] transition group-hover:-translate-y-0.5">
         <svg viewBox="0 0 64 64" aria-hidden="true" className="h-10 w-10">
-          <circle cx="45" cy="17" r="8" fill="#F7B955" />
           <path
-            d="M7 44c8-15 17-24 27-24 8 0 15 5 23 15v22H7V44Z"
-            fill="#2F6F4E"
+            d="M22 12c9-3 17 0 23 8-10 2-18 0-23-8Z"
+            fill="#66752F"
           />
           <path
-            d="M7 48c8-8 16-12 24-12s17 4 26 12v9H7v-9Z"
-            fill="#7BB661"
+            d="M45 15c3-2 6-1 8 2-3 2-6 2-8-2Z"
+            fill="#B8794A"
           />
           <path
-            d="M12 47c5 5 11 5 16 0s11-5 16 0 9 5 12 2v8H12V47Z"
-            fill="#2A9DB0"
+            d="M17 33 32 21l15 12v19H17V33Z"
+            fill="#17332A"
           />
-          <circle cx="19" cy="20" r="2.5" fill="#1F3D2B" />
-          <circle cx="27" cy="18" r="2.5" fill="#1F3D2B" />
-          <circle cx="23" cy="25" r="4" fill="#1F3D2B" />
           <path
-            d="M17 37c3-5 7-8 12-8 4 0 8 2 11 6"
+            d="M23 33 32 26l9 7v15H23V33Z"
+            fill="#D8D5C9"
+          />
+          <path
+            d="M32 35c4 3 7 7 9 13H23c2-6 5-10 9-13Z"
+            fill="#B85F3B"
+          />
+          <path
+            d="M25 35h14"
             fill="none"
-            stroke="#FDF2D0"
+            stroke="#17332A"
             strokeLinecap="round"
-            strokeWidth="3"
+            strokeWidth="2.5"
           />
+          <path d="M31 31h2v6h-2z" fill="#17332A" />
+          <path d="M28 42h8v2h-8z" fill="#D8D5C9" opacity="0.85" />
         </svg>
       </span>
 
       <span className={compact ? "hidden sm:block" : "block"}>
-        <span className="block text-xl font-black leading-none tracking-tight text-[#1F3D2B]">
+        <span className="block text-2xl font-black uppercase leading-none tracking-[0.04em] text-[#17332A]">
           Alkila
         </span>
-        <span className="mt-1 block text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#2A9DB0]">
-          Anapoima natural
+        <span className="mt-1 block text-[0.58rem] font-black uppercase tracking-[0.16em] text-[#66752F]">
+          Anapoima, Colombia
         </span>
       </span>
     </Link>

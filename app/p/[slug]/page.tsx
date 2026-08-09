@@ -27,38 +27,38 @@ export default async function Page({
         <div className="flex items-center justify-between gap-4">
           <Link
             href="/propiedades"
-            className="text-sm font-bold text-[#1F3D2B] hover:text-[#2A9DB0]"
+            className="text-sm font-bold text-[#17332A] hover:text-[#66752F]"
           >
             Volver a propiedades
           </Link>
 
           <a
             href="#reserva"
-            className="rounded-full bg-[#E76F51] px-4 py-2 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5"
+            className="rounded-full bg-[#B85F3B] px-4 py-2 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5"
           >
             Consultar disponibilidad
           </a>
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[1.3fr,0.7fr]">
-          <section className="rounded-[2rem] border border-[#E9D8A6] bg-[#FFFCF2] p-5 shadow-sm md:p-6">
-            <div className="text-sm font-bold text-[#2A9DB0]">
+          <section className="rounded-[2rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm md:p-6">
+            <div className="text-sm font-bold text-[#66752F]">
               {property.locationLabel ?? "Anapoima"}
             </div>
 
-            <h1 className="mt-2 text-3xl font-black tracking-tight text-[#1F3D2B] md:text-4xl">
+            <h1 className="mt-2 text-3xl font-black tracking-tight text-[#17332A] md:text-4xl">
               {property.title}
             </h1>
 
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded-full bg-[#FDF2D0] px-3 py-1 text-sm font-black text-[#1F3D2B]">
+              <span className="rounded-full bg-[#D8D5C9] px-3 py-1 text-sm font-black text-[#17332A]">
                 Hasta {property.capacity} personas
               </span>
 
               {(property.highlights ?? []).slice(0, 6).map((h: string) => (
                 <span
                   key={h}
-                  className="rounded-full border border-[#E9D8A6] bg-white px-3 py-1 text-sm font-bold text-gray-800"
+                  className="rounded-full border border-[#C6C0B1] bg-white px-3 py-1 text-sm font-bold text-[#3F4741]"
                 >
                   {h}
                 </span>
@@ -74,10 +74,10 @@ export default async function Page({
             )}
 
             <div className="mt-8">
-              <h2 className="text-xl font-black text-[#1F3D2B]">
+              <h2 className="text-xl font-black text-[#17332A]">
                 Descripción
               </h2>
-              <p className="mt-2 leading-relaxed text-gray-700">
+              <p className="mt-2 leading-relaxed text-[#4B544D]">
                 {property.description ??
                   "Un espacio ideal para disfrutar en familia y con amigos, rodeado de naturaleza y con todas las comodidades."}
               </p>

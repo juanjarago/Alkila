@@ -12,7 +12,7 @@ type Property = {
 
 export function PropertyCard({ p }: { p: Property }) {
   return (
-    <div className="group overflow-hidden rounded-[1.75rem] border border-[#E9D8A6] bg-[#FFFCF2] shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1F3D2B]/10">
+    <div className="group overflow-hidden rounded-[1.6rem] border border-[#C6C0B1] bg-[#F4EFE2] shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17332A]/10">
       <Link href={`/p/${p.slug}`} className="block">
         <div className="relative aspect-[4/3] w-full">
           <Image
@@ -23,19 +23,18 @@ export function PropertyCard({ p }: { p: Property }) {
             sizes="(max-width: 768px) 100vw, 33vw"
             priority={false}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1F3D2B]/70 via-transparent to-transparent" />
-          <div className="absolute left-4 top-4 flex gap-2">
-            <span className="rounded-full bg-[#FDF2D0]/95 px-3 py-1 text-xs font-black text-[#1F3D2B]">
+          <div className="absolute left-4 top-4">
+            <span className="rounded-full bg-[#D8D5C9]/95 px-3 py-1 text-xs font-black text-[#17332A]">
               Hasta {p.capacity}
             </span>
           </div>
         </div>
 
         <div className="p-5">
-          <div className="text-sm font-semibold text-[#2A9DB0]">
+          <div className="text-sm font-bold text-[#66752F]">
             {p.locationLabel}
           </div>
-          <h3 className="mt-1 text-lg font-black leading-tight text-[#1F3D2B]">
+          <h3 className="mt-1 text-lg font-black leading-tight text-[#17332A]">
             {p.title}
           </h3>
 
@@ -43,14 +42,14 @@ export function PropertyCard({ p }: { p: Property }) {
             {p.highlights.slice(0, 3).map((h) => (
               <span
                 key={h}
-                className="rounded-full border border-[#E9D8A6] bg-white px-3 py-1 text-xs font-bold text-gray-800"
+                className="rounded-full border border-[#C6C0B1] bg-white px-3 py-1 text-xs font-bold text-[#3F4741]"
               >
                 {h}
               </span>
             ))}
           </div>
 
-          <div className="mt-5 text-sm font-black text-[#E76F51]">
+          <div className="mt-5 text-sm font-black text-[#B85F3B]">
             Ver detalles
           </div>
         </div>
