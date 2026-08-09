@@ -59,7 +59,7 @@ export default function Home() {
             <div className="grid gap-3 sm:grid-cols-[1.12fr,0.88fr] md:gap-4">
               <div className="relative min-h-[19rem] overflow-hidden rounded-[1.7rem] border border-[#C6C0B1] bg-[#D8D5C9] shadow-sm md:min-h-[30rem] md:rounded-[2rem]">
                 <Image
-                  src="/images/brand/rainbow-house.webp"
+                  src="/images/properties/finca-anapoima-22-personas/20.webp"
                   alt="Vista de la finca Alkila con paisaje de Anapoima"
                   fill
                   priority
@@ -81,7 +81,7 @@ export default function Home() {
 
                 <div className="relative min-h-[8.5rem] overflow-hidden rounded-[1.4rem] border border-[#C6C0B1] bg-[#D8D5C9] shadow-sm md:min-h-[14rem] md:rounded-[2rem]">
                   <Image
-                    src={ordered[2]?.heroImage ?? "/images/brand/rainbow-house.webp"}
+                    src="/images/brand/rainbow-house.webp"
                     alt="Casa privada Alkila en Anapoima"
                     fill
                     sizes="(max-width: 768px) 50vw, 28vw"
