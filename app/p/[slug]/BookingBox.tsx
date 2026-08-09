@@ -25,6 +25,41 @@ function formatUSD(value: number) {
   }).format(value);
 }
 
+function formatDate(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+  if (!year || !month || !day) return value;
+
+  return new Intl.DateTimeFormat("es-CO", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(year, month - 1, day));
+}
+
+function sourceLabel(source?: string) {
+  if (source === "airbnb") return "Airbnb";
+  if (source === "booking") return "Booking";
+  if (source === "direct") return "reserva directa";
+  if (source === "manual") return "bloqueo del administrador";
+  return "otra reserva";
+}
+
+function availabilityMessage(data: any, from: string, to: string) {
+  if (!data?.blocked) return null;
+
+  const conflicts = Array.isArray(data?.conflicts) ? data.conflicts : [];
+  const firstConflict = conflicts[0];
+  const source = sourceLabel(firstConflict?.source);
+  const range =
+    firstConflict?.start && firstConflict?.end
+      ? ` Hay cruce con ${source} del ${formatDate(firstConflict.start)} al ${formatDate(
+          firstConflict.end
+        )}.`
+      : "";
+
+  return `No hay disponibilidad del ${formatDate(from)} al ${formatDate(to)}.${range} Prueba otras fechas o escríbenos por WhatsApp y te ayudamos a revisar alternativas.`;
+}
+
 export default function BookingBox({
   property,
   extras = [],
@@ -111,9 +146,10 @@ export default function BookingBox({
 
       if (!res.ok) {
         setError(
-          data?.error ||
+          availabilityMessage(data, checkIn, checkOut) ||
+            data?.error ||
             data?.message ||
-            `Error consultando disponibilidad (${res.status})`
+            "No fue posible consultar disponibilidad. Intenta de nuevo o escríbenos por WhatsApp."
         );
         return;
       }
