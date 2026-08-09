@@ -692,7 +692,7 @@ export default function AdminClient() {
               <>
                 <div className="mt-4 flex flex-wrap gap-2 text-xs font-bold">
                   <span className="rounded-full border border-[#8F3F2A] bg-[#8F3F2A] px-3 py-1 text-white">
-                    Alta +40% o mas
+                    Alta
                   </span>
                   <span className="rounded-full border border-[#D08A5B] bg-[#F4D6B8] px-3 py-1 text-[#1F3D2B]">
                     Temporada / puente
@@ -760,14 +760,14 @@ export default function AdminClient() {
                               {year}
                             </div>
                           </div>
-                          <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[11px] font-black text-[#6B7D2D]">
+                          <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-[11px] font-black text-[#6B7D2D]">
                             {["L", "M", "M", "J", "V", "S", "D"].map((day, dayIndex) => (
                               <div key={`${day}-${dayIndex}`}>{day}</div>
                             ))}
                           </div>
-                          <div className="mt-2 grid grid-cols-7 gap-1">
+                          <div className="mt-2 grid grid-cols-7 gap-1.5">
                             {Array.from({ length: blanks }).map((_, blank) => (
-                              <div key={`blank-${blank}`} className="min-h-14" />
+                              <div key={`blank-${blank}`} className="aspect-square" />
                             ))}
                             {Array.from({ length: days }, (_, dayIndex) => {
                               const day = dayIndex + 1;
@@ -776,27 +776,41 @@ export default function AdminClient() {
                               const isHot = status.percent >= 40;
                               const isWarm = status.percent > 0;
                               const className = isHot
-                                ? "border-[#8F3F2A] bg-[#8F3F2A] text-white"
+                                ? "border-[#8F3F2A] bg-[#8F3F2A] text-white shadow-sm"
                                 : isWarm
                                 ? "border-[#D08A5B] bg-[#F4D6B8] text-[#1F3D2B]"
-                                : "border-orange-100 bg-white text-gray-700";
+                                : "border-orange-100 bg-white text-[#1F3D2B]";
 
                               return (
                                 <div
                                   key={ymd}
-                                  title={status.label || "Tarifa normal"}
-                                  className={`min-h-14 rounded-xl border p-1.5 text-left ${className}`}
+                                  title={
+                                    status.label
+                                      ? `${status.label}: +${status.percent}%, minimo ${status.minNights} noches`
+                                      : "Tarifa normal"
+                                  }
+                                  className={`aspect-square overflow-hidden rounded-xl border p-1 ${className}`}
                                 >
-                                  <div className="text-sm font-extrabold leading-none">
+                                  <div className="text-center text-sm font-extrabold leading-none">
                                     {day}
                                   </div>
                                   {status.percent > 0 && (
-                                    <div className="mt-1 leading-tight">
-                                      <div className="text-[11px] font-black">
-                                        +{status.percent}%
+                                    <div className="mt-1 flex flex-col items-center gap-0.5 leading-none">
+                                      <div
+                                        className={`rounded-full px-1.5 py-0.5 text-[10px] font-black ${
+                                          isHot
+                                            ? "bg-white/20 text-white"
+                                            : "bg-white/70 text-[#8F3F2A]"
+                                        }`}
+                                      >
+                                        +{status.percent}
                                       </div>
-                                      <div className="text-[10px] font-bold">
-                                        min {status.minNights}n
+                                      <div
+                                        className={`text-[9px] font-black ${
+                                          isHot ? "text-white/90" : "text-[#1F3D2B]"
+                                        }`}
+                                      >
+                                        {status.minNights}n
                                       </div>
                                     </div>
                                   )}
