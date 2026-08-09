@@ -56,7 +56,7 @@ export async function collectAvailabilityConflicts(input: {
   ]);
 
   const direct = reservations
-    .filter((reservation) => reservation.status !== "cancelled")
+    .filter((reservation) => reservation.status === "paid")
     .filter((reservation) =>
       dateRangesOverlap(input.from, input.to, reservation.from, reservation.to)
     )
@@ -64,7 +64,7 @@ export async function collectAvailabilityConflicts(input: {
       source: "direct" as const,
       start: reservation.from,
       end: reservation.to,
-      summary: reservation.status === "paid" ? "Reserva directa pagada" : "Pago pendiente",
+      summary: "Reserva directa pagada",
     }));
 
   const manual = manualBlocks

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { properties } from "@/lib/properties";
-import { listReservations } from "@/lib/booking/store";
+import { listManualBlocks, listReservations } from "@/lib/booking/store";
+import type { ManualBlock, Reservation } from "@/lib/booking/types";
 
 export const runtime = "nodejs";
 
@@ -16,6 +17,32 @@ function escapeText(value: string) {
     .replace(/\n/g, "\\n");
 }
 
+function directReservationEvent(reservation: Reservation, now: string) {
+  return [
+    "BEGIN:VEVENT",
+    `UID:${reservation.id}@alkila-web`,
+    `DTSTAMP:${now}`,
+    `DTSTART;VALUE=DATE:${icalDate(reservation.from)}`,
+    `DTEND;VALUE=DATE:${icalDate(reservation.to)}`,
+    `SUMMARY:${escapeText("Reserva directa Alkila")}`,
+    `DESCRIPTION:${escapeText(`${reservation.propertyTitle} - pago confirmado`)}`,
+    "END:VEVENT",
+  ].join("\r\n");
+}
+
+function manualBlockEvent(block: ManualBlock, now: string) {
+  return [
+    "BEGIN:VEVENT",
+    `UID:${block.id}@alkila-web`,
+    `DTSTAMP:${now}`,
+    `DTSTART;VALUE=DATE:${icalDate(block.from)}`,
+    `DTEND;VALUE=DATE:${icalDate(block.to)}`,
+    `SUMMARY:${escapeText("Bloqueo Alkila")}`,
+    `DESCRIPTION:${escapeText(block.reason || "Bloqueo manual")}`,
+    "END:VEVENT",
+  ].join("\r\n");
+}
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ slug: string }> }
@@ -26,24 +53,20 @@ export async function GET(
     return NextResponse.json({ error: "Propiedad no encontrada." }, { status: 404 });
   }
 
-  const reservations = (await listReservations(slug)).filter(
-    (reservation) => reservation.status !== "cancelled"
+  const [reservations, manualBlocks] = await Promise.all([
+    listReservations(slug),
+    listManualBlocks(slug),
+  ]);
+
+  const paidReservations = reservations.filter(
+    (reservation) => reservation.status === "paid"
   );
 
   const now = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-  const events = reservations
-    .map((reservation) =>
-      [
-        "BEGIN:VEVENT",
-        `UID:${reservation.id}@alkila-web`,
-        `DTSTAMP:${now}`,
-        `DTSTART;VALUE=DATE:${icalDate(reservation.from)}`,
-        `DTEND;VALUE=DATE:${icalDate(reservation.to)}`,
-        `SUMMARY:${escapeText("Reserva directa Alkila")}`,
-        `DESCRIPTION:${escapeText(`${reservation.propertyTitle} - ${reservation.status}`)}`,
-        "END:VEVENT",
-      ].join("\r\n")
-    )
+  const events = [
+    ...paidReservations.map((reservation) => directReservationEvent(reservation, now)),
+    ...manualBlocks.map((block) => manualBlockEvent(block, now)),
+  ]
     .join("\r\n");
 
   const calendar = [
