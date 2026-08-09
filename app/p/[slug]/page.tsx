@@ -40,8 +40,8 @@ export default async function Page({
           </a>
         </div>
 
-        <div className="mt-4 grid gap-5 min-[900px]:mt-6">
-          <section className="rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm min-[900px]:rounded-[2rem] min-[900px]:p-6">
+        <div className="mt-4 grid min-w-0 gap-5 min-[900px]:mt-6">
+          <section className="min-w-0 rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm min-[900px]:rounded-[2rem] min-[900px]:p-6">
             <div className="text-lg font-black text-[#66752F]">
               {property.locationLabel ?? "Anapoima"}
             </div>
@@ -66,8 +66,8 @@ export default async function Page({
             </div>
 
             {images.length > 0 && (
-              <div className="mt-4 min-[900px]:mt-6">
-                <div className="mx-auto max-w-4xl">
+              <div className="mt-4 min-w-0 min-[900px]:mt-6">
+                <div className="mx-auto w-full max-w-4xl min-w-0">
                   <PropertyGallery images={images} title={property.title} />
                 </div>
               </div>
@@ -84,7 +84,7 @@ export default async function Page({
             </div>
           </section>
 
-          <aside id="reserva">
+          <aside id="reserva" className="min-w-0">
             <ReservationSidebar
               slug={property.slug}
               property={{

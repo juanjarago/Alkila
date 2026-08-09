@@ -120,8 +120,9 @@ export const properties: Property[] = [
     rooms: 7,
     baths: 8,
     locationLabel: "Anapoima · Vereda Las Mercedes",
-    heroImage: "/images/properties/finca-anapoima-22-personas/01.webp",
+    heroImage: "/images/properties/finca-anapoima-22-personas/20.webp",
     images: [
+      "/images/properties/finca-anapoima-22-personas/20.webp",
       "/images/properties/finca-anapoima-22-personas/01.webp",
       "/images/properties/finca-anapoima-22-personas/02.webp",
       "/images/properties/finca-anapoima-22-personas/03.webp",
@@ -141,7 +142,6 @@ export const properties: Property[] = [
       "/images/properties/finca-anapoima-22-personas/17.webp",
       "/images/properties/finca-anapoima-22-personas/18.webp",
       "/images/properties/finca-anapoima-22-personas/19.webp",
-      "/images/properties/finca-anapoima-22-personas/20.webp",
       "/images/properties/finca-anapoima-22-personas/21.webp",
       "/images/properties/finca-anapoima-22-personas/22.webp",
       "/images/properties/finca-anapoima-22-personas/23.webp",

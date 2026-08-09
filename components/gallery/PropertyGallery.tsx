@@ -26,9 +26,9 @@ export default function PropertyGallery({ images, title }: Props) {
   }
 
   return (
-    <div className="space-y-3 min-[900px]:space-y-4">
+    <div className="min-w-0 space-y-3 min-[900px]:space-y-4">
       {/* Imagen principal: tamaño controlado para que no “explote” en pantallas grandes */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.35rem] border border-orange-200 bg-gray-200 min-[900px]:aspect-[16/9] min-[900px]:rounded-2xl">
+      <div className="relative aspect-[4/3] w-full min-w-0 overflow-hidden rounded-[1.35rem] border border-orange-200 bg-gray-200 min-[900px]:aspect-[16/9] min-[900px]:rounded-2xl">
 
         <Image
           src={current}
@@ -44,7 +44,7 @@ export default function PropertyGallery({ images, title }: Props) {
       </div>
 
       {/* Miniaturas */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex max-w-full gap-2 overflow-x-auto pb-2">
         {safeImages.map((img, i) => (
           <button
             key={img + i}

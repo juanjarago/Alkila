@@ -19,6 +19,7 @@ body {
 body {
   background: var(--bg);
   color: #17332a;
+  overflow-x: clip;
 }
 
 .site-nature-bg {
@@ -35,14 +36,16 @@ body {
   backdrop-filter: blur(18px);
 }
 
-@media (pointer: coarse) {
+@media (max-width: 899px) {
   .property-detail-page {
     font-size: 20px;
+    overflow-x: clip;
   }
 
   .property-detail-page > div {
     max-width: none;
     padding: 18px 10px 96px;
+    width: 100%;
   }
 
   .property-detail-page section,
@@ -50,16 +53,18 @@ body {
   .property-calendar {
     border-radius: 28px;
     padding: 22px 18px;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .property-detail-page h1 {
-    font-size: clamp(2.65rem, 7vw, 3.35rem);
+    font-size: clamp(2.25rem, 7vw, 2.85rem);
     line-height: 1.04;
   }
 
   .property-detail-page h2,
   .property-booking-title {
-    font-size: 2.25rem;
+    font-size: 2rem;
     line-height: 1.08;
   }
 
