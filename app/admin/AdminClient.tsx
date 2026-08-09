@@ -120,6 +120,42 @@ function seasonDay(rule: PricingRule, ymd: string) {
   return { matches, percent, minNights, label };
 }
 
+function AdminNumberField({
+  label,
+  value,
+  disabled,
+  onChange,
+  suffix,
+}: {
+  label: string;
+  value: number;
+  disabled: boolean;
+  onChange: (value: number) => void;
+  suffix?: string;
+}) {
+  return (
+    <label className="block rounded-xl border border-orange-100 bg-white/80 p-2.5">
+      <span className="block text-[11px] font-black uppercase tracking-wide text-gray-500">
+        {label}
+      </span>
+      <div className="mt-1 flex items-center gap-1">
+        <input
+          type="number"
+          disabled={disabled}
+          value={value}
+          onChange={(e) => onChange(numberValue(e.target.value))}
+          className="min-w-0 flex-1 bg-transparent text-base font-extrabold text-[#1F3D2B] outline-none disabled:opacity-60"
+        />
+        {suffix && (
+          <span className="shrink-0 rounded-full bg-orange-50 px-2 py-1 text-[10px] font-black text-[#8F3F2A]">
+            {suffix}
+          </span>
+        )}
+      </div>
+    </label>
+  );
+}
+
 export default function AdminClient() {
   const [token, setToken] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -387,228 +423,197 @@ export default function AdminClient() {
             return (
               <article
                 key={property.slug}
-                className="rounded-2xl border border-orange-200 bg-white p-5 shadow-sm"
+                className="rounded-2xl border border-orange-200 bg-white p-4 shadow-sm"
               >
-                <div className="text-xs font-bold uppercase text-gray-500">
-                  {property.shortTitle}
-                </div>
-                <h2 className="mt-1 text-lg font-extrabold text-gray-900">
-                  {property.title}
-                </h2>
-
-                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                  <label className="font-semibold text-gray-700">
-                    Noche base
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.baseNightCOP}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          baseNightCOP: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Fin de semana
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.weekendNightCOP ?? 0}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          weekendNightCOP: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Limpieza
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.cleaningFeeCOP}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          cleaningFeeCOP: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Min noches entre semana
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.minWeekdayNights}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          minNights: numberValue(e.target.value),
-                          minWeekdayNights: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Min noches fin de semana
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.minWeekendNights}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          minWeekendNights: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Huespedes incluidos
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.includedGuests}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          includedGuests: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Adicional por noche
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.extraGuestFeeCOP ?? 0}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          extraGuestFeeCOP: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Mascotas por estadia
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.petFeeCOP}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          petFeeCOP: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Servicio domestico dia
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.domesticServiceFeePerDayCOP}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          domesticServiceFeePerDayCOP: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Early check-in %
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.earlyCheckInPercent}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          earlyCheckInPercent: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <label className="font-semibold text-gray-700">
-                    Late check-out %
-                    <input
-                      type="number"
-                      disabled={!isAuthorized}
-                      value={rule.lateCheckoutPercent}
-                      onChange={(e) =>
-                        updateRule(property.slug, {
-                          lateCheckoutPercent: numberValue(e.target.value),
-                        })
-                      }
-                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
-                    />
-                  </label>
-                  <div className="col-span-2 mt-2 border-t border-orange-100 pt-4">
-                    <div className="text-sm font-extrabold text-gray-900">
-                      Incrementos automaticos por calendario Colombia
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-[11px] font-black uppercase tracking-wide text-[#6B7D2D]">
+                      {property.shortTitle}
                     </div>
-                    <p className="mt-1 text-xs leading-5 text-gray-600">
-                      El sistema reconoce festivos, Semana Santa, semana de receso,
-                      Navidad y Ano Nuevo. Puedes definir incremento y minimo de noches.
-                      Si hay temporada especial manual con precio fijo, se respeta ese precio.
-                    </p>
+                    <h2 className="mt-1 text-base font-extrabold leading-snug text-gray-900">
+                      {property.title}
+                    </h2>
                   </div>
-                  {automaticSeasonFields.map((season) => (
-                    <div
-                      key={season.kind}
-                      className="col-span-2 rounded-xl border border-orange-100 bg-orange-50 p-3"
-                    >
-                      <div className="font-extrabold text-gray-900">{season.title}</div>
-                      <div className="mt-1 text-xs font-normal text-gray-600">
-                        {season.dates}
+                  <div className="rounded-full bg-[#EEF2DC] px-2 py-1 text-[10px] font-black text-[#1F3D2B]">
+                    Hasta {property.capacity}
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-3 text-sm">
+                  <div className="rounded-2xl border border-orange-100 bg-[#FFF7ED] p-3">
+                    <div className="mb-2 flex items-center justify-between">
+                      <div className="text-xs font-black uppercase tracking-wide text-[#6B7D2D]">
+                        Tarifas
                       </div>
-                      <div className="mt-3 grid grid-cols-2 gap-3">
-                        <label className="font-semibold text-gray-700">
-                          Incremento %
-                          <input
-                            type="number"
-                            disabled={!isAuthorized}
-                            value={Number(rule[season.percentKey] ?? 0)}
-                            onChange={(e) =>
-                              updateRule(property.slug, {
-                                [season.percentKey]: numberValue(e.target.value),
-                              } as Partial<PricingRule>)
-                            }
-                            className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 disabled:opacity-60"
-                          />
-                          <span className="mt-1 block text-xs font-normal text-gray-500">
-                            Sugerido {season.suggestedPercent}%
-                          </span>
-                        </label>
-                        <label className="font-semibold text-gray-700">
-                          Minimo noches
-                          <input
-                            type="number"
-                            disabled={!isAuthorized}
-                            value={Number(rule[season.minKey] ?? 1)}
-                            onChange={(e) =>
-                              updateRule(property.slug, {
-                                [season.minKey]: numberValue(e.target.value),
-                              } as Partial<PricingRule>)
-                            }
-                            className="mt-1 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 disabled:opacity-60"
-                          />
-                          <span className="mt-1 block text-xs font-normal text-gray-500">
-                            Sugerido {season.suggestedMin} noches
-                          </span>
-                        </label>
+                      <div className="rounded-full bg-white px-2 py-1 text-[10px] font-black text-gray-500">
+                        COP
                       </div>
                     </div>
-                  ))}
+                    <div className="grid grid-cols-2 gap-2">
+                      <AdminNumberField
+                        label="Base"
+                        disabled={!isAuthorized}
+                        value={rule.baseNightCOP}
+                        onChange={(value) => updateRule(property.slug, { baseNightCOP: value })}
+                      />
+                      <AdminNumberField
+                        label="Finde"
+                        disabled={!isAuthorized}
+                        value={rule.weekendNightCOP ?? 0}
+                        onChange={(value) => updateRule(property.slug, { weekendNightCOP: value })}
+                      />
+                      <AdminNumberField
+                        label="Limpieza"
+                        disabled={!isAuthorized}
+                        value={rule.cleaningFeeCOP}
+                        onChange={(value) => updateRule(property.slug, { cleaningFeeCOP: value })}
+                      />
+                      <AdminNumberField
+                        label="Huesped extra"
+                        disabled={!isAuthorized}
+                        value={rule.extraGuestFeeCOP ?? 0}
+                        onChange={(value) => updateRule(property.slug, { extraGuestFeeCOP: value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-orange-100 bg-white p-3">
+                    <div className="mb-2 text-xs font-black uppercase tracking-wide text-[#6B7D2D]">
+                      Ocupacion y minimo
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      <AdminNumberField
+                        label="Incluidos"
+                        suffix="pax"
+                        disabled={!isAuthorized}
+                        value={rule.includedGuests}
+                        onChange={(value) => updateRule(property.slug, { includedGuests: value })}
+                      />
+                      <AdminNumberField
+                        label="Semana"
+                        suffix="noches"
+                        disabled={!isAuthorized}
+                        value={rule.minWeekdayNights}
+                        onChange={(value) =>
+                          updateRule(property.slug, {
+                            minNights: value,
+                            minWeekdayNights: value,
+                          })
+                        }
+                      />
+                      <AdminNumberField
+                        label="Finde"
+                        suffix="noches"
+                        disabled={!isAuthorized}
+                        value={rule.minWeekendNights}
+                        onChange={(value) => updateRule(property.slug, { minWeekendNights: value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-orange-100 bg-white p-3">
+                    <div className="mb-2 text-xs font-black uppercase tracking-wide text-[#6B7D2D]">
+                      Extras
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <AdminNumberField
+                        label="Mascotas"
+                        disabled={!isAuthorized}
+                        value={rule.petFeeCOP}
+                        onChange={(value) => updateRule(property.slug, { petFeeCOP: value })}
+                      />
+                      <AdminNumberField
+                        label="Servicio dia"
+                        disabled={!isAuthorized}
+                        value={rule.domesticServiceFeePerDayCOP}
+                        onChange={(value) =>
+                          updateRule(property.slug, { domesticServiceFeePerDayCOP: value })
+                        }
+                      />
+                      <AdminNumberField
+                        label="Early"
+                        suffix="%"
+                        disabled={!isAuthorized}
+                        value={rule.earlyCheckInPercent}
+                        onChange={(value) => updateRule(property.slug, { earlyCheckInPercent: value })}
+                      />
+                      <AdminNumberField
+                        label="Late"
+                        suffix="%"
+                        disabled={!isAuthorized}
+                        value={rule.lateCheckoutPercent}
+                        onChange={(value) => updateRule(property.slug, { lateCheckoutPercent: value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl border border-orange-100 bg-[#F8EFE2] p-3">
+                    <div className="mb-3 flex items-center justify-between gap-2">
+                      <div>
+                        <div className="text-xs font-black uppercase tracking-wide text-[#6B7D2D]">
+                          Temporadas automaticas
+                        </div>
+                        <div className="text-[11px] font-semibold text-gray-500">
+                          Precio manual especial conserva prioridad
+                        </div>
+                      </div>
+                      <span className="rounded-full bg-white px-2 py-1 text-[10px] font-black text-[#8F3F2A]">
+                        Colombia
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {automaticSeasonFields.map((season) => (
+                        <div
+                          key={season.kind}
+                          className="rounded-xl border border-orange-100 bg-white/85 p-2"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <div>
+                              <div className="text-sm font-extrabold text-[#1F3D2B]">
+                                {season.title}
+                              </div>
+                              <div className="text-[10px] font-semibold text-gray-500">
+                                {season.dates}
+                              </div>
+                            </div>
+                            <div className="flex gap-1 text-[10px] font-black">
+                              <span className="rounded-full bg-[#F4D6B8] px-2 py-1 text-[#8F3F2A]">
+                                +{Number(rule[season.percentKey] ?? 0)}%
+                              </span>
+                              <span className="rounded-full bg-[#EEF2DC] px-2 py-1 text-[#1F3D2B]">
+                                {Number(rule[season.minKey] ?? 1)}n
+                              </span>
+                            </div>
+                          </div>
+                          <div className="mt-2 grid grid-cols-2 gap-2">
+                            <AdminNumberField
+                              label="Incremento"
+                              suffix="%"
+                              disabled={!isAuthorized}
+                              value={Number(rule[season.percentKey] ?? 0)}
+                              onChange={(value) =>
+                                updateRule(property.slug, {
+                                  [season.percentKey]: value,
+                                } as Partial<PricingRule>)
+                              }
+                            />
+                            <AdminNumberField
+                              label="Minimo"
+                              suffix="noches"
+                              disabled={!isAuthorized}
+                              value={Number(rule[season.minKey] ?? 1)}
+                              onChange={(value) =>
+                                updateRule(property.slug, {
+                                  [season.minKey]: value,
+                                } as Partial<PricingRule>)
+                              }
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 <button
