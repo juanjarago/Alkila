@@ -41,7 +41,20 @@ export async function POST(req: Request) {
       domesticServiceFeePerDayCOP: Number(body?.domesticServiceFeePerDayCOP ?? 0),
       earlyCheckInPercent: Number(body?.earlyCheckInPercent ?? 0),
       lateCheckoutPercent: Number(body?.lateCheckoutPercent ?? 0),
+      holidayWeekendIncreasePercent: Number(body?.holidayWeekendIncreasePercent ?? 0),
+      holyWeekIncreasePercent: Number(body?.holyWeekIncreasePercent ?? 0),
+      schoolBreakIncreasePercent: Number(body?.schoolBreakIncreasePercent ?? 0),
+      christmasIncreasePercent: Number(body?.christmasIncreasePercent ?? 0),
+      newYearIncreasePercent: Number(body?.newYearIncreasePercent ?? 0),
     };
+
+    const autoIncreases = [
+      rule.holidayWeekendIncreasePercent,
+      rule.holyWeekIncreasePercent,
+      rule.schoolBreakIncreasePercent,
+      rule.christmasIncreasePercent,
+      rule.newYearIncreasePercent,
+    ];
 
     if (
       !rule.propertySlug ||
@@ -55,7 +68,8 @@ export async function POST(req: Request) {
       rule.earlyCheckInPercent < 0 ||
       rule.earlyCheckInPercent > 100 ||
       rule.lateCheckoutPercent < 0 ||
-      rule.lateCheckoutPercent > 100
+      rule.lateCheckoutPercent > 100 ||
+      autoIncreases.some((percent) => percent < 0 || percent > 300)
     ) {
       return NextResponse.json({ error: "Regla de precios invalida." }, { status: 400 });
     }

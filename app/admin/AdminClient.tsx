@@ -458,6 +458,101 @@ export default function AdminClient() {
                       className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
                     />
                   </label>
+                  <div className="col-span-2 mt-2 border-t border-orange-100 pt-4">
+                    <div className="text-sm font-extrabold text-gray-900">
+                      Incrementos automaticos por calendario Colombia
+                    </div>
+                    <p className="mt-1 text-xs leading-5 text-gray-600">
+                      El sistema reconoce festivos, Semana Santa, semana de receso,
+                      Navidad y Ano Nuevo. Si hay temporada especial manual con precio
+                      fijo, se respeta ese precio.
+                    </p>
+                  </div>
+                  <label className="font-semibold text-gray-700">
+                    Festivo / puente %
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.holidayWeekendIncreasePercent}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          holidayWeekendIncreasePercent: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                    <span className="mt-1 block text-xs font-normal text-gray-500">
+                      Sugerido 20%
+                    </span>
+                  </label>
+                  <label className="font-semibold text-gray-700">
+                    Semana Santa %
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.holyWeekIncreasePercent}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          holyWeekIncreasePercent: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                    <span className="mt-1 block text-xs font-normal text-gray-500">
+                      Sugerido 40%
+                    </span>
+                  </label>
+                  <label className="font-semibold text-gray-700">
+                    Semana de receso %
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.schoolBreakIncreasePercent}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          schoolBreakIncreasePercent: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                    <span className="mt-1 block text-xs font-normal text-gray-500">
+                      Sugerido 25%
+                    </span>
+                  </label>
+                  <label className="font-semibold text-gray-700">
+                    Navidad %
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.christmasIncreasePercent}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          christmasIncreasePercent: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                    <span className="mt-1 block text-xs font-normal text-gray-500">
+                      Sugerido 35%
+                    </span>
+                  </label>
+                  <label className="font-semibold text-gray-700">
+                    Ano Nuevo %
+                    <input
+                      type="number"
+                      disabled={!isAuthorized}
+                      value={rule.newYearIncreasePercent}
+                      onChange={(e) =>
+                        updateRule(property.slug, {
+                          newYearIncreasePercent: numberValue(e.target.value),
+                        })
+                      }
+                      className="mt-1 w-full rounded-xl border border-orange-200 px-3 py-2 disabled:opacity-60"
+                    />
+                    <span className="mt-1 block text-xs font-normal text-gray-500">
+                      Sugerido 45%
+                    </span>
+                  </label>
                 </div>
 
                 <button

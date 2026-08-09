@@ -1,4 +1,5 @@
 import { properties } from "@/lib/properties";
+import { colombiaSeasonMatches } from "./colombiaCalendar";
 import { normalizeBookingExtras } from "./extras";
 import { listPricingRules, listSeasonalRates } from "./store";
 import type { BookingExtra, PricingRule, QuoteResult } from "./types";
@@ -18,6 +19,11 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     domesticServiceFeePerDayCOP: 90000,
     earlyCheckInPercent: 50,
     lateCheckoutPercent: 50,
+    holidayWeekendIncreasePercent: 20,
+    holyWeekIncreasePercent: 40,
+    schoolBreakIncreasePercent: 25,
+    christmasIncreasePercent: 35,
+    newYearIncreasePercent: 45,
   },
   {
     propertySlug: "casa-campestre-anapoima-16-personas",
@@ -33,6 +39,11 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     domesticServiceFeePerDayCOP: 90000,
     earlyCheckInPercent: 50,
     lateCheckoutPercent: 50,
+    holidayWeekendIncreasePercent: 20,
+    holyWeekIncreasePercent: 40,
+    schoolBreakIncreasePercent: 25,
+    christmasIncreasePercent: 35,
+    newYearIncreasePercent: 45,
   },
   {
     propertySlug: "finca-anapoima-22-personas",
@@ -48,6 +59,11 @@ export const DEFAULT_PRICING_RULES: PricingRule[] = [
     domesticServiceFeePerDayCOP: 90000,
     earlyCheckInPercent: 50,
     lateCheckoutPercent: 50,
+    holidayWeekendIncreasePercent: 20,
+    holyWeekIncreasePercent: 40,
+    schoolBreakIncreasePercent: 25,
+    christmasIncreasePercent: 35,
+    newYearIncreasePercent: 45,
   },
 ];
 
@@ -94,6 +110,19 @@ function findSeasonalRateForNight(
   return rates.find((rate) => ymd >= rate.from && ymd < rate.to);
 }
 
+function automaticIncreasePercent(rule: PricingRule, ymd: string) {
+  const percentages = colombiaSeasonMatches(ymd).map((match) => {
+    if (match.kind === "holiday_weekend") return rule.holidayWeekendIncreasePercent;
+    if (match.kind === "holy_week") return rule.holyWeekIncreasePercent;
+    if (match.kind === "school_break") return rule.schoolBreakIncreasePercent;
+    if (match.kind === "christmas") return rule.christmasIncreasePercent;
+    if (match.kind === "new_year") return rule.newYearIncreasePercent;
+    return 0;
+  });
+
+  return Math.max(0, ...percentages);
+}
+
 export async function quoteDirectStay(input: {
   propertySlug: string;
   from: string;
@@ -127,11 +156,16 @@ export async function quoteDirectStay(input: {
 
   function nightPriceFor(night: string) {
     const seasonalRate = findSeasonalRateForNight(seasonalRates, night);
-    return seasonalRate
+    const baseNightPrice = seasonalRate
       ? seasonalRate.nightCOP
       : isWeekendNight(night) && rule.weekendNightCOP
       ? rule.weekendNightCOP
       : rule.baseNightCOP;
+
+    if (seasonalRate) return baseNightPrice;
+
+    const increasePercent = automaticIncreasePercent(rule, night);
+    return Math.round(baseNightPrice * (1 + increasePercent / 100));
   }
 
   const subtotalCOP = nightsList.reduce(

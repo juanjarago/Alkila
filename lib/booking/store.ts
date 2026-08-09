@@ -103,6 +103,11 @@ function asPricingRule(row: any): PricingRule {
     domesticServiceFeePerDayCOP: row.domestic_service_fee_per_day_cop ?? 90000,
     earlyCheckInPercent: row.early_checkin_percent ?? 50,
     lateCheckoutPercent: row.late_checkout_percent ?? 50,
+    holidayWeekendIncreasePercent: row.holiday_weekend_increase_percent ?? 20,
+    holyWeekIncreasePercent: row.holy_week_increase_percent ?? 40,
+    schoolBreakIncreasePercent: row.school_break_increase_percent ?? 25,
+    christmasIncreasePercent: row.christmas_increase_percent ?? 35,
+    newYearIncreasePercent: row.new_year_increase_percent ?? 45,
   };
 }
 
@@ -121,6 +126,11 @@ function pricingRuleToRow(rule: PricingRule) {
     domestic_service_fee_per_day_cop: rule.domesticServiceFeePerDayCOP,
     early_checkin_percent: rule.earlyCheckInPercent,
     late_checkout_percent: rule.lateCheckoutPercent,
+    holiday_weekend_increase_percent: rule.holidayWeekendIncreasePercent,
+    holy_week_increase_percent: rule.holyWeekIncreasePercent,
+    school_break_increase_percent: rule.schoolBreakIncreasePercent,
+    christmas_increase_percent: rule.christmasIncreasePercent,
+    new_year_increase_percent: rule.newYearIncreasePercent,
   };
 }
 

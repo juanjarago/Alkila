@@ -20,6 +20,11 @@ export type PricingRule = {
   domesticServiceFeePerDayCOP: number;
   earlyCheckInPercent: number;
   lateCheckoutPercent: number;
+  holidayWeekendIncreasePercent: number;
+  holyWeekIncreasePercent: number;
+  schoolBreakIncreasePercent: number;
+  christmasIncreasePercent: number;
+  newYearIncreasePercent: number;
 };
 
 export type SeasonalRate = {

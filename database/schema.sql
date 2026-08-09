@@ -40,6 +40,11 @@ create table if not exists pricing_rules (
   domestic_service_fee_per_day_cop integer not null default 90000,
   early_checkin_percent integer not null default 50,
   late_checkout_percent integer not null default 50,
+  holiday_weekend_increase_percent integer not null default 20,
+  holy_week_increase_percent integer not null default 40,
+  school_break_increase_percent integer not null default 25,
+  christmas_increase_percent integer not null default 35,
+  new_year_increase_percent integer not null default 45,
   updated_at timestamptz not null default now()
 );
 
@@ -49,7 +54,12 @@ alter table pricing_rules
   add column if not exists pet_fee_cop integer not null default 50000,
   add column if not exists domestic_service_fee_per_day_cop integer not null default 90000,
   add column if not exists early_checkin_percent integer not null default 50,
-  add column if not exists late_checkout_percent integer not null default 50;
+  add column if not exists late_checkout_percent integer not null default 50,
+  add column if not exists holiday_weekend_increase_percent integer not null default 20,
+  add column if not exists holy_week_increase_percent integer not null default 40,
+  add column if not exists school_break_increase_percent integer not null default 25,
+  add column if not exists christmas_increase_percent integer not null default 35,
+  add column if not exists new_year_increase_percent integer not null default 45;
 
 update pricing_rules
 set
