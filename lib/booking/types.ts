@@ -1,5 +1,11 @@
 export type BookingStatus = "pending_payment" | "paid" | "cancelled";
 
+export type BookingExtra =
+  | "pets"
+  | "domestic_service"
+  | "early_checkin"
+  | "late_checkout";
+
 export type PricingRule = {
   propertySlug: string;
   baseNightCOP: number;
@@ -60,6 +66,12 @@ export type QuoteResult = {
   subtotalCOP: number;
   cleaningFeeCOP: number;
   extraGuestFeeCOP: number;
+  extras: BookingExtra[];
+  petFeeCOP: number;
+  domesticServiceFeeCOP: number;
+  earlyCheckInFeeCOP: number;
+  lateCheckoutFeeCOP: number;
+  extrasFeeCOP: number;
   totalCOP: number;
   blocked: boolean;
   conflicts: Array<{

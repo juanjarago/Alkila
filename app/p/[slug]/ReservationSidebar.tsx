@@ -16,7 +16,7 @@ export default function ReservationSidebar({
 }) {
   return (
     <aside id="reserva" className="lg:sticky lg:top-6">
-      <BookingBox property={{ ...property, slug }} extras={[]} />
+      <BookingBox property={{ ...property, slug }} />
       <AvailabilityCalendar slug={slug} />
     </aside>
   );

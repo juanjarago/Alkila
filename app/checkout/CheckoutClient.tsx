@@ -2,6 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { getBookingExtraLabel } from "@/lib/booking/extras";
 
 export default function CheckoutPage() {
   const sp = useSearchParams();
@@ -15,6 +16,7 @@ export default function CheckoutPage() {
   const checkOut = sp.get("checkOut") ?? "";
   const guests = Number(sp.get("guests") ?? 0);
   const extras = (sp.get("extras") ?? "").split("|").filter(Boolean);
+  const extraLabels = extras.map((extra) => getBookingExtraLabel(extra));
   const title = sp.get("title") ?? slug;
   const totalCOP = Number(sp.get("totalCOP") ?? 0);
 
@@ -61,7 +63,9 @@ export default function CheckoutPage() {
           <div className="mt-4 text-sm text-gray-700">
             <div>📅 {checkIn} a {checkOut}</div>
             <div>👥 {guests} personas</div>
-            {extras.length > 0 && <div>➕ Extras: {extras.join(", ")}</div>}
+            {extraLabels.length > 0 && (
+              <div>Opcionales: {extraLabels.join(", ")}</div>
+            )}
           </div>
 
           <div className="mt-6">

@@ -1,6 +1,7 @@
 import { properties } from "@/lib/properties";
+import { normalizeBookingExtras } from "./extras";
 import { listPricingRules, listSeasonalRates } from "./store";
-import type { PricingRule, QuoteResult } from "./types";
+import type { BookingExtra, PricingRule, QuoteResult } from "./types";
 
 export const DEFAULT_PRICING_RULES: PricingRule[] = [
   {
@@ -80,6 +81,7 @@ export async function quoteDirectStay(input: {
   from: string;
   to: string;
   guests: number;
+  extras?: BookingExtra[] | string[];
   conflicts?: QuoteResult["conflicts"];
 }): Promise<QuoteResult> {
   const property = properties.find((item) => item.slug === input.propertySlug);
@@ -101,22 +103,43 @@ export async function quoteDirectStay(input: {
     throw new Error(`La propiedad permite entre 1 y ${property.capacity} personas.`);
   }
 
-  const subtotalCOP = nightsList.reduce((sum, night) => {
+  function nightPriceFor(night: string) {
     const seasonalRate = findSeasonalRateForNight(seasonalRates, night);
-    const nightPrice = seasonalRate
+    return seasonalRate
       ? seasonalRate.nightCOP
       : isWeekendNight(night) && rule.weekendNightCOP
       ? rule.weekendNightCOP
       : rule.baseNightCOP;
+  }
 
-    return sum + nightPrice;
-  }, 0);
+  const subtotalCOP = nightsList.reduce(
+    (sum, night) => sum + nightPriceFor(night),
+    0
+  );
 
   const extraGuests = Math.max(0, input.guests - rule.includedGuests);
   const extraGuestFeeCOP =
     extraGuests * (rule.extraGuestFeeCOP ?? 0) * nightsList.length;
   const cleaningFeeCOP = rule.cleaningFeeCOP;
-  const totalCOP = subtotalCOP + cleaningFeeCOP + extraGuestFeeCOP;
+  const selectedExtras = normalizeBookingExtras(input.extras);
+  const hasExtra = (extra: BookingExtra) => selectedExtras.includes(extra);
+  const firstNight = nightsList[0];
+  const lastNight = nightsList[nightsList.length - 1];
+  const petFeeCOP = hasExtra("pets") ? 50000 : 0;
+  const domesticServiceFeeCOP = hasExtra("domestic_service")
+    ? 90000 * nightsList.length
+    : 0;
+  const earlyCheckInFeeCOP =
+    hasExtra("early_checkin") && firstNight
+      ? Math.round(nightPriceFor(firstNight) * 0.5)
+      : 0;
+  const lateCheckoutFeeCOP =
+    hasExtra("late_checkout") && lastNight
+      ? Math.round(nightPriceFor(lastNight) * 0.5)
+      : 0;
+  const extrasFeeCOP =
+    petFeeCOP + domesticServiceFeeCOP + earlyCheckInFeeCOP + lateCheckoutFeeCOP;
+  const totalCOP = subtotalCOP + cleaningFeeCOP + extraGuestFeeCOP + extrasFeeCOP;
   const conflicts = input.conflicts ?? [];
 
   return {
@@ -129,6 +152,12 @@ export async function quoteDirectStay(input: {
     subtotalCOP,
     cleaningFeeCOP,
     extraGuestFeeCOP,
+    extras: selectedExtras,
+    petFeeCOP,
+    domesticServiceFeeCOP,
+    earlyCheckInFeeCOP,
+    lateCheckoutFeeCOP,
+    extrasFeeCOP,
     totalCOP,
     blocked: conflicts.length > 0,
     conflicts,

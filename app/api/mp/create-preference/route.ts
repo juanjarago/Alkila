@@ -63,6 +63,7 @@ export async function POST(req: Request) {
       from: checkIn,
       to: checkOut,
       guests,
+      extras,
       conflicts,
     });
 

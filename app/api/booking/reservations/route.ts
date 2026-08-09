@@ -43,6 +43,7 @@ export async function POST(req: Request) {
     const from = String(body?.from ?? "").slice(0, 10);
     const to = String(body?.to ?? "").slice(0, 10);
     const guests = Number(body?.guests ?? 0);
+    const extras = Array.isArray(body?.extras) ? body.extras : [];
     const payMode = body?.payMode === "full" ? "full" : "deposit";
 
     const conflicts = await collectAvailabilityConflicts({ propertySlug, from, to });
@@ -53,7 +54,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const quote = await quoteDirectStay({ propertySlug, from, to, guests, conflicts });
+    const quote = await quoteDirectStay({
+      propertySlug,
+      from,
+      to,
+      guests,
+      extras,
+      conflicts,
+    });
     const now = new Date().toISOString();
     const id = makeId();
     const paidCOP = 0;

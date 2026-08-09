@@ -11,6 +11,7 @@ export async function POST(req: Request) {
     const from = String(body?.from ?? "").slice(0, 10);
     const to = String(body?.to ?? "").slice(0, 10);
     const guests = Number(body?.guests ?? 0);
+    const extras = Array.isArray(body?.extras) ? body.extras : [];
 
     if (!propertySlug || !from || !to || to <= from || guests < 1) {
       return NextResponse.json(
@@ -20,7 +21,14 @@ export async function POST(req: Request) {
     }
 
     const conflicts = await collectAvailabilityConflicts({ propertySlug, from, to });
-    const quote = await quoteDirectStay({ propertySlug, from, to, guests, conflicts });
+    const quote = await quoteDirectStay({
+      propertySlug,
+      from,
+      to,
+      guests,
+      extras,
+      conflicts,
+    });
 
     return NextResponse.json(quote, { status: quote.blocked ? 409 : 200 });
   } catch (error: any) {
