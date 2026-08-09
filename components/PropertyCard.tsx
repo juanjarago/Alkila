@@ -49,8 +49,8 @@ export function PropertyCard({ p }: { p: Property }) {
             ))}
           </div>
 
-          <div className="mt-5 text-sm font-black text-[#B85F3B]">
-            Ver detalles
+          <div className="mt-5 rounded-2xl bg-[#B85F3B] px-4 py-3 text-center text-sm font-black text-white transition group-hover:-translate-y-0.5">
+            Cotizar y reservar
           </div>
         </div>
       </Link>

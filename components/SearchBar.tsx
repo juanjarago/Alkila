@@ -22,7 +22,7 @@ export function SearchBar() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#66752F]">
-            Reserva directa
+            Consulta de fechas
           </p>
           <h2 className="mt-2 text-2xl font-black leading-tight text-[#17332A]">
             Consulta tu estadía

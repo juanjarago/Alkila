@@ -14,6 +14,21 @@ export function Header() {
             Anapoima
           </a>
         </nav>
+
+        <nav className="flex items-center gap-2 text-xs font-black text-[#17332A] md:hidden">
+          <a
+            className="rounded-full border border-[#C6C0B1] bg-white px-3 py-2"
+            href="/#propiedades"
+          >
+            Fincas
+          </a>
+          <a
+            className="rounded-full bg-[#B85F3B] px-3 py-2 text-white"
+            href="https://wa.me/573014000436?text=Hola%2C%20quiero%20ayuda%20para%20escoger%20una%20finca%20en%20Alkila."
+          >
+            WhatsApp
+          </a>
+        </nav>
       </div>
     </header>
   );
