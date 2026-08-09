@@ -214,6 +214,20 @@ export default function AdminClient() {
     return window.location.origin;
   }, []);
 
+  const externalReservationsByProperty = useMemo(
+    () =>
+      properties.map((property) => ({
+        property,
+        statuses: externalChannelStatuses.filter(
+          (status) => status.propertySlug === property.slug
+        ),
+        reservations: externalReservations
+          .filter((reservation) => reservation.propertyTitle === property.shortTitle)
+          .sort((a, b) => a.start.localeCompare(b.start)),
+      })),
+    [externalChannelStatuses, externalReservations]
+  );
+
   useEffect(() => {
     const storedToken = window.sessionStorage.getItem("alkila_admin_token");
     if (storedToken) setToken(storedToken);
@@ -1078,90 +1092,115 @@ export default function AdminClient() {
             </div>
           </div>
 
-          <div className="mt-4 grid gap-3 lg:grid-cols-3">
-            {externalChannelStatuses.map((status) => (
+          <div className="mt-4 grid gap-4">
+            {externalReservationsByProperty.map(({ property, statuses, reservations }) => (
               <div
-                key={`${status.propertySlug}-${status.source}`}
-                className="rounded-2xl border border-orange-100 bg-white p-3"
+                key={property.slug}
+                className="overflow-hidden rounded-2xl border border-orange-100 bg-[#FFF7ED]"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="text-[11px] font-black uppercase tracking-wide text-gray-500">
-                    {status.propertyTitle}
+                <div className="flex flex-col gap-3 border-b border-orange-100 bg-white px-4 py-3 lg:flex-row lg:items-center lg:justify-between">
+                  <div>
+                    <div className="text-[11px] font-black uppercase tracking-wide text-[#6B7D2D]">
+                      {property.shortTitle}
+                    </div>
+                    <div className="text-lg font-extrabold text-[#1F3D2B]">
+                      {reservations.length} reservas externas
+                    </div>
                   </div>
-                  <span
-                    className={`rounded-full px-2 py-1 text-[10px] font-black uppercase ${
-                      status.source === "airbnb"
-                        ? "bg-[#FF385C] text-white"
-                        : "bg-[#003B95] text-white"
-                    }`}
-                  >
-                    {status.source}
-                  </span>
+
+                  <div className="flex flex-wrap gap-2">
+                    {statuses.map((status) => (
+                      <div
+                        key={`${status.propertySlug}-${status.source}`}
+                        className="flex items-center gap-2 rounded-full border border-orange-100 bg-[#FFF7ED] px-2 py-1"
+                      >
+                        <span
+                          className={`rounded-full px-2 py-1 text-[10px] font-black uppercase text-white ${
+                            status.source === "airbnb" ? "bg-[#FF385C]" : "bg-[#003B95]"
+                          }`}
+                        >
+                          {status.source}
+                        </span>
+                        <span
+                          className={`text-[11px] font-black ${
+                            status.error
+                              ? "text-red-700"
+                              : status.configured
+                              ? "text-green-800"
+                              : "text-gray-500"
+                          }`}
+                        >
+                          {status.error
+                            ? "Error"
+                            : status.configured
+                            ? `${status.events} eventos`
+                            : "Sin URL"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="mt-2 flex items-center justify-between gap-2">
-                  <div
-                    className={`rounded-full px-2 py-1 text-xs font-black ${
-                      status.error
-                        ? "bg-red-50 text-red-700"
-                        : status.configured
-                        ? "bg-green-50 text-green-800"
-                        : "bg-gray-100 text-gray-600"
-                    }`}
-                  >
-                    {status.error
-                      ? "Error iCal"
-                      : status.configured
-                      ? "Configurado"
-                      : "Sin URL"}
-                  </div>
-                  <div className="text-sm font-extrabold text-[#1F3D2B]">
-                    {status.events} eventos
-                  </div>
-                </div>
-                {status.error && (
-                  <div className="mt-2 text-xs font-semibold text-red-700">
-                    {status.error}
+
+                {statuses.some((status) => status.error) && (
+                  <div className="border-b border-orange-100 bg-red-50 px-4 py-2 text-xs font-semibold text-red-700">
+                    {statuses
+                      .filter((status) => status.error)
+                      .map((status) => `${status.source}: ${status.error}`)
+                      .join(" | ")}
                   </div>
                 )}
+
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[680px] text-left text-sm">
+                    <thead className="bg-orange-50 text-[11px] font-black uppercase tracking-wide text-gray-500">
+                      <tr>
+                        <th className="px-4 py-2">Canal</th>
+                        <th className="px-4 py-2">Check-in</th>
+                        <th className="px-4 py-2">Check-out</th>
+                        <th className="px-4 py-2">Detalle</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {reservations.map((reservation) => (
+                        <tr
+                          key={reservation.id}
+                          className="border-t border-orange-100 bg-white/70"
+                        >
+                          <td className="px-4 py-3">
+                            <span
+                              className={`rounded-full px-2 py-1 text-[10px] font-black uppercase text-white ${
+                                reservation.source === "airbnb"
+                                  ? "bg-[#FF385C]"
+                                  : "bg-[#003B95]"
+                              }`}
+                            >
+                              {reservation.source}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 font-extrabold text-[#1F3D2B]">
+                            {reservation.start}
+                          </td>
+                          <td className="px-4 py-3 font-semibold text-gray-700">
+                            {reservation.end}
+                          </td>
+                          <td className="px-4 py-3 text-gray-600">
+                            {reservation.summary || "Reserva / bloqueo del canal"}
+                          </td>
+                        </tr>
+                      ))}
+
+                      {reservations.length === 0 && (
+                        <tr>
+                          <td className="px-4 py-5 text-gray-500" colSpan={4}>
+                            No hay reservas externas cargadas para este alojamiento.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             ))}
-          </div>
-
-          <div className="mt-4 grid gap-3 lg:grid-cols-3">
-            {externalReservations.map((reservation) => (
-              <div
-                key={reservation.id}
-                className="rounded-2xl border border-orange-100 bg-[#FFF7ED] p-3"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="text-[11px] font-black uppercase tracking-wide text-[#6B7D2D]">
-                    {reservation.propertyTitle}
-                  </div>
-                  <span
-                    className={`rounded-full px-2 py-1 text-[10px] font-black uppercase ${
-                      reservation.source === "airbnb"
-                        ? "bg-[#FF385C] text-white"
-                        : "bg-[#003B95] text-white"
-                    }`}
-                  >
-                    {reservation.source}
-                  </span>
-                </div>
-                <div className="mt-2 text-lg font-extrabold text-[#1F3D2B]">
-                  {reservation.start} a {reservation.end}
-                </div>
-                <div className="mt-1 text-xs font-semibold text-gray-500">
-                  {reservation.summary || "Reserva / bloqueo del canal"}
-                </div>
-              </div>
-            ))}
-
-            {externalReservations.length === 0 && (
-              <div className="rounded-2xl border border-orange-100 bg-orange-50 p-4 text-sm text-gray-500">
-                No hay reservas externas cargadas para los proximos 12 meses, o no hay
-                calendarios iCal configurados.
-              </div>
-            )}
           </div>
         </section>
 
