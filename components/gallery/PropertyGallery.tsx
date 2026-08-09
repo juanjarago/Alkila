@@ -26,9 +26,9 @@ export default function PropertyGallery({ images, title }: Props) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 min-[900px]:space-y-4">
       {/* Imagen principal: tamaño controlado para que no “explote” en pantallas grandes */}
-      <div className="relative w-full overflow-hidden rounded-2xl border border-orange-200 bg-gray-200 aspect-[16/9]">
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.35rem] border border-orange-200 bg-gray-200 min-[900px]:aspect-[16/9] min-[900px]:rounded-2xl">
 
         <Image
           src={current}
@@ -51,7 +51,7 @@ export default function PropertyGallery({ images, title }: Props) {
             type="button"
             onClick={() => setActive(i)}
             className={[
-              "relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-lg border transition",
+              "relative h-20 w-28 flex-shrink-0 overflow-hidden rounded-xl border transition min-[900px]:h-16 min-[900px]:w-24 min-[900px]:rounded-lg",
               i === active
                 ? "border-orange-500 ring-2 ring-orange-300"
                 : "border-orange-200 opacity-80 hover:opacity-100",

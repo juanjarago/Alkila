@@ -23,42 +23,42 @@ export default async function Page({
 
   return (
     <main>
-      <div className="mx-auto max-w-6xl px-4 pt-8">
-        <div className="flex items-center justify-between gap-4">
+      <div className="mx-auto max-w-6xl px-3 pt-4 min-[900px]:px-4 min-[900px]:pt-8">
+        <div className="grid grid-cols-2 items-stretch gap-3 min-[900px]:flex min-[900px]:items-center min-[900px]:justify-between min-[900px]:gap-4">
           <Link
             href="/propiedades"
-            className="text-sm font-bold text-[#17332A] hover:text-[#66752F]"
+            className="grid min-h-12 place-items-center rounded-full border border-[#C6C0B1] bg-white px-3 text-center text-sm font-black leading-tight text-[#17332A] hover:text-[#66752F] min-[900px]:block min-[900px]:min-h-0 min-[900px]:border-0 min-[900px]:bg-transparent min-[900px]:p-0 min-[900px]:text-left"
           >
             Volver a propiedades
           </Link>
 
           <a
             href="#reserva"
-            className="rounded-full bg-[#B85F3B] px-4 py-2 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5"
+            className="grid min-h-12 place-items-center rounded-full bg-[#B85F3B] px-4 text-center text-sm font-black leading-tight text-white shadow-sm transition hover:-translate-y-0.5 min-[900px]:block min-[900px]:min-h-0 min-[900px]:py-2"
           >
             Consultar disponibilidad
           </a>
         </div>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1.3fr,0.7fr]">
-          <section className="rounded-[2rem] border border-[#C6C0B1] bg-[#F4EFE2] p-5 shadow-sm md:p-6">
-            <div className="text-sm font-bold text-[#66752F]">
+        <div className="mt-4 grid gap-4 min-[900px]:mt-6 min-[900px]:gap-6 lg:grid-cols-[1.3fr,0.7fr]">
+          <section className="rounded-[1.5rem] border border-[#C6C0B1] bg-[#F4EFE2] p-4 shadow-sm min-[900px]:rounded-[2rem] min-[900px]:p-6">
+            <div className="text-base font-bold text-[#66752F] min-[900px]:text-sm">
               {property.locationLabel ?? "Anapoima"}
             </div>
 
-            <h1 className="mt-2 text-3xl font-black tracking-tight text-[#17332A] md:text-4xl">
+            <h1 className="mt-2 text-[1.7rem] font-black leading-[1.08] tracking-tight text-[#17332A] min-[900px]:text-4xl">
               {property.title}
             </h1>
 
-            <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded-full bg-[#D8D5C9] px-3 py-1 text-sm font-black text-[#17332A]">
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-2 min-[900px]:flex-wrap min-[900px]:overflow-visible min-[900px]:pb-0">
+              <span className="shrink-0 rounded-full bg-[#D8D5C9] px-3 py-2 text-sm font-black text-[#17332A] min-[900px]:py-1">
                 Hasta {property.capacity} personas
               </span>
 
               {(property.highlights ?? []).slice(0, 6).map((h: string) => (
                 <span
                   key={h}
-                  className="rounded-full border border-[#C6C0B1] bg-white px-3 py-1 text-sm font-bold text-[#3F4741]"
+                  className="shrink-0 rounded-full border border-[#C6C0B1] bg-white px-3 py-2 text-sm font-bold text-[#3F4741] min-[900px]:py-1"
                 >
                   {h}
                 </span>
@@ -66,18 +66,18 @@ export default async function Page({
             </div>
 
             {images.length > 0 && (
-              <div className="mt-6">
+              <div className="mt-4 min-[900px]:mt-6">
                 <div className="mx-auto max-w-4xl">
                   <PropertyGallery images={images} title={property.title} />
                 </div>
               </div>
             )}
 
-            <div className="mt-8">
-              <h2 className="text-xl font-black text-[#17332A]">
+            <div className="mt-6 min-[900px]:mt-8">
+              <h2 className="text-2xl font-black text-[#17332A] min-[900px]:text-xl">
                 Descripción
               </h2>
-              <p className="mt-2 leading-relaxed text-[#4B544D]">
+              <p className="mt-2 text-base leading-7 text-[#4B544D]">
                 {property.description ??
                   "Un espacio ideal para disfrutar en familia y con amigos, rodeado de naturaleza y con todas las comodidades."}
               </p>
