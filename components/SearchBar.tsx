@@ -33,11 +33,11 @@ export function SearchBar() {
         </span>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+      <div className="mt-5 grid gap-3">
         <label className="min-w-0 text-sm font-black text-[#17332A]">
           Check-in
           <input
-            className="mt-1 min-h-12 w-full min-w-0 rounded-2xl border border-[#C6C0B1] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
+            className="mt-1 min-h-12 w-full min-w-0 rounded-2xl border border-[#C6C0B1] bg-white px-4 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
             type="date"
             value={checkIn}
             onChange={(e) => setCheckIn(e.target.value)}
@@ -47,17 +47,17 @@ export function SearchBar() {
         <label className="min-w-0 text-sm font-black text-[#17332A]">
           Check-out
           <input
-            className="mt-1 min-h-12 w-full min-w-0 rounded-2xl border border-[#C6C0B1] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
+            className="mt-1 min-h-12 w-full min-w-0 rounded-2xl border border-[#C6C0B1] bg-white px-4 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
             type="date"
             value={checkOut}
             onChange={(e) => setCheckOut(e.target.value)}
           />
         </label>
 
-        <label className="min-w-0 text-sm font-black text-[#17332A] sm:col-span-2">
+        <label className="min-w-0 text-sm font-black text-[#17332A]">
           Personas
           <input
-            className="mt-1 min-h-12 w-full rounded-2xl border border-[#C6C0B1] bg-white px-3 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
+            className="mt-1 min-h-12 w-full rounded-2xl border border-[#C6C0B1] bg-white px-4 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
             type="number"
             min={1}
             max={22}

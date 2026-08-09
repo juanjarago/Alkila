@@ -184,7 +184,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
       </p>
 
       <div className="mt-4 space-y-3">
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-3">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(13rem,1fr))] gap-3">
           <label className="min-w-0 text-sm font-bold text-[#17332A]">
             Check-in
             <input
