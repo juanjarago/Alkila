@@ -31,6 +31,15 @@ type ExternalReservationRow = {
   summary?: string;
 };
 
+type ExternalChannelStatusRow = {
+  propertySlug: string;
+  propertyTitle: string;
+  source: "airbnb" | "booking";
+  configured: boolean;
+  events: number;
+  error?: string;
+};
+
 function formatCOP(value: number) {
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
@@ -172,6 +181,9 @@ export default function AdminClient() {
   const [externalReservations, setExternalReservations] = useState<
     ExternalReservationRow[]
   >([]);
+  const [externalChannelStatuses, setExternalChannelStatuses] = useState<
+    ExternalChannelStatusRow[]
+  >([]);
   const [rules, setRules] = useState<PricingRule[]>(DEFAULT_PRICING_RULES);
   const [blocks, setBlocks] = useState<ManualBlock[]>([]);
   const [seasonalRates, setSeasonalRates] = useState<SeasonalRate[]>([]);
@@ -279,6 +291,7 @@ export default function AdminClient() {
 
       setReservations(reservationsData.reservations ?? []);
       setExternalReservations(externalReservationsData.reservations ?? []);
+      setExternalChannelStatuses(externalReservationsData.statuses ?? []);
       setRules(pricingData.rules ?? DEFAULT_PRICING_RULES);
       setBlocks(blocksData.blocks ?? []);
       setSeasonalRates(seasonsData.rates ?? []);
@@ -1063,6 +1076,55 @@ export default function AdminClient() {
             <div className="rounded-full bg-orange-50 px-3 py-1 text-xs font-black text-[#8F3F2A]">
               {externalReservations.length} eventos
             </div>
+          </div>
+
+          <div className="mt-4 grid gap-3 lg:grid-cols-3">
+            {externalChannelStatuses.map((status) => (
+              <div
+                key={`${status.propertySlug}-${status.source}`}
+                className="rounded-2xl border border-orange-100 bg-white p-3"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-[11px] font-black uppercase tracking-wide text-gray-500">
+                    {status.propertyTitle}
+                  </div>
+                  <span
+                    className={`rounded-full px-2 py-1 text-[10px] font-black uppercase ${
+                      status.source === "airbnb"
+                        ? "bg-[#FF385C] text-white"
+                        : "bg-[#003B95] text-white"
+                    }`}
+                  >
+                    {status.source}
+                  </span>
+                </div>
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <div
+                    className={`rounded-full px-2 py-1 text-xs font-black ${
+                      status.error
+                        ? "bg-red-50 text-red-700"
+                        : status.configured
+                        ? "bg-green-50 text-green-800"
+                        : "bg-gray-100 text-gray-600"
+                    }`}
+                  >
+                    {status.error
+                      ? "Error iCal"
+                      : status.configured
+                      ? "Configurado"
+                      : "Sin URL"}
+                  </div>
+                  <div className="text-sm font-extrabold text-[#1F3D2B]">
+                    {status.events} eventos
+                  </div>
+                </div>
+                {status.error && (
+                  <div className="mt-2 text-xs font-semibold text-red-700">
+                    {status.error}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
 
           <div className="mt-4 grid gap-3 lg:grid-cols-3">

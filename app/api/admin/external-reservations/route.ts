@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { adminStatus, assertAdmin } from "@/lib/admin/auth";
-import { listExternalChannelReservations } from "@/lib/booking/availability";
+import { loadExternalChannelReservations } from "@/lib/booking/availability";
 
 export const runtime = "nodejs";
 
@@ -18,10 +18,10 @@ export async function GET(req: Request) {
     const today = new Date();
     const from = toYMD(today);
     const to = toYMD(new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()));
-    const reservations = await listExternalChannelReservations({ from, to });
+    const { reservations, statuses } = await loadExternalChannelReservations({ from, to });
 
     return NextResponse.json(
-      { from, to, reservations },
+      { from, to, reservations, statuses },
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch (error: any) {

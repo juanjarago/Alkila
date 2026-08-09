@@ -32,6 +32,15 @@ export type ExternalChannelReservation = {
   summary?: string;
 };
 
+export type ExternalChannelStatus = {
+  propertySlug: string;
+  propertyTitle: string;
+  source: "airbnb" | "booking";
+  configured: boolean;
+  events: number;
+  error?: string;
+};
+
 async function channelConflicts(input: {
   propertySlug: string;
   from: string;
@@ -92,10 +101,13 @@ export async function collectAvailabilityConflicts(input: {
   return [...airbnb, ...booking, ...direct, ...manual];
 }
 
-export async function listExternalChannelReservations(input: {
+export async function loadExternalChannelReservations(input: {
   from: string;
   to: string;
-}): Promise<ExternalChannelReservation[]> {
+}): Promise<{
+  reservations: ExternalChannelReservation[];
+  statuses: ExternalChannelStatus[];
+}> {
   const items = await Promise.all(
     properties.flatMap((property) => {
       const channelEnv = PROPERTY_TO_CHANNEL_ENV[property.slug] ?? {};
@@ -103,11 +115,22 @@ export async function listExternalChannelReservations(input: {
       return (["airbnb", "booking"] as const).map(async (source) => {
         const envName = channelEnv[source];
         const url = envName ? process.env[envName] : undefined;
-        if (!url) return [];
+        const baseStatus = {
+          propertySlug: property.slug,
+          propertyTitle: property.shortTitle,
+          source,
+        };
+
+        if (!url) {
+          return {
+            reservations: [] as ExternalChannelReservation[],
+            status: { ...baseStatus, configured: false, events: 0 },
+          };
+        }
 
         try {
           const events = await fetchIcalBlockedEvents(url);
-          return blockedEventsForRange(events, input.from, input.to).map((event) => ({
+          const reservations = blockedEventsForRange(events, input.from, input.to).map((event) => ({
             id: `${property.slug}-${source}-${event.uid ?? event.start}-${event.end}`,
             propertySlug: property.slug,
             propertyTitle: property.shortTitle,
@@ -116,14 +139,41 @@ export async function listExternalChannelReservations(input: {
             end: event.end,
             summary: event.summary,
           }));
-        } catch {
-          return [];
+          return {
+            reservations,
+            status: {
+              ...baseStatus,
+              configured: true,
+              events: reservations.length,
+            },
+          };
+        } catch (error: any) {
+          return {
+            reservations: [] as ExternalChannelReservation[],
+            status: {
+              ...baseStatus,
+              configured: true,
+              events: 0,
+              error: error?.message ?? "No fue posible leer el iCal",
+            },
+          };
         }
       });
     })
   );
 
-  return items
-    .flat()
-    .sort((a, b) => a.start.localeCompare(b.start) || a.propertyTitle.localeCompare(b.propertyTitle));
+  return {
+    reservations: items
+      .flatMap((item) => item.reservations)
+      .sort((a, b) => a.start.localeCompare(b.start) || a.propertyTitle.localeCompare(b.propertyTitle)),
+    statuses: items.map((item) => item.status),
+  };
+}
+
+export async function listExternalChannelReservations(input: {
+  from: string;
+  to: string;
+}): Promise<ExternalChannelReservation[]> {
+  const data = await loadExternalChannelReservations(input);
+  return data.reservations;
 }
