@@ -3,7 +3,11 @@ import { adminStatus, assertAdmin } from "@/lib/admin/auth";
 import { properties } from "@/lib/properties";
 import { collectAvailabilityConflicts } from "@/lib/booking/availability";
 import { quoteDirectStay } from "@/lib/booking/pricing";
-import { createReservation, listReservations } from "@/lib/booking/store";
+import {
+  createReservation,
+  listReservations,
+  updateReservationStatusById,
+} from "@/lib/booking/store";
 import type { Reservation } from "@/lib/booking/types";
 
 export const runtime = "nodejs";
@@ -82,6 +86,55 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { error: error?.message ?? "No fue posible crear la reserva." },
       { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req: Request) {
+  try {
+    assertAdmin(req);
+    const body = await req.json();
+    const id = String(body?.id ?? "").trim();
+    const action = String(body?.action ?? "").trim();
+
+    if (!id || action !== "mark_paid") {
+      return NextResponse.json({ error: "Accion invalida." }, { status: 400 });
+    }
+
+    const reservations = await listReservations();
+    const reservation = reservations.find((item) => item.id === id);
+    if (!reservation) {
+      return NextResponse.json({ error: "Reserva no encontrada." }, { status: 404 });
+    }
+
+    if (reservation.status === "cancelled") {
+      return NextResponse.json(
+        { error: "No se puede marcar como pagada una reserva cancelada." },
+        { status: 409 }
+      );
+    }
+
+    const paidCOP =
+      reservation.payMode === "deposit"
+        ? Math.round(reservation.totalCOP * 0.3)
+        : reservation.totalCOP;
+
+    const updated = await updateReservationStatusById(id, {
+      status: "paid",
+      paidCOP,
+      paymentId: "manual_admin",
+      updatedAt: new Date().toISOString(),
+    });
+
+    if (!updated) {
+      return NextResponse.json({ error: "No fue posible actualizar la reserva." }, { status: 500 });
+    }
+
+    return NextResponse.json({ reservation: updated });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error?.message ?? "No fue posible actualizar la reserva." },
+      { status: adminStatus(error) }
     );
   }
 }

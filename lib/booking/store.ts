@@ -232,6 +232,39 @@ export async function updateReservationStatus(
   return rows[0] ? asReservation(rows[0]) : undefined;
 }
 
+export async function updateReservationStatusById(
+  id: string,
+  updates: Pick<Reservation, "status" | "paidCOP"> & {
+    paymentId?: string;
+    updatedAt: string;
+  }
+) {
+  const config = supabaseConfig();
+  if (!config) {
+    const reservation = memoryReservations.find((item) => item.id === id);
+    if (!reservation) return undefined;
+    reservation.status = updates.status;
+    reservation.paidCOP = updates.paidCOP;
+    reservation.paymentId = updates.paymentId;
+    reservation.updatedAt = updates.updatedAt;
+    return reservation;
+  }
+
+  const rows = await supabaseRequest<any[]>(
+    `reservations?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({
+        status: updates.status,
+        paid_cop: updates.paidCOP,
+        payment_id: updates.paymentId ?? null,
+        updated_at: updates.updatedAt,
+      }),
+    }
+  );
+  return rows[0] ? asReservation(rows[0]) : undefined;
+}
+
 export async function listManualBlocks(propertySlug?: string) {
   const config = supabaseConfig();
   if (!config) {

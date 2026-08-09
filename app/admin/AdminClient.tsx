@@ -13,6 +13,7 @@ type ReservationRow = {
   guests: number;
   totalCOP: number;
   paidCOP: number;
+  payMode: "deposit" | "full";
   status: string;
 };
 
@@ -194,6 +195,38 @@ export default function AdminClient() {
       if (!res.ok) throw new Error(data?.error ?? "No fue posible crear temporada");
       setSeasonalRates((current) => [...current, data.rate]);
       setMessage("Temporada especial creada.");
+    } catch (e: any) {
+      setError(e?.message ?? "Error inesperado");
+    }
+  }
+
+  async function markReservationPaid(reservation: ReservationRow) {
+    setError("");
+    setMessage("");
+
+    const paidCOP =
+      reservation.payMode === "deposit"
+        ? Math.round(reservation.totalCOP * 0.3)
+        : reservation.totalCOP;
+
+    const ok = window.confirm(
+      `Marcar esta reserva como pagada por ${formatCOP(paidCOP)}? Al hacerlo bloqueara calendarios y saldra en el iCal de Alkila.`
+    );
+    if (!ok) return;
+
+    try {
+      if (!isAuthorized) throw new Error("Valida el acceso admin antes de guardar.");
+      const res = await fetch("/api/booking/reservations", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...authHeaders() },
+        body: JSON.stringify({ id: reservation.id, action: "mark_paid" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error ?? "No fue posible marcar la reserva");
+      setReservations((current) =>
+        current.map((item) => (item.id === data.reservation.id ? data.reservation : item))
+      );
+      setMessage("Reserva marcada como pagada. Ya bloquea disponibilidad e iCal.");
     } catch (e: any) {
       setError(e?.message ?? "Error inesperado");
     }
@@ -560,6 +593,7 @@ export default function AdminClient() {
                   <th>Total</th>
                   <th>Pagado</th>
                   <th>Estado</th>
+                  <th>Accion</th>
                 </tr>
               </thead>
               <tbody>
@@ -573,11 +607,25 @@ export default function AdminClient() {
                     <td>{formatCOP(reservation.totalCOP)}</td>
                     <td>{formatCOP(reservation.paidCOP)}</td>
                     <td>{reservation.status}</td>
+                    <td>
+                      {reservation.status === "pending_payment" ? (
+                        <button
+                          type="button"
+                          onClick={() => markReservationPaid(reservation)}
+                          disabled={!isAuthorized || loading}
+                          className="rounded-xl bg-[#1F3D2B] px-3 py-2 text-xs font-bold text-white disabled:opacity-50"
+                        >
+                          Marcar pagada
+                        </button>
+                      ) : (
+                        <span className="text-xs text-gray-500">Sin accion</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
                 {reservations.length === 0 && (
                   <tr>
-                    <td className="py-6 text-gray-500" colSpan={6}>
+                    <td className="py-6 text-gray-500" colSpan={7}>
                       No hay reservas cargadas.
                     </td>
                   </tr>
