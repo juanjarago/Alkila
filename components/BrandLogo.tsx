@@ -49,6 +49,17 @@ export function BrandLogo({ compact = false }: { compact?: boolean }) {
           Anapoima, Colombia
         </span>
       </span>
+
+      {compact ? (
+        <span className="block sm:hidden">
+          <span className="block text-lg font-black uppercase leading-none tracking-[0.04em] text-[#17332A]">
+            Alkila
+          </span>
+          <span className="mt-0.5 block text-[0.5rem] font-black uppercase tracking-[0.12em] text-[#66752F]">
+            Anapoima
+          </span>
+        </span>
+      ) : null}
     </Link>
   );
 }
