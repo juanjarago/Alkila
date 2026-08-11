@@ -152,20 +152,20 @@ function AdminNumberField({
   suffix?: string;
 }) {
   return (
-    <label className="block rounded-xl border border-orange-100 bg-white/80 p-2.5">
-      <span className="block text-[11px] font-black uppercase tracking-wide text-gray-500">
+    <label className="block min-w-0 rounded-xl border border-orange-100 bg-white/80 p-2.5">
+      <span className="block truncate text-[11px] font-semibold uppercase tracking-wide text-gray-500">
         {label}
       </span>
-      <div className="mt-1 flex items-center gap-1">
+      <div className="mt-1 flex min-w-0 items-center gap-1">
         <input
           type="number"
           disabled={disabled}
           value={value}
           onChange={(e) => onChange(numberValue(e.target.value))}
-          className="min-w-0 flex-1 bg-transparent text-base font-extrabold text-[#1F3D2B] outline-none disabled:opacity-60"
+          className="w-0 min-w-0 flex-1 appearance-none bg-transparent text-[15px] font-semibold leading-tight text-[#1F3D2B] outline-none disabled:opacity-60 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         />
         {suffix && (
-          <span className="shrink-0 rounded-full bg-orange-50 px-2 py-1 text-[10px] font-black text-[#8F3F2A]">
+          <span className="shrink-0 rounded-full bg-orange-50 px-1.5 py-0.5 text-[9px] font-semibold leading-none text-[#8F3F2A]">
             {suffix}
           </span>
         )}
@@ -427,7 +427,7 @@ export default function AdminClient() {
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="text-sm font-semibold text-[#E76F51]">Alkila admin</div>
-            <h1 className="text-3xl font-extrabold text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900">
               Reservas, precios y calendarios
             </h1>
           </div>
@@ -478,14 +478,14 @@ export default function AdminClient() {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <div className="text-[11px] font-black uppercase tracking-wide text-[#6B7D2D]">
+                    <div className="text-[11px] font-bold uppercase tracking-wide text-[#6B7D2D]">
                       {property.shortTitle}
                     </div>
-                    <h2 className="mt-1 text-base font-extrabold leading-snug text-gray-900">
+                    <h2 className="mt-1 text-base font-bold leading-snug text-gray-900">
                       {property.title}
                     </h2>
                   </div>
-                  <div className="rounded-full bg-[#EEF2DC] px-2 py-1 text-[10px] font-black text-[#1F3D2B]">
+                  <div className="rounded-full bg-[#EEF2DC] px-2 py-1 text-[10px] font-bold text-[#1F3D2B]">
                     Hasta {property.capacity}
                   </div>
                 </div>
@@ -493,10 +493,10 @@ export default function AdminClient() {
                 <div className="mt-4 space-y-3 text-sm">
                   <div className="rounded-2xl border border-orange-100 bg-[#FFF7ED] p-3">
                     <div className="mb-2 flex items-center justify-between">
-                      <div className="text-xs font-black uppercase tracking-wide text-[#6B7D2D]">
+                      <div className="text-xs font-bold uppercase tracking-wide text-[#6B7D2D]">
                         Tarifas
                       </div>
-                      <div className="rounded-full bg-white px-2 py-1 text-[10px] font-black text-gray-500">
+                      <div className="rounded-full bg-white px-2 py-1 text-[10px] font-bold text-gray-500">
                         COP
                       </div>
                     </div>
@@ -529,7 +529,7 @@ export default function AdminClient() {
                   </div>
 
                   <div className="rounded-2xl border border-orange-100 bg-white p-3">
-                    <div className="mb-2 text-xs font-black uppercase tracking-wide text-[#6B7D2D]">
+                    <div className="mb-2 text-xs font-bold uppercase tracking-wide text-[#6B7D2D]">
                       Ocupacion y minimo
                     </div>
                     <div className="grid grid-cols-3 gap-2">
@@ -563,7 +563,7 @@ export default function AdminClient() {
                   </div>
 
                   <div className="rounded-2xl border border-orange-100 bg-white p-3">
-                    <div className="mb-2 text-xs font-black uppercase tracking-wide text-[#6B7D2D]">
+                    <div className="mb-2 text-xs font-bold uppercase tracking-wide text-[#6B7D2D]">
                       Extras
                     </div>
                     <div className="grid grid-cols-2 gap-2">
@@ -601,14 +601,14 @@ export default function AdminClient() {
                   <div className="rounded-2xl border border-orange-100 bg-[#F8EFE2] p-3">
                     <div className="mb-3 flex items-center justify-between gap-2">
                       <div>
-                        <div className="text-xs font-black uppercase tracking-wide text-[#6B7D2D]">
+                        <div className="text-xs font-bold uppercase tracking-wide text-[#6B7D2D]">
                           Temporadas automaticas
                         </div>
                         <div className="text-[11px] font-semibold text-gray-500">
                           Precio manual especial conserva prioridad
                         </div>
                       </div>
-                      <span className="rounded-full bg-white px-2 py-1 text-[10px] font-black text-[#8F3F2A]">
+                      <span className="rounded-full bg-white px-2 py-1 text-[10px] font-bold text-[#8F3F2A]">
                         Colombia
                       </span>
                     </div>
@@ -621,14 +621,14 @@ export default function AdminClient() {
                         >
                           <div className="flex items-center justify-between gap-2">
                             <div>
-                              <div className="text-sm font-extrabold text-[#1F3D2B]">
+                              <div className="text-sm font-semibold text-[#1F3D2B]">
                                 {season.title}
                               </div>
                               <div className="text-[10px] font-semibold text-gray-500">
                                 {season.dates}
                               </div>
                             </div>
-                            <div className="flex gap-1 text-[10px] font-black">
+                            <div className="flex gap-1 text-[10px] font-bold">
                               <span className="rounded-full bg-[#F4D6B8] px-2 py-1 text-[#8F3F2A]">
                                 +{Number(rule[season.percentKey] ?? 0)}%
                               </span>
@@ -688,7 +688,7 @@ export default function AdminClient() {
         <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-xl font-extrabold text-gray-900">
+              <h2 className="text-xl font-bold text-gray-900">
                 Calendario Colombia y temporadas automaticas
               </h2>
               <p className="mt-1 text-sm text-gray-600">
@@ -717,7 +717,7 @@ export default function AdminClient() {
                     key={page}
                     type="button"
                     onClick={() => setPreviewMonthPage(page)}
-                    className={`rounded-lg px-3 py-2 text-xs font-extrabold ${
+                    className={`rounded-lg px-3 py-2 text-xs font-semibold ${
                       previewMonthPage === page
                         ? "bg-[#1F3D2B] text-white"
                         : "text-[#1F3D2B]"
@@ -764,7 +764,7 @@ export default function AdminClient() {
                       key={`${window.kind}-${window.from}`}
                       className="rounded-xl border border-orange-100 bg-[#FFF7ED] px-3 py-2 text-gray-700"
                     >
-                      <div className="font-extrabold text-gray-900">{window.label}</div>
+                      <div className="font-bold text-gray-900">{window.label}</div>
                       <div>
                         {window.from} a {window.to}
                       </div>
@@ -777,11 +777,11 @@ export default function AdminClient() {
                     type="button"
                     onClick={() => setPreviewMonthPage((page) => Math.max(0, page - 1))}
                     disabled={previewMonthPage === 0}
-                    className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-extrabold text-[#1F3D2B] disabled:opacity-40"
+                    className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-[#1F3D2B] disabled:opacity-40"
                   >
                     Anteriores
                   </button>
-                  <div className="text-center text-sm font-extrabold text-gray-900">
+                  <div className="text-center text-sm font-bold text-gray-900">
                     Mostrando meses {previewMonthPage * 4 + 1} al{" "}
                     {previewMonthPage * 4 + 4} de los proximos 12
                   </div>
@@ -789,7 +789,7 @@ export default function AdminClient() {
                     type="button"
                     onClick={() => setPreviewMonthPage((page) => Math.min(2, page + 1))}
                     disabled={previewMonthPage === 2}
-                    className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-extrabold text-[#1F3D2B] disabled:opacity-40"
+                    className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-[#1F3D2B] disabled:opacity-40"
                   >
                     Siguientes
                   </button>
@@ -809,14 +809,14 @@ export default function AdminClient() {
                           className="rounded-2xl border border-orange-100 bg-[#FFF7ED] p-4 shadow-sm"
                         >
                           <div className="flex items-center justify-between gap-2">
-                            <div className="text-base font-extrabold capitalize text-[#1F3D2B]">
+                            <div className="text-base font-bold capitalize text-[#1F3D2B]">
                             {monthLabel(monthDate)}
                             </div>
                             <div className="rounded-full bg-white px-2 py-1 text-[10px] font-bold text-gray-500">
                               {year}
                             </div>
                           </div>
-                          <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-[11px] font-black text-[#6B7D2D]">
+                          <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-[11px] font-bold text-[#6B7D2D]">
                             {["L", "M", "M", "J", "V", "S", "D"].map((day, dayIndex) => (
                               <div key={`${day}-${dayIndex}`}>{day}</div>
                             ))}
@@ -847,13 +847,13 @@ export default function AdminClient() {
                                   }
                                   className={`aspect-square overflow-hidden rounded-xl border p-1 ${className}`}
                                 >
-                                  <div className="text-center text-sm font-extrabold leading-none">
+                                  <div className="text-center text-sm font-semibold leading-none">
                                     {day}
                                   </div>
                                   {status.percent > 0 && (
                                     <div className="mt-1 flex flex-col items-center gap-0.5 leading-none">
                                       <div
-                                        className={`rounded-full px-1.5 py-0.5 text-[10px] font-black ${
+                                        className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
                                           isHot
                                             ? "bg-white/20 text-white"
                                             : "bg-white/70 text-[#8F3F2A]"
@@ -862,7 +862,7 @@ export default function AdminClient() {
                                         +{status.percent}
                                       </div>
                                       <div
-                                        className={`text-[9px] font-black ${
+                                        className={`text-[9px] font-bold ${
                                           isHot ? "text-white/90" : "text-[#1F3D2B]"
                                         }`}
                                       >
@@ -884,7 +884,7 @@ export default function AdminClient() {
         </section>
 
         <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-extrabold text-gray-900">
+          <h2 className="text-xl font-bold text-gray-900">
             Temporadas especiales
           </h2>
           <p className="mt-1 text-sm text-gray-600">
@@ -1008,7 +1008,7 @@ export default function AdminClient() {
         </section>
 
         <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-extrabold text-gray-900">Bloqueos manuales</h2>
+          <h2 className="text-xl font-bold text-gray-900">Bloqueos manuales</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-[1.5fr,1fr,1fr,1.2fr,auto]">
             <select
               disabled={!isAuthorized}
@@ -1079,7 +1079,7 @@ export default function AdminClient() {
         <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-xl font-extrabold text-gray-900">
+              <h2 className="text-xl font-bold text-gray-900">
                 Reservas externas
               </h2>
               <p className="mt-1 text-sm text-gray-600">
@@ -1087,7 +1087,7 @@ export default function AdminClient() {
                 Booking para los proximos 12 meses.
               </p>
             </div>
-            <div className="rounded-full bg-orange-50 px-3 py-1 text-xs font-black text-[#8F3F2A]">
+            <div className="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-[#8F3F2A]">
               {externalReservations.length} eventos
             </div>
           </div>
@@ -1100,10 +1100,10 @@ export default function AdminClient() {
               >
                 <div className="flex flex-col gap-3 border-b border-orange-100 bg-white px-4 py-3 lg:flex-row lg:items-center lg:justify-between">
                   <div>
-                    <div className="text-[11px] font-black uppercase tracking-wide text-[#6B7D2D]">
+                    <div className="text-[11px] font-bold uppercase tracking-wide text-[#6B7D2D]">
                       {property.shortTitle}
                     </div>
-                    <div className="text-lg font-extrabold text-[#1F3D2B]">
+                    <div className="text-lg font-bold text-[#1F3D2B]">
                       {reservations.length} reservas externas
                     </div>
                   </div>
@@ -1115,14 +1115,14 @@ export default function AdminClient() {
                         className="flex items-center gap-2 rounded-full border border-orange-100 bg-[#FFF7ED] px-2 py-1"
                       >
                         <span
-                          className={`rounded-full px-2 py-1 text-[10px] font-black uppercase text-white ${
+                          className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase text-white ${
                             status.source === "airbnb" ? "bg-[#FF385C]" : "bg-[#003B95]"
                           }`}
                         >
                           {status.source}
                         </span>
                         <span
-                          className={`text-[11px] font-black ${
+                          className={`text-[11px] font-bold ${
                             status.error
                               ? "text-red-700"
                               : status.configured
@@ -1152,7 +1152,7 @@ export default function AdminClient() {
 
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[680px] text-left text-sm">
-                    <thead className="bg-orange-50 text-[11px] font-black uppercase tracking-wide text-gray-500">
+                    <thead className="bg-orange-50 text-[11px] font-bold uppercase tracking-wide text-gray-500">
                       <tr>
                         <th className="px-4 py-2">Canal</th>
                         <th className="px-4 py-2">Check-in</th>
@@ -1168,7 +1168,7 @@ export default function AdminClient() {
                         >
                           <td className="px-4 py-3">
                             <span
-                              className={`rounded-full px-2 py-1 text-[10px] font-black uppercase text-white ${
+                              className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase text-white ${
                                 reservation.source === "airbnb"
                                   ? "bg-[#FF385C]"
                                   : "bg-[#003B95]"
@@ -1177,7 +1177,7 @@ export default function AdminClient() {
                               {reservation.source}
                             </span>
                           </td>
-                          <td className="px-4 py-3 font-extrabold text-[#1F3D2B]">
+                          <td className="px-4 py-3 font-semibold text-[#1F3D2B]">
                             {reservation.start}
                           </td>
                           <td className="px-4 py-3 font-semibold text-gray-700">
@@ -1205,7 +1205,7 @@ export default function AdminClient() {
         </section>
 
         <section className="mt-8 rounded-2xl border border-orange-200 bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-extrabold text-gray-900">Reservas directas</h2>
+          <h2 className="text-xl font-bold text-gray-900">Reservas directas</h2>
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[760px] text-left text-sm">
               <thead className="border-b text-xs uppercase text-gray-500">
