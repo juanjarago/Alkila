@@ -1,5 +1,8 @@
 import { properties } from "@/lib/properties";
-import { colombiaSeasonMatches } from "./colombiaCalendar";
+import {
+  colombiaSeasonMatches,
+  isSundayBeforeColombiaHolidayMonday,
+} from "./colombiaCalendar";
 import { normalizeBookingExtras } from "./extras";
 import { listPricingRules, listSeasonalRates } from "./store";
 import type { BookingExtra, PricingRule, QuoteResult } from "./types";
@@ -115,7 +118,7 @@ export function enumerateNights(from: string, to: string) {
 
 function isWeekendNight(ymd: string) {
   const day = new Date(`${ymd}T00:00:00`).getDay();
-  return day === 5 || day === 6;
+  return day === 5 || day === 6 || isSundayBeforeColombiaHolidayMonday(ymd);
 }
 
 function findSeasonalRateForNight(

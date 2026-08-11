@@ -111,6 +111,20 @@ function isHolidayWeekendNight(ymd: string) {
   return (day === 5 || day === 6 || day === 0) && holidays.has(toYMD(nextMon));
 }
 
+export function isSundayBeforeColombiaHolidayMonday(ymd: string) {
+  const date = new Date(`${ymd}T00:00:00`);
+  if (date.getDay() !== 0) return false;
+
+  const nextDay = addDays(date, 1);
+  const holidays = dateSet([
+    ...colombiaHolidays(nextDay.getFullYear() - 1),
+    ...colombiaHolidays(nextDay.getFullYear()),
+    ...colombiaHolidays(nextDay.getFullYear() + 1),
+  ]);
+
+  return holidays.has(toYMD(nextDay));
+}
+
 export function colombiaSeasonMatches(ymd: string): ColombiaSeasonMatch[] {
   const date = new Date(`${ymd}T00:00:00`);
   const year = date.getFullYear();
