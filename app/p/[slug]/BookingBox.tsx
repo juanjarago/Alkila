@@ -16,6 +16,29 @@ type PropertyLike = {
   airbnbHostYears?: number;
 };
 
+type AvailabilityConflict = {
+  source?: string;
+  start?: string;
+  end?: string;
+};
+
+type QuoteResponse = {
+  blocked?: boolean;
+  conflicts?: AvailabilityConflict[];
+  error?: string;
+  message?: string;
+  totalCOP?: number | null;
+  nights?: number | null;
+  subtotalCOP?: number | null;
+  cleaningFeeCOP?: number | null;
+  extraGuestFeeCOP?: number | null;
+  petFeeCOP?: number | null;
+  domesticServiceFeeCOP?: number | null;
+  earlyCheckInFeeCOP?: number | null;
+  lateCheckoutFeeCOP?: number | null;
+  extrasFeeCOP?: number | null;
+};
+
 function formatCOP(value: number) {
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
@@ -63,7 +86,7 @@ function sourceLabel(source?: string) {
   return "otra reserva";
 }
 
-function availabilityMessage(data: any, from: string, to: string) {
+function availabilityMessage(data: QuoteResponse | null, from: string, to: string) {
   if (!data?.blocked) return null;
 
   const conflicts = Array.isArray(data?.conflicts) ? data.conflicts : [];
@@ -91,7 +114,7 @@ export default function BookingBox({
   const [guests, setGuests] = useState<number>(Math.min(8, property.capacity));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<QuoteResponse | null>(null);
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
 
   const minDate = useMemo(() => {
@@ -180,9 +203,13 @@ export default function BookingBox({
 
       const raw = await res.text();
 
-      let data: any = null;
+      let data: QuoteResponse | null = null;
       try {
-        data = raw ? JSON.parse(raw) : null;
+        const parsed: unknown = raw ? JSON.parse(raw) : null;
+        data =
+          parsed && typeof parsed === "object"
+            ? (parsed as QuoteResponse)
+            : null;
       } catch {
         data = { message: raw };
       }
@@ -198,8 +225,12 @@ export default function BookingBox({
       }
 
       setResult(data);
-    } catch (e: any) {
-      setError(e?.message ?? "Error inesperado consultando disponibilidad");
+    } catch (error: unknown) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Error inesperado consultando disponibilidad"
+      );
     } finally {
       setLoading(false);
     }

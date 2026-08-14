@@ -48,8 +48,8 @@ export default async function Page({
   if (!property) return notFound();
 
   const images: string[] =
-    (property as any).images && (property as any).images.length > 0
-      ? (property as any).images
+    property.images && property.images.length > 0
+      ? property.images
       : property.heroImage
         ? [property.heroImage]
         : [];
