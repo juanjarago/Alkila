@@ -65,6 +65,10 @@ export const properties: Property[] = [
     privateJacuzzi: true,
     description:
       "Cabaña privada ideal para familias pequeñas o amigos. Piscina y jacuzzi privados, BBQ con cocina de leña, internet y un entorno natural rodeado de frutales.",
+    airbnbUrl: "https://www.airbnb.com.co/rooms/50155196",
+    airbnbRating: 4.59,
+    airbnbReviewCount: 95,
+    airbnbHostYears: 8,
   },
   {
     slug: "casa-campestre-anapoima-16-personas",
@@ -172,5 +176,9 @@ export const properties: Property[] = [
     privateJacuzzi: true,
     description:
       "Finca ideal para reuniones grandes. Piscina/jacuzzi privados, billar, kiosco con cocina de leña y amplias zonas verdes para compartir.",
+    airbnbUrl: "https://www.airbnb.com.co/rooms/32492341",
+    airbnbRating: 4.83,
+    airbnbReviewCount: 138,
+    airbnbHostYears: 8,
   },
 ];
