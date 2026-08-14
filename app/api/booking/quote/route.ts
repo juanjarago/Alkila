@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 
     if (!propertySlug || !from || !to || to <= from || guests < 1) {
       return NextResponse.json(
-        { error: "Datos invalidos para cotizar." },
+        { error: "Datos inválidos para cotizar." },
         { status: 400 }
       );
     }

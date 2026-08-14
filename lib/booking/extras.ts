@@ -9,14 +9,14 @@ export const BOOKING_EXTRA_DEFINITIONS: Array<{
   {
     id: "pets",
     label: "Mascotas",
-    description: "Tarifa unica por estadia.",
+    description: "Tarifa única por estadía.",
     priceLabel: "$50.000",
   },
   {
     id: "domestic_service",
-    label: "Servicio domestico",
-    description: "Apoyo durante los dias de la estadia.",
-    priceLabel: "$90.000 por dia",
+    label: "Servicio doméstico",
+    description: "Apoyo durante los días de la estadía.",
+    priceLabel: "$90.000 por día",
   },
   {
     id: "early_checkin",
@@ -27,7 +27,7 @@ export const BOOKING_EXTRA_DEFINITIONS: Array<{
   {
     id: "late_checkout",
     label: "Late check-out",
-    description: "Salida despues de la hora regular, sujeto a disponibilidad.",
+    description: "Salida después de la hora regular, sujeto a disponibilidad.",
     priceLabel: "50% de una noche",
   },
 ];

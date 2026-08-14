@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     const conflicts = await collectAvailabilityConflicts({ propertySlug, from, to });
     if (conflicts.length > 0) {
       return NextResponse.json(
-        { error: "La propiedad no esta disponible para esas fechas.", conflicts },
+        { error: "La propiedad no está disponible para esas fechas.", conflicts },
         { status: 409 }
       );
     }
@@ -106,7 +106,7 @@ export async function PATCH(req: Request) {
     const action = String(body?.action ?? "").trim();
 
     if (!id || action !== "mark_paid") {
-      return NextResponse.json({ error: "Accion invalida." }, { status: 400 });
+      return NextResponse.json({ error: "Acción inválida." }, { status: 400 });
     }
 
     const reservations = await listReservations();

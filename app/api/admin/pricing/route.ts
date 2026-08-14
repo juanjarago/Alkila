@@ -84,7 +84,7 @@ export async function POST(req: Request) {
       autoIncreases.some((percent) => percent < 0 || percent > 300) ||
       autoMinimums.some((nights) => nights < 1)
     ) {
-      return NextResponse.json({ error: "Regla de precios invalida." }, { status: 400 });
+      return NextResponse.json({ error: "Regla de precios inválida." }, { status: 400 });
     }
 
     const saved = await upsertPricingRule(rule);

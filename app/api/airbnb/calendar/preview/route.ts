@@ -12,14 +12,14 @@ export async function POST(req: Request) {
 
     if (!url || !url.endsWith(".ics") && !url.includes(".ics?")) {
       return NextResponse.json(
-        { error: "URL iCal invalida. Debe ser un enlace .ics de Airbnb." },
+        { error: "URL iCal inválida. Debe ser un enlace .ics de Airbnb." },
         { status: 400 }
       );
     }
 
     if (!from || !to || to <= from) {
       return NextResponse.json(
-        { error: "Fechas invalidas. Usa from/to en formato YYYY-MM-DD." },
+        { error: "Fechas inválidas. Usa from/to en formato YYYY-MM-DD." },
         { status: 400 }
       );
     }

@@ -262,7 +262,7 @@ export async function POST(req: Request) {
         if (conflicts.length > 0) {
           return NextResponse.json(
             {
-              error: "La propiedad no esta disponible para esas fechas en Airbnb.",
+              error: "La propiedad no está disponible para esas fechas en Airbnb.",
               conflicts,
             },
             { status: 409 }
@@ -319,7 +319,7 @@ export async function POST(req: Request) {
         }
 
         console.warn(
-          "STAYS Calendar API no disponible; se continua con calculate-price.",
+          "STAYS Calendar API no disponible; se continúa con calculate-price.",
           { listingId, status, message: calendarError?.message }
         );
       }

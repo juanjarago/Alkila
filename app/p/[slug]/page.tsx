@@ -121,7 +121,7 @@ export default async function Page({
 
               {details ? (
                 <div className="mt-5 grid gap-3 min-[900px]:grid-cols-3">
-                  <InfoDisclosure title="Mas informacion" items={details.moreInfo} />
+                  <InfoDisclosure title="Más información" items={details.moreInfo} />
                   <InfoDisclosure title="Servicios" items={details.amenities} />
                   <InfoDisclosure title="Condiciones" items={details.rules} />
                 </div>

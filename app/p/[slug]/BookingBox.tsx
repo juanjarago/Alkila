@@ -231,7 +231,7 @@ export default function BookingBox({
     if (!pricingRule) return fallback;
     if (extraId === "pets") return formatCOP(pricingRule.petFeeCOP);
     if (extraId === "domestic_service") {
-      return `${formatCOP(pricingRule.domesticServiceFeePerDayCOP)} por dia`;
+      return `${formatCOP(pricingRule.domesticServiceFeePerDayCOP)} por día`;
     }
     if (extraId === "early_checkin") {
       return `${pricingRule.earlyCheckInPercent}% de una noche`;

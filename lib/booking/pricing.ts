@@ -185,7 +185,7 @@ export async function quoteDirectStay(input: {
   );
 
   if (nightsList.length < minNights) {
-    throw new Error(`La estadia minima es de ${minNights} noches.`);
+    throw new Error(`La estadía mínima es de ${minNights} noches.`);
   }
 
   if (input.guests < 1 || input.guests > property.capacity) {

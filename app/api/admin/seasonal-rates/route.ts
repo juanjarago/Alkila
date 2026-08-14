@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     };
 
     if (!rate.propertySlug || !rate.from || !rate.to || rate.to <= rate.from || rate.nightCOP <= 0) {
-      return NextResponse.json({ error: "Temporada invalida." }, { status: 400 });
+      return NextResponse.json({ error: "Temporada inválida." }, { status: 400 });
     }
 
     const saved = await createSeasonalRate(rate);

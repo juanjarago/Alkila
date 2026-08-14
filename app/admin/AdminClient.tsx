@@ -391,7 +391,7 @@ export default function AdminClient() {
         : reservation.totalCOP;
 
     const ok = window.confirm(
-      `Marcar esta reserva como pagada por ${formatCOP(paidCOP)}? Al hacerlo bloqueara calendarios y saldra en el iCal de Alkila.`
+      `¿Marcar esta reserva como pagada por ${formatCOP(paidCOP)}? Al hacerlo bloqueará calendarios y saldrá en el iCal de Alkila.`
     );
     if (!ok) return;
 
@@ -520,7 +520,7 @@ export default function AdminClient() {
                         onChange={(value) => updateRule(property.slug, { cleaningFeeCOP: value })}
                       />
                       <AdminNumberField
-                        label="Huesped extra"
+                        label="Huésped extra"
                         disabled={!isAuthorized}
                         value={rule.extraGuestFeeCOP ?? 0}
                         onChange={(value) => updateRule(property.slug, { extraGuestFeeCOP: value })}
@@ -574,7 +574,7 @@ export default function AdminClient() {
                         onChange={(value) => updateRule(property.slug, { petFeeCOP: value })}
                       />
                       <AdminNumberField
-                        label="Servicio dia"
+                        label="Servicio día"
                         disabled={!isAuthorized}
                         value={rule.domesticServiceFeePerDayCOP}
                         onChange={(value) =>
@@ -650,7 +650,7 @@ export default function AdminClient() {
                               }
                             />
                             <AdminNumberField
-                              label="Minimo"
+                              label="Mínimo"
                               suffix="noches"
                               disabled={!isAuthorized}
                               value={Number(rule[season.minKey] ?? 1)}
@@ -783,7 +783,7 @@ export default function AdminClient() {
                   </button>
                   <div className="text-center text-sm font-bold text-gray-900">
                     Mostrando meses {previewMonthPage * 4 + 1} al{" "}
-                    {previewMonthPage * 4 + 4} de los proximos 12
+                    {previewMonthPage * 4 + 4} de los próximos 12
                   </div>
                   <button
                     type="button"
@@ -965,7 +965,7 @@ export default function AdminClient() {
               />
             </label>
             <label className="text-sm font-semibold text-gray-700">
-              Minimo de noches en esta temporada
+              Mínimo de noches en esta temporada
               <input
                 type="number"
                 disabled={!isAuthorized}
@@ -1084,7 +1084,7 @@ export default function AdminClient() {
               </h2>
               <p className="mt-1 text-sm text-gray-600">
                 Fechas bloqueadas que llegan desde los calendarios iCal de Airbnb y
-                Booking para los proximos 12 meses.
+                Booking para los próximos 12 meses.
               </p>
             </div>
             <div className="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-[#8F3F2A]">
@@ -1216,7 +1216,7 @@ export default function AdminClient() {
                   <th>Total</th>
                   <th>Pagado</th>
                   <th>Estado</th>
-                  <th>Accion</th>
+                  <th>Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -1241,7 +1241,7 @@ export default function AdminClient() {
                           Marcar pagada
                         </button>
                       ) : (
-                        <span className="text-xs text-gray-500">Sin accion</span>
+                        <span className="text-xs text-gray-500">Sin acción</span>
                       )}
                     </td>
                   </tr>

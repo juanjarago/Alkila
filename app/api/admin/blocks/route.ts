@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     };
 
     if (!block.propertySlug || !block.from || !block.to || block.to <= block.from) {
-      return NextResponse.json({ error: "Bloqueo invalido." }, { status: 400 });
+      return NextResponse.json({ error: "Bloqueo inválido." }, { status: 400 });
     }
 
     const saved = await createManualBlock(block);

@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     if (!slug || !checkIn || !checkOut || !Number.isFinite(guests) || guests <= 0) {
       return NextResponse.json(
-        { error: "Datos invalidos: slug/checkIn/checkOut/guests" },
+        { error: "Datos inválidos: slug/checkIn/checkOut/guests" },
         { status: 400 }
       );
     }
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
 
     if (conflicts.length > 0) {
       return NextResponse.json(
-        { error: "La propiedad no esta disponible para esas fechas.", conflicts },
+        { error: "La propiedad no está disponible para esas fechas.", conflicts },
         { status: 409 }
       );
     }
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
 
     if (!siteUrl.startsWith("http")) {
       return NextResponse.json(
-        { error: `NEXT_PUBLIC_SITE_URL invalido: "${siteUrl}"` },
+        { error: `NEXT_PUBLIC_SITE_URL inválido: "${siteUrl}"` },
         { status: 500 }
       );
     }
