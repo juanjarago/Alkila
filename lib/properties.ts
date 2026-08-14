@@ -14,6 +14,10 @@ export type Property = {
   privatePool: boolean;
   privateJacuzzi: boolean;
   description: string;
+  airbnbUrl?: string;
+  airbnbRating?: number;
+  airbnbReviewCount?: number;
+  airbnbHostYears?: number;
 };
 
 export const properties: Property[] = [
@@ -110,6 +114,10 @@ export const properties: Property[] = [
     privateJacuzzi: true,
     description:
       "Casa campestre amplia para familias y grupos de amigos. Piscina/jacuzzi privados, BBQ con cocina de leña, A/C y habitaciones cómodas.",
+    airbnbUrl: "https://www.airbnb.com.co/rooms/1141337700316872045",
+    airbnbRating: 4.85,
+    airbnbReviewCount: 47,
+    airbnbHostYears: 8,
   },
   {
     slug: "finca-anapoima-22-personas",

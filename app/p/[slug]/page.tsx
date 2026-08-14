@@ -87,6 +87,25 @@ export default async function Page({
               {property.title}
             </h1>
 
+            {property.airbnbUrl &&
+            property.airbnbRating != null &&
+            property.airbnbReviewCount != null ? (
+              <a
+                href={property.airbnbUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#C6C0B1] bg-white px-4 py-2.5 text-sm font-black text-[#17332A] transition hover:border-[#B85F3B] hover:text-[#B85F3B]"
+              >
+                <span aria-hidden="true" className="text-[#B85F3B]">★</span>
+                {property.airbnbRating.toLocaleString("es-CO", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                · {property.airbnbReviewCount} reseñas verificadas en Airbnb
+                <span aria-hidden="true">↗</span>
+              </a>
+            ) : null}
+
             <div className="property-highlights mt-4 flex gap-2 overflow-x-auto pb-2 min-[900px]:flex-wrap min-[900px]:overflow-visible min-[900px]:pb-0">
               <span className="shrink-0 rounded-full bg-[#D8D5C9] px-4 py-2.5 text-base font-black text-[#17332A]">
                 Hasta {property.capacity} personas
@@ -137,6 +156,8 @@ export default async function Page({
                 title: property.title,
                 capacity: property.capacity,
                 staysListingId: property.staysListingId,
+                airbnbUrl: property.airbnbUrl,
+                airbnbHostYears: property.airbnbHostYears,
               }}
             />
           </aside>

@@ -15,6 +15,8 @@ export default function ReservationSidebar({
     title: string;
     capacity: number;
     staysListingId: string;
+    airbnbUrl?: string;
+    airbnbHostYears?: number;
   };
 }) {
   return (

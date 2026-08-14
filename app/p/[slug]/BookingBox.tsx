@@ -12,6 +12,8 @@ type PropertyLike = {
   capacity: number;
   staysListingId: string;
   slug?: string;
+  airbnbUrl?: string;
+  airbnbHostYears?: number;
 };
 
 function formatCOP(value: number) {
@@ -371,6 +373,31 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
         >
           {loading ? "Consultando..." : "Ver disponibilidad"}
         </button>
+
+        {property.airbnbUrl ? (
+          <div className="rounded-2xl border border-[#C6C0B1] bg-white p-4 text-[#3F4741]">
+            <div className="font-black text-[#17332A]">
+              Reserva directa, sin intermediarios
+            </div>
+            <p className="mt-1 text-base leading-6">
+              Consulta nuestra tarifa directa reservando en Alkila.
+            </p>
+            <a
+              href={property.airbnbUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex items-center gap-1 text-sm font-black text-[#B85F3B] underline decoration-2 underline-offset-4 hover:text-[#8F3F2A]"
+            >
+              ¿Prefieres Airbnb? Ver y reservar el anuncio
+              <span aria-hidden="true">↗</span>
+            </a>
+            {property.airbnbHostYears ? (
+              <div className="mt-2 text-sm text-[#4B544D]">
+                Anfitrión con {property.airbnbHostYears} años de experiencia en Airbnb.
+              </div>
+            ) : null}
+          </div>
+        ) : null}
 
         {error ? (
           <div className="break-words rounded-2xl border border-red-200 bg-red-50 p-4 text-lg leading-7 text-red-700">

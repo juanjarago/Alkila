@@ -8,6 +8,8 @@ type Property = {
   capacity: number;
   locationLabel: string;
   highlights: string[];
+  airbnbRating?: number;
+  airbnbReviewCount?: number;
 };
 
 export function PropertyCard({ p }: { p: Property }) {
@@ -37,6 +39,17 @@ export function PropertyCard({ p }: { p: Property }) {
           <h3 className="mt-1 text-lg font-black leading-tight text-[#17332A]">
             {p.title}
           </h3>
+
+          {p.airbnbRating != null && p.airbnbReviewCount != null ? (
+            <div className="mt-3 text-sm font-black text-[#17332A]">
+              <span aria-hidden="true" className="text-[#B85F3B]">★</span>{" "}
+              {p.airbnbRating.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              · {p.airbnbReviewCount} reseñas en Airbnb
+            </div>
+          ) : null}
 
           <div className="mt-4 flex flex-wrap gap-2">
             {p.highlights.slice(0, 3).map((h) => (
