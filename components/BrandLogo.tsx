@@ -8,7 +8,7 @@ export function BrandLogo({ compact = false }: { compact?: boolean }) {
       aria-label="Alkila | Casas y fincas"
     >
       <img
-        src="/alkila-logo.svg"
+        src="/alkila-logo-approved.webp"
         alt="Alkila — Casas y fincas"
         width={207}
         height={185}
