@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+// Stable brand mark used to force a clean production deployment after rollback.
 export function BrandLogo({ compact = false }: { compact?: boolean }) {
   return (
     <Link
