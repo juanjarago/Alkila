@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 207 185" role="img" aria-labelledby="title desc">
+  <title id="title">Alkila</title>
+  <desc id="desc">Alkila — Casas y fincas</desc>
+  <rect width="207" height="185" rx="22" fill="#F6F0E6"/>
+
+  <!-- Brand symbol -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M76 43 L104 17 L132 43 V86 H118" stroke="#17392F" stroke-width="5.2"/>
+    <path d="M76 43 V86 H90" stroke="#17392F" stroke-width="5.2"/>
+    <path d="M92 57 V76 C92 84 97 89 104 89 C112 89 117 84 117 75 V56" stroke="#B69758" stroke-width="5.5"/>
+    <path d="M116 57 C117 45 124 36 134 33 C133 45 127 54 117 60" stroke="#6A7936" stroke-width="5"/>
+    <path d="M117 67 C126 64 134 66 141 74 C132 78 123 77 117 71" stroke="#B69758" stroke-width="4.6"/>
+    <path d="M99 56 C100 48 105 43 112 41 C111 48 107 54 100 58" stroke="#6A7936" stroke-width="4"/>
+    <path d="M121 86 H137" stroke="#17392F" stroke-width="5"/>
+    <circle cx="139" cy="74" r="2.4" fill="#17392F" stroke="none"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="103.5" y="137" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="31" font-weight="400" letter-spacing="8.4" fill="#17392F">ALKILA</text>
+
+  <!-- Descriptor -->
+  <line x1="17" y1="158" x2="40" y2="158" stroke="#B69758" stroke-width="1.4"/>
+  <line x1="167" y1="158" x2="190" y2="158" stroke="#B69758" stroke-width="1.4"/>
+  <text x="103.5" y="162" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="10.5" font-weight="400" letter-spacing="2.2" fill="#B69758">CASAS Y FINCAS</text>
+</svg>
