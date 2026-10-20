@@ -1,0 +1,35 @@
+name: Quotations checks
+on:
+  push:
+    branches: [feat/admin-cotizaciones]
+  pull_request:
+    paths:
+      - 'app/admin/**'
+      - 'app/cotizacion/**'
+      - 'app/api/admin/quotes/**'
+      - 'app/api/quotes/**'
+      - 'components/quotations/**'
+      - 'lib/quotations/**'
+      - 'lib/booking/**'
+      - 'tests/quotations.test.cjs'
+      - '.github/workflows/quotations-check.yml'
+permissions:
+  contents: read
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/quotations.test.cjs
+      - run: npx tsc --noEmit
+      - run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
