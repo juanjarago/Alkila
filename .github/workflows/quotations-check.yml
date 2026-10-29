@@ -12,6 +12,7 @@ on:
       - 'lib/quotations/**'
       - 'lib/booking/**'
       - 'tests/quotations.test.cjs'
+      - 'tests/pricing.test.cjs'
       - '.github/workflows/quotations-check.yml'
 permissions:
   contents: read
@@ -28,7 +29,7 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - run: node --test tests/quotations.test.cjs
+      - run: node --test tests/pricing.test.cjs tests/quotations.test.cjs
       - run: npx tsc --noEmit
       - run: npm run build
         env:

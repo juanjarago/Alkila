@@ -23,6 +23,35 @@ const grande = "finca-anapoima-22-personas";
 const mediana = "casa-campestre-anapoima-16-personas";
 const quote = (from, to, guests = 10, propertySlug = grande, extras = []) => quoteDirectStay({ propertySlug, from, to, guests, extras });
 
+test("ordinary Sunday to Thursday permits one night, including holiday Monday checkout", async () => {
+  for (const from of ["2026-10-28", "2026-11-02", "2026-11-16", "2027-01-07", "2027-04-28"]) {
+    const to = new Date(`${from}T12:00:00Z`); to.setUTCDate(to.getUTCDate() + 1);
+    for (const [slug, guests, price] of [[grande, 10, 819000], [mediana, 6, 504000]]) {
+      const q = await quote(from, to.toISOString().slice(0, 10), guests, slug);
+      assert.equal(q.minNights, 1); assert.equal(q.subtotalCOP, price);
+    }
+  }
+});
+
+test("every authorized night matches the explicit agreed calendar for both houses", () => {
+  const { standardizedStay } = require("../lib/booking/standardPricing.ts");
+  const specials = [
+    ["2026-10-30", "2026-11-01", 1.2, 3], ["2026-11-13", "2026-11-15", 1.2, 3],
+    ["2026-12-08", "2026-12-08", 1.2, 3], ["2027-01-08", "2027-01-10", 1.2, 3],
+    ["2027-03-19", "2027-03-20", 1.2, 3], ["2027-03-21", "2027-03-28", 1.5, 4],
+    ["2026-12-20", "2027-01-06", 2, 5],
+  ];
+  for (const night of enumerateNights("2026-10-28", "2027-04-29")) {
+    const special = specials.find(([from, to]) => night >= from && night <= to);
+    const weekend = [5, 6].includes(new Date(night + "T12:00:00Z").getUTCDay());
+    for (const [slug, guests, base] of [[grande, 10, 1300000], [mediana, 6, 800000]]) {
+      const [q] = standardizedStay(slug, [night], guests);
+      assert.equal(q.nightCOP, Math.round(base * (special?.[2] ?? (weekend ? 1 : 0.7)) * 0.9), night);
+      assert.equal(q.minNights, special?.[3] ?? (weekend ? 2 : 1), night);
+    }
+  }
+});
+
 test("weekday and ordinary weekend use 90% of standard, without stacking", async () => {
   assert.equal((await quote("2026-11-03", "2026-11-05")).subtotalCOP, 819000 * 2);
   assert.equal((await quote("2026-11-06", "2026-11-08")).subtotalCOP, 1170000 * 2);

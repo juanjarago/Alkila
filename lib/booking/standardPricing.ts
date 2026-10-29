@@ -27,7 +27,7 @@ export function standardizedStay(propertySlug: string, nights: string[], guests:
     const holyWeekOrBreak = seasons.some((s) => s.kind === "holy_week" || s.kind === "school_break");
     const specialHoliday = night === "2026-12-08";
     const multiplier = yearEnd ? 2 : holyWeekOrBreak ? 1.5 : bridge || specialHoliday ? 1.2 : day === 5 || day === 6 ? 1 : 0.7;
-    const minNights = yearEnd ? 5 : holyWeekOrBreak ? 4 : bridge || specialHoliday ? 3 : 2;
+    const minNights = yearEnd ? 5 : holyWeekOrBreak ? 4 : bridge || specialHoliday ? 3 : day === 5 || day === 6 ? 2 : 1;
     return {
       nightCOP: Math.round(house.night * multiplier * 0.9),
       // Seasonal treatment of extra guests is still unresolved on platforms.

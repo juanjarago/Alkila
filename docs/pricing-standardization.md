@@ -11,7 +11,7 @@ Alkila aplica el 90% al alojamiento y al adicional fijo por persona. Conserva lo
 
 Prioridad por noche: fin de año > Semana Santa/receso > puente/festivo > viernes/sábado > entre semana. Nunca se suman recargos ni se aplica un recargo sobre la tarifa ya rebajada de entre semana.
 
-- Entre semana: 70% de la tarifa estándar. Se conserva el mínimo previo de dos noches porque no se acordó otro mínimo entre semana.
+- Entre semana (domingo a jueves ordinarios): 70% de la tarifa estándar, mínimo una noche.
 - Viernes/sábado: base, mínimo dos noches.
 - Puente con lunes festivo: viernes, sábado y domingo al 120%, mínimo tres noches. La noche del lunes vuelve al 70%, salvo temporada superior.
 - 8 diciembre: 120%, mínimo tres noches; no se extiende automáticamente a noches vecinas.
