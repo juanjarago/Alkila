@@ -125,10 +125,10 @@ export const properties: Property[] = [
   },
   {
     slug: "finca-anapoima-22-personas",
-    title: "Finca en Anapoima para 22 personas con piscina, jacuzzi y zonas sociales",
-    shortTitle: "Finca grande (hasta 22)",
+    title: "Finca en Anapoima para 24 personas con piscina, jacuzzi y zonas sociales",
+    shortTitle: "Finca grande (hasta 24)",
     staysListingId: "669c05fb930a3f38680ebda",
-    capacity: 22,
+    capacity: 24,
     rooms: 7,
     baths: 8,
     locationLabel: "Anapoima · Vereda Las Mercedes",

@@ -2,12 +2,13 @@ import Link from "next/link";
 import { PropertyCard } from "@/components/PropertyCard";
 import { properties } from "@/lib/properties";
 
-export default function PropiedadesPage({
+export default async function PropiedadesPage({
   searchParams,
 }: {
-  searchParams?: { guests?: string };
+  searchParams?: Promise<{ guests?: string }>;
 }) {
-  const guests = Number(searchParams?.guests || 0);
+  const params = await searchParams;
+  const guests = Number(params?.guests || 0);
   const filtered =
     guests > 0 ? properties.filter((p) => p.capacity >= guests) : properties;
 
@@ -30,7 +31,7 @@ export default function PropiedadesPage({
             {[
               ["Hasta 8", "/propiedades?guests=8"],
               ["Hasta 16", "/propiedades?guests=16"],
-              ["Hasta 22", "/propiedades?guests=22"],
+              ["Hasta 24", "/propiedades?guests=24"],
               ["Ver todas", "/propiedades"],
             ].map(([label, href]) => (
               <Link
