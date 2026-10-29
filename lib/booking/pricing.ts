@@ -4,6 +4,7 @@ import {
   isSundayBeforeColombiaHolidayMonday,
 } from "./colombiaCalendar";
 import { normalizeBookingExtras } from "./extras";
+import { standardizedStay } from "./standardPricing";
 import { listPricingRules, listSeasonalRates } from "./store";
 import type { BookingExtra, PricingRule, QuoteResult } from "./types";
 
@@ -105,6 +106,14 @@ export function toYMD(date: Date) {
 }
 
 export function enumerateNights(from: string, to: string) {
+  for (const value of [from, to]) {
+    const parsed = new Date(`${value}T12:00:00Z`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || !Number.isFinite(parsed.getTime()) ||
+      parsed.toISOString().slice(0, 10) !== value) {
+      throw new Error("Fechas inválidas.");
+    }
+  }
+  if (to <= from) throw new Error("La salida debe ser posterior a la entrada.");
   const start = new Date(`${from}T00:00:00`);
   const end = new Date(`${to}T00:00:00`);
   const nights: string[] = [];
@@ -168,20 +177,26 @@ export async function quoteDirectStay(input: {
   const seasonalRates = await listSeasonalRates(input.propertySlug);
 
   const nightsList = enumerateNights(input.from, input.to);
+  if (!Number.isInteger(input.guests) || !nightsList.length) {
+    throw new Error("Fechas o número de personas inválidos.");
+  }
+  const standard = standardizedStay(input.propertySlug, nightsList, input.guests);
+  const legacyNights = nightsList.filter((_, index) => !standard?.[index]);
   const seasonalMinNights = seasonalRates
-    .filter((rate) => nightsList.some((night) => night >= rate.from && night < rate.to))
+    .filter((rate) => legacyNights.some((night) => night >= rate.from && night < rate.to))
     .map((rate) => rate.minNights ?? 0);
-  const usesWeekendRate = nightsList.some(isWeekendNight);
-  const baseMinNights = usesWeekendRate
+  const usesWeekendRate = legacyNights.some(isWeekendNight);
+  const baseMinNights = !legacyNights.length ? 0 : usesWeekendRate
     ? rule.minWeekendNights
     : rule.minWeekdayNights;
-  const automaticSeasonMinNights = nightsList.map((night) =>
+  const automaticSeasonMinNights = legacyNights.map((night) =>
     automaticMinNights(rule, night)
   );
   const minNights = Math.max(
     baseMinNights,
     ...seasonalMinNights,
-    ...automaticSeasonMinNights
+    ...automaticSeasonMinNights,
+    ...(standard ?? []).map((night) => night?.minNights ?? 0)
   );
 
   if (nightsList.length < minNights) {
@@ -193,6 +208,8 @@ export async function quoteDirectStay(input: {
   }
 
   function nightPriceFor(night: string) {
+    const agreedPrice = standard?.[nightsList.indexOf(night)];
+    if (agreedPrice) return agreedPrice.nightCOP;
     const seasonalRate = findSeasonalRateForNight(seasonalRates, night);
     const baseNightPrice = seasonalRate
       ? seasonalRate.nightCOP
@@ -213,7 +230,8 @@ export async function quoteDirectStay(input: {
 
   const extraGuests = Math.max(0, input.guests - rule.includedGuests);
   const extraGuestFeeCOP =
-    extraGuests * (rule.extraGuestFeeCOP ?? 0) * nightsList.length;
+    nightsList.reduce((sum, _, index) => sum + (standard?.[index]?.extraGuestFeeCOP ??
+      extraGuests * (rule.extraGuestFeeCOP ?? 0)), 0);
   const cleaningFeeCOP = rule.cleaningFeeCOP;
   const selectedExtras = normalizeBookingExtras(input.extras);
   const hasExtra = (extra: BookingExtra) => selectedExtras.includes(extra);

@@ -83,7 +83,7 @@ export function SearchBar() {
             className="mt-1 min-h-12 w-full rounded-2xl border border-[#C6C0B1] bg-white px-4 py-2 text-base outline-none focus:ring-2 focus:ring-[#B8794A]"
             type="number"
             min={1}
-            max={22}
+            max={24}
             value={guests}
             onChange={(e) => setGuests(Number(e.target.value))}
           />
