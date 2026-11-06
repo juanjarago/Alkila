@@ -121,6 +121,27 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="px-4 py-8 md:py-12" aria-labelledby="guest-services-title">
+        <div className="glass-panel mx-auto flex max-w-6xl flex-col gap-5 rounded-3xl p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#66752F]">
+              Para nuestros huéspedes
+            </p>
+            <h2 id="guest-services-title" className="mt-2 text-2xl font-black text-[#17332A]">
+              ¿Vas a usar la mesa de billar?
+            </h2>
+            <p className="mt-2 text-base leading-7 text-[#4B544D]">
+              Revisa la mesa, registra sus fotos y firma el acta desde tu celular.
+            </p>
+          </div>
+          <a
+            href="/huespedes/billar"
+            className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-[#17332A] px-6 py-3 text-center text-sm font-black text-white transition hover:bg-[#284D3D]"
+          >
+            Registrar entrega de billar →
+          </a>
+        </div>
+      </section>
     </main>
   );
 }
