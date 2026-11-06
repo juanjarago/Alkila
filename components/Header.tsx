@@ -13,6 +13,9 @@ export function Header() {
           <a className="transition hover:text-[#66752F]" href="/destinos/anapoima">
             Anapoima
           </a>
+          <a className="transition hover:text-[#66752F]" href="/huespedes/billar">
+            Huéspedes
+          </a>
         </nav>
 
         <nav className="flex shrink-0 items-center gap-2 text-xs font-black text-[#17332A] md:hidden">
