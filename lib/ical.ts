@@ -103,5 +103,10 @@ export async function fetchIcalBlockedEvents(url: string) {
     throw new Error(`iCal error (${res.status}): ${text.slice(0, 160)}`);
   }
 
+  if (!/^BEGIN:VCALENDAR\s*$/m.test(text.replace(/\r/g, "")) ||
+      !/^END:VCALENDAR\s*$/m.test(text.replace(/\r/g, ""))) {
+    throw new Error("No fue posible verificar el calendario externo.");
+  }
+
   return parseIcalBlockedEvents(text);
 }

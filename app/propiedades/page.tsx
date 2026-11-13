@@ -23,13 +23,14 @@ export default async function PropiedadesPage({
             Elige el espacio ideal para tu grupo
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-[#4B544D]">
-            Todas las propiedades están en Anapoima, con piscina privada,
-            jacuzzi y zonas verdes para descansar en familia o con amigos.
+            Casas y fincas en Anapoima y Apulo, con piscina privada y espacios
+            para descansar en familia o con amigos. Consulta los servicios de cada propiedad.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
             {[
               ["Hasta 8", "/propiedades?guests=8"],
+              ["Hasta 13", "/propiedades?guests=13"],
               ["Hasta 16", "/propiedades?guests=16"],
               ["Hasta 24", "/propiedades?guests=24"],
               ["Ver todas", "/propiedades"],

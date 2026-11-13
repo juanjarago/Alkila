@@ -3,7 +3,8 @@ import { colombiaHolidays, colombiaSeasonMatches } from "./colombiaCalendar";
 // Approved platform tariffs. Direct accommodation and extra guests cost 90%.
 export const STANDARD_FROM = "2026-10-28";
 export const STANDARD_TO = "2027-04-28"; // Last priced night, inclusive.
-export const STANDARD_HOUSES: Record<string, { night: number; included: number; extra: number }> = {
+export const STANDARD_HOUSES: Record<string, { night: number; included: number; extra: number; from?: string }> = {
+  "casa-david-apulo-13-personas": { night: 504182, included: 6, extra: 100000, from: "2026-11-13" },
   "casa-campestre-anapoima-16-personas": { night: 800000, included: 6, extra: 80000 },
   "finca-anapoima-22-personas": { night: 1300000, included: 10, extra: 100000 },
 };
@@ -11,7 +12,7 @@ export const STANDARD_HOUSES: Record<string, { night: number; included: number; 
 export function standardizedStay(propertySlug: string, nights: string[], guests: number) {
   const house = STANDARD_HOUSES[propertySlug];
   if (!house) return undefined;
-  const applies = (night: string) => night >= STANDARD_FROM && night <= STANDARD_TO;
+  const applies = (night: string) => night >= (house.from ?? STANDARD_FROM) && night <= STANDARD_TO;
   if (!nights.some(applies)) return undefined;
   const yearEnd = nights.some((night) => night >= "2026-12-20" && night <= "2027-01-06");
   const holidays = new Set([2026, 2027].flatMap(colombiaHolidays).map((d) =>

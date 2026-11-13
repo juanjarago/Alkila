@@ -11,7 +11,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.88fr,1.12fr] lg:items-center">
           <div className="order-2 lg:order-1">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-[#66752F] md:text-sm">
-              Fincas privadas en Anapoima
+              Fincas privadas en Anapoima y Apulo
             </p>
 
             <h1 className="mt-3 text-4xl font-black leading-[0.98] tracking-tight text-[#17332A] md:mt-5 md:max-w-2xl md:text-7xl">
@@ -19,8 +19,8 @@ export default function Home() {
             </h1>
 
             <p className="mt-4 text-base leading-7 text-[#3F4741] md:mt-6 md:max-w-xl md:text-lg md:leading-8">
-              Tres espacios privados con piscina, jacuzzi y naturaleza para
-              descansar en Anapoima. Escoge por tamaño de grupo y revisa fechas
+              Espacios privados con piscina y naturaleza para
+              descansar en Anapoima y Apulo. Escoge por tamaño de grupo y revisa fechas
               disponibles en la ficha de cada propiedad.
             </p>
 
@@ -42,7 +42,7 @@ export default function Home() {
                 href="#propiedades"
                 className="rounded-full bg-[#B85F3B] px-6 py-3 text-center text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5"
               >
-                Ver las 3 opciones
+                Ver las {properties.length} opciones
               </a>
               <a
                 href="https://wa.me/573014000436?text=Hola%2C%20quiero%20ayuda%20para%20escoger%20una%20finca%20en%20Alkila."
@@ -105,7 +105,7 @@ export default function Home() {
                 Escoge y cotiza
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight text-[#17332A] md:text-4xl">
-                Tres opciones según tu grupo
+                Opciones según tu grupo
               </h2>
             </div>
             <p className="text-sm leading-6 text-[#4B544D]">

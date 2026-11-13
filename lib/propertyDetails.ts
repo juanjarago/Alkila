@@ -5,6 +5,25 @@ export type PropertyDetails = {
 };
 
 export const propertyDetails: Record<string, PropertyDetails> = {
+  "casa-david-apulo-13-personas": {
+    moreInfo: [
+      "Casa privada en Apulo para grupos de hasta 13 personas, con 4 habitaciones y 4,5 baños.",
+      "Habitación principal con cama king y sencilla; dos habitaciones con cama doble y sencilla; una habitación con cama doble. Además, cuenta con dos sofá camas.",
+      "Piscina privada, kiosco con billar y máquina arcade, zona BBQ con parrilla y ahumador.",
+      "Cocina abierta, balcones con vista a las montañas, jardines y cerramiento completo.",
+    ],
+    amenities: ["Piscina privada", "Billar", "Máquina arcade", "Parrilla y ahumador", "Cocina abierta", "Balcones con vista a las montañas", "Jardines y cerramiento completo"],
+    rules: [
+      "La tarifa incluye hasta 6 personas. Registra la cantidad real de huéspedes; desde la séptima persona se cobra un adicional por persona y noche, hasta un máximo de 13.",
+      "La tarifa directa de Alkila tiene un 10% de descuento en alojamiento y huéspedes adicionales frente a la tarifa de plataforma. El adicional directo es de $90.000 por persona y noche.",
+      "Limpieza: $100.000 por estancia. Mascotas: $50.000 por estancia.",
+      "Estadía mínima: 1 noche entre semana, 2 noches en fin de semana ordinario y 3 noches en puentes y festivos programados.",
+      "Semana Santa (21 al 28 de marzo de 2027): recargo del 50% y mínimo 4 noches. Fin de año (20 de diciembre de 2026 al 6 de enero de 2027): recargo del 100% y mínimo 5 noches.",
+      "En Alkila, si la reserva ocupa alguna noche de fin de año, esa tarifa y el mínimo de 5 noches se aplican a toda la reserva. Los recargos no se acumulan.",
+      "Tarifas programadas para noches del 13 de noviembre de 2026 al 28 de abril de 2027. Para otras fechas, consulta por WhatsApp.",
+      "Las horas de llegada y salida y las demás condiciones se confirman al reservar. Los servicios adicionales distintos de mascotas requieren consulta previa.",
+    ],
+  },
   "cabana-privada-anapoima-8-personas": {
     moreInfo: [
       "Casa recreativa privada para relajarse con familia o amigos en un entorno tranquilo.",

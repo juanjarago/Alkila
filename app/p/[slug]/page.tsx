@@ -5,6 +5,8 @@ import { getEffectivePricingRule, getPricingRule } from "@/lib/booking/pricing";
 import { propertyDetails } from "@/lib/propertyDetails";
 import { properties } from "@/lib/properties";
 import ReservationSidebar from "./ReservationSidebar";
+import { isPropertyCalendarReady } from "@/lib/booking/calendarSetup";
+import { STANDARD_HOUSES } from "@/lib/booking/standardPricing";
 
 export const dynamic = "force-dynamic";
 
@@ -54,6 +56,7 @@ export default async function Page({
         ? [property.heroImage]
         : [];
   const details = propertyDetails[property.slug];
+  const standardHouse = STANDARD_HOUSES[property.slug];
   const pricingRule = await getEffectivePricingRule(property.slug).catch(() =>
     getPricingRule(property.slug)
   );
@@ -149,15 +152,45 @@ export default async function Page({
           </section>
 
           <aside id="reserva" className="min-w-0">
+            {property.requiresCalendarSync && standardHouse ? (
+              <section className="mb-5 rounded-3xl border border-[#C6C0B1] bg-white p-5 text-[#17332A]">
+                <h2 className="text-2xl font-black">Tarifas directas para hasta {standardHouse.included} personas</h2>
+                <p className="mt-2 text-base leading-7">10% de descuento en alojamiento frente a la tarifa de plataforma. Valores por noche en pesos colombianos.</p>
+                <div className="mt-4 overflow-x-auto">
+                  <table className="w-full text-left text-base">
+                    <caption className="sr-only">Tarifas y estadías mínimas de Casa David</caption>
+                    <thead><tr><th scope="col" className="p-3">Temporada</th><th scope="col" className="p-3">Por noche</th><th scope="col" className="p-3">Mínimo</th></tr></thead>
+                    <tbody>
+                      {[
+                        ["Domingo a jueves ordinarios", 0.7, "1 noche"],
+                        ["Viernes y sábado ordinarios", 1, "2 noches"],
+                        ["Puentes y festivos programados", 1.2, "3 noches"],
+                        ["Semana Santa", 1.5, "4 noches"],
+                        ["Fin de año", 2, "5 noches"],
+                      ].map(([label, factor, minimum]) => (
+                        <tr key={String(label)} className="border-t border-[#C6C0B1]">
+                          <th scope="row" className="p-3 font-semibold">{label}</th>
+                          <td className="whitespace-nowrap p-3">${Math.round(standardHouse.night * Number(factor) * 0.9).toLocaleString("es-CO")}</td>
+                          <td className="whitespace-nowrap p-3">{minimum}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="mt-3 text-base leading-7">Desde la séptima persona: $90.000 por persona y noche. Limpieza: $100.000 por estancia. Mascotas: $50.000 por estancia. Tarifas para noches del 13 de noviembre de 2026 al 28 de abril de 2027.</p>
+              </section>
+            ) : null}
             <ReservationSidebar
               slug={property.slug}
               pricingRule={pricingRule}
+              bookingReady={isPropertyCalendarReady(property)}
               property={{
                 title: property.title,
                 capacity: property.capacity,
                 staysListingId: property.staysListingId,
                 airbnbUrl: property.airbnbUrl,
                 airbnbHostYears: property.airbnbHostYears,
+                availableExtras: property.availableExtras,
               }}
             />
           </aside>

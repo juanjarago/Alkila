@@ -11,8 +11,13 @@ on:
       - 'components/quotations/**'
       - 'lib/quotations/**'
       - 'lib/booking/**'
+      - 'lib/properties.ts'
+      - 'lib/propertyDetails.ts'
+      - 'lib/ical.ts'
+      - 'app/p/**'
       - 'tests/quotations.test.cjs'
       - 'tests/pricing.test.cjs'
+      - 'tests/casa-david.test.cjs'
       - '.github/workflows/quotations-check.yml'
 permissions:
   contents: read
@@ -29,7 +34,7 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - run: node --test tests/pricing.test.cjs tests/quotations.test.cjs
+      - run: node --test tests/pricing.test.cjs tests/quotations.test.cjs tests/casa-david.test.cjs
       - run: npx tsc --noEmit
       - run: npm run build
         env:

@@ -10,6 +10,31 @@ import type { BookingExtra, PricingRule, QuoteResult } from "./types";
 
 export const DEFAULT_PRICING_RULES: PricingRule[] = [
   {
+    propertySlug: "casa-david-apulo-13-personas",
+    baseNightCOP: 317635,
+    weekendNightCOP: 453764,
+    cleaningFeeCOP: 100000,
+    includedGuests: 6,
+    extraGuestFeeCOP: 90000,
+    minNights: 1,
+    minWeekdayNights: 1,
+    minWeekendNights: 2,
+    petFeeCOP: 50000,
+    domesticServiceFeePerDayCOP: 0,
+    earlyCheckInPercent: 0,
+    lateCheckoutPercent: 0,
+    holidayWeekendIncreasePercent: 20,
+    holidayWeekendMinNights: 3,
+    holyWeekIncreasePercent: 50,
+    holyWeekMinNights: 4,
+    schoolBreakIncreasePercent: 50,
+    schoolBreakMinNights: 4,
+    christmasIncreasePercent: 100,
+    christmasMinNights: 5,
+    newYearIncreasePercent: 100,
+    newYearMinNights: 5,
+  },
+  {
     propertySlug: "cabana-privada-anapoima-8-personas",
     baseNightCOP: 950000,
     weekendNightCOP: 1150000,
@@ -177,6 +202,12 @@ export async function quoteDirectStay(input: {
   const seasonalRates = await listSeasonalRates(input.propertySlug);
 
   const nightsList = enumerateNights(input.from, input.to);
+  if (nightsList.some((night) =>
+    (property.bookingFrom && night < property.bookingFrom) ||
+    (property.bookingThrough && night > property.bookingThrough)
+  )) {
+    throw new Error("Para esas fechas, consulta la tarifa y disponibilidad por WhatsApp.");
+  }
   if (!Number.isInteger(input.guests) || !nightsList.length) {
     throw new Error("Fechas o número de personas inválidos.");
   }
@@ -234,6 +265,9 @@ export async function quoteDirectStay(input: {
       extraGuests * (rule.extraGuestFeeCOP ?? 0)), 0);
   const cleaningFeeCOP = rule.cleaningFeeCOP;
   const selectedExtras = normalizeBookingExtras(input.extras);
+  if (property.availableExtras && selectedExtras.some((extra) => !property.availableExtras!.includes(extra))) {
+    throw new Error("Ese servicio adicional requiere consulta previa para esta propiedad.");
+  }
   const hasExtra = (extra: BookingExtra) => selectedExtras.includes(extra);
   const firstNight = nightsList[0];
   const lastNight = nightsList[nightsList.length - 1];

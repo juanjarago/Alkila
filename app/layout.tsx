@@ -3,9 +3,9 @@ import type { Metadata, Viewport } from "next";
 import { SiteChrome } from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
-  title: "Alkila | Fincas en Anapoima",
+  title: "Alkila | Fincas en Anapoima y Apulo",
   description:
-    "Fincas privadas en Anapoima según el tamaño de tu grupo. Piscina, jacuzzi, naturaleza y espacios pet friendly.",
+    "Casas y fincas privadas en Anapoima y Apulo según el tamaño de tu grupo. Piscinas, naturaleza y opciones pet friendly.",
 };
 
 export const viewport: Viewport = {

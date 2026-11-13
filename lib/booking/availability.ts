@@ -3,11 +3,16 @@ import { properties } from "@/lib/properties";
 import { dateRangesOverlap } from "@/lib/ical";
 import { listManualBlocks, listReservations } from "./store";
 import type { QuoteResult } from "./types";
+import { requirePropertyCalendar } from "./calendarSetup";
 
 export const PROPERTY_TO_CHANNEL_ENV: Record<
   string,
   { airbnb?: string; booking?: string }
 > = {
+  "casa-david-apulo-13-personas": {
+    airbnb: "AIRBNB_ICAL_CASA_DAVID_URL",
+    booking: "BOOKING_ICAL_CASA_DAVID_URL",
+  },
   "cabana-privada-anapoima-8-personas": {
     airbnb: "AIRBNB_ICAL_JF08_URL",
     booking: "BOOKING_ICAL_JF08_URL",
@@ -68,6 +73,7 @@ export async function collectAvailabilityConflicts(input: {
 }): Promise<QuoteResult["conflicts"]> {
   const property = properties.find((item) => item.slug === input.propertySlug);
   if (!property) throw new Error("Propiedad no encontrada.");
+  requirePropertyCalendar(property);
 
   const channelEnv = PROPERTY_TO_CHANNEL_ENV[input.propertySlug] ?? {};
   const [airbnb, booking, reservations, manualBlocks] = await Promise.all([

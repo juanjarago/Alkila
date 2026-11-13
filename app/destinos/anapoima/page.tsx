@@ -23,7 +23,7 @@ export default function AnapoimaPage() {
 
         <h2 className="mt-10 text-2xl font-extrabold">Propiedades</h2>
         <div className="mt-4 grid gap-4 md:grid-cols-3">
-          {properties.slice().sort((a, b) => a.capacity - b.capacity).map((p) => (
+          {properties.filter((p) => p.locationLabel.startsWith("Anapoima")).sort((a, b) => a.capacity - b.capacity).map((p) => (
             <PropertyCard key={p.slug} p={p} />
           ))}
         </div>
