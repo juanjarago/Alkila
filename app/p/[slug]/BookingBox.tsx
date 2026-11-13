@@ -10,7 +10,8 @@ import type { PricingRule } from "@/lib/booking/types";
 type PropertyLike = {
   title: string;
   capacity: number;
-  staysListingId: string;
+  staysListingId?: string;
+  availableExtras?: string[];
   slug?: string;
   airbnbUrl?: string;
   airbnbHostYears?: number;
@@ -363,7 +364,7 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
         <div>
           <div className="text-lg font-black text-[#17332A]">Opcionales</div>
           <div className="mt-3 grid gap-3">
-            {BOOKING_EXTRA_DEFINITIONS.map((extra) => {
+            {BOOKING_EXTRA_DEFINITIONS.filter((extra) => !property.availableExtras || property.availableExtras.includes(extra.id)).map((extra) => {
               const checked = selectedExtras.includes(extra.id);
 
               return (

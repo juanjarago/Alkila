@@ -2,7 +2,11 @@ export type Property = {
   slug: string;
   title: string;
   shortTitle: string;
-  staysListingId: string; // ✅ ahora es string (ObjectId real)
+  staysListingId?: string;
+  requiresCalendarSync?: boolean;
+  bookingFrom?: string;
+  bookingThrough?: string;
+  availableExtras?: string[];
   capacity: number;
   rooms: number;
   baths: number;
@@ -21,6 +25,29 @@ export type Property = {
 };
 
 export const properties: Property[] = [
+  {
+    slug: "casa-david-apulo-13-personas",
+    title: "Casa David en Apulo para 13 personas con piscina privada",
+    shortTitle: "Casa David (hasta 13)",
+    capacity: 13,
+    rooms: 4,
+    baths: 4.5,
+    locationLabel: "Apulo · Cundinamarca",
+    heroImage: "/images/properties/casa-david-apulo-13-personas/01.webp",
+    images: Array.from({ length: 25 }, (_, i) =>
+      `/images/properties/casa-david-apulo-13-personas/${String(i + 1).padStart(2, "0")}.webp`
+    ),
+    highlights: ["Piscina privada", "4 habitaciones", "Billar y arcade", "BBQ y ahumador", "Mascotas (tarifa adicional)"],
+    petFriendly: true,
+    privatePool: true,
+    privateJacuzzi: false,
+    description: "Casa moderna en Apulo para compartir en familia o con amigos. Tiene piscina privada, kiosco con billar y máquina arcade, y zona BBQ con parrilla y ahumador. Sus cuatro habitaciones, cocina abierta, balcones con vista a las montañas y jardines ofrecen un espacio privado para descansar en clima cálido.",
+    airbnbUrl: "https://www.airbnb.com.co/rooms/1816839560642450342",
+    requiresCalendarSync: true,
+    bookingFrom: "2026-11-13",
+    bookingThrough: "2027-04-28",
+    availableExtras: ["pets"],
+  },
   {
     slug: "cabana-privada-anapoima-8-personas",
     title: "Cabaña privada en Anapoima para 8 personas con piscina y jacuzzi",
