@@ -3,8 +3,8 @@ import Link from "next/link";
 import { BilliardForm } from "@/components/guests/BilliardForm";
 
 export const metadata: Metadata = {
-  title: "Entrega de billar | Huéspedes Alkila",
-  description: "Revisa la mesa, registra sus fotos y firma el acta de entrega desde tu celular.",
+  title: "Entrega de billar | Casa Grande | Alkila",
+  description: "Préstamo de la mesa de billar exclusivo para huéspedes de Casa Grande. Revisa la mesa, registra sus fotos y firma el acta.",
   robots: { index: false, follow: true },
 };
 
@@ -20,13 +20,13 @@ export default function BilliardPage() {
         </Link>
         <header className="mb-6 mt-3 sm:mb-8">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#66752F]">
-            Para nuestros huéspedes
+            Exclusivo para huéspedes de Casa Grande
           </p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-[#17332A] sm:text-4xl">
-            Entrega de la mesa de billar
+            Préstamo de la mesa de billar · Casa Grande
           </h1>
           <p className="mt-3 max-w-2xl text-base leading-7 text-[#4B544D]">
-            Antes de jugar, revisa la mesa y sus accesorios, toma las fotos y
+            Este préstamo corresponde únicamente a Casa Grande. Antes de jugar, revisa la mesa y sus accesorios, toma las fotos y
             firma el acta. Ten a mano el número de reserva de la app donde reservaste.
           </p>
         </header>
