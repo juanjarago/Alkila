@@ -5,7 +5,7 @@ Fuente de descripción, habitaciones, baños y fotos: anuncio Airbnb `1816839560
 
 Capacidad máxima: 13. Incluye 6 personas. Tarifa plataforma: $504.182 por noche de fin de semana, -30% entre semana, +20% puentes y 8 de diciembre, +50% Semana Santa y +100% fin de año. Mínimos: 1/2/3/4/5 noches, respectivamente. Adicional plataforma: $100.000 por persona y noche desde la séptima persona.
 
-Se conserva la política directa existente de Alkila: 90% del alojamiento y del adicional, sin descuento a limpieza ($100.000) ni mascotas ($50.000 por estancia). Tarifas directas por noche: entre semana $317.635; fin de semana $453.764; puentes $544.517; Semana Santa $680.646; fin de año $907.528. Adicional directo: $90.000. No se ofrecen automáticamente servicios no confirmados para esta casa.
+Se conserva la política directa existente de Alkila: 90% del alojamiento y del adicional, sin descuento a limpieza ($100.000) ni mascotas ($50.000 por estancia). Tarifas directas por noche: entre semana $317.635; fin de semana $453.764; puentes $544.517; Semana Santa $680.646; fin de año $907.528. Adicional directo: $90.000. Opcionales iguales a las otras casas: servicio doméstico $90.000 por día, early check-in y late check-out al 50% de la tarifa de una noche, sujetos a disponibilidad.
 
 Solo se cotizan noches del 13 de noviembre de 2026 al 28 de abril de 2027 inclusive. La salida puede ser el 29 de abril. Se aplica la prioridad existente de temporadas sin acumular recargos; una noche ocupada del 20 de diciembre al 6 de enero activa la tarifa de fin de año para toda la reserva.
 
