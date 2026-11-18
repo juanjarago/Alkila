@@ -14,9 +14,9 @@ type Property = {
 
 export function PropertyCard({ p }: { p: Property }) {
   return (
-    <div className="group overflow-hidden rounded-[1.6rem] border border-[#C6C0B1] bg-[#F4EFE2] shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17332A]/10">
-      <Link href={`/p/${p.slug}`} className="block">
-        <div className="relative aspect-[4/3] w-full">
+    <div className="group h-full overflow-hidden rounded-[1.6rem] border border-[#C6C0B1] bg-[#F4EFE2] shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-[#17332A]/10">
+      <Link href={`/p/${p.slug}`} className="flex h-full flex-col">
+        <div className="relative aspect-[4/3] w-full shrink-0">
           <Image
             src={p.heroImage}
             alt={p.title}
@@ -32,7 +32,7 @@ export function PropertyCard({ p }: { p: Property }) {
           </div>
         </div>
 
-        <div className="p-5">
+        <div className="flex flex-1 flex-col p-5">
           <div className="text-sm font-bold text-[#66752F]">
             {p.locationLabel}
           </div>
@@ -40,18 +40,20 @@ export function PropertyCard({ p }: { p: Property }) {
             {p.title}
           </h3>
 
-          {p.airbnbRating != null && p.airbnbReviewCount != null ? (
-            <div className="mt-3 text-sm font-black text-[#17332A]">
+          <div className="mt-3 min-h-5 text-sm font-black text-[#17332A]">
+            {p.airbnbRating != null && p.airbnbReviewCount != null ? (
+              <>
               <span aria-hidden="true" className="text-[#B85F3B]">★</span>{" "}
               {p.airbnbRating.toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}{" "}
               · {p.airbnbReviewCount} reseñas en Airbnb
-            </div>
-          ) : null}
+              </>
+            ) : null}
+          </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mb-5 mt-4 flex flex-wrap gap-2">
             {p.highlights.slice(0, 3).map((h) => (
               <span
                 key={h}
@@ -62,7 +64,7 @@ export function PropertyCard({ p }: { p: Property }) {
             ))}
           </div>
 
-          <div className="mt-5 rounded-2xl bg-[#B85F3B] px-4 py-3 text-center text-sm font-black text-white transition group-hover:-translate-y-0.5">
+          <div className="mt-auto rounded-2xl bg-[#B85F3B] px-4 py-3 text-center text-sm font-black text-white transition group-hover:-translate-y-0.5">
             Cotizar y reservar
           </div>
         </div>
