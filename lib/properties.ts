@@ -46,7 +46,7 @@ export const properties: Property[] = [
     requiresCalendarSync: true,
     bookingFrom: "2026-11-13",
     bookingThrough: "2027-04-28",
-    availableExtras: ["pets"],
+    availableExtras: ["pets", "domestic_service", "early_checkin", "late_checkout"],
   },
   {
     slug: "cabana-privada-anapoima-8-personas",

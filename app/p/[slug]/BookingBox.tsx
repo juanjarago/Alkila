@@ -112,7 +112,8 @@ export default function BookingBox({
 }) {
   const [checkIn, setCheckIn] = useState<string>("");
   const [checkOut, setCheckOut] = useState<string>("");
-  const [guests, setGuests] = useState<number>(Math.min(8, property.capacity));
+  const [guestInput, setGuestInput] = useState(String(Math.min(8, property.capacity)));
+  const guests = Number(guestInput);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const [result, setResult] = useState<QuoteResponse | null>(null);
@@ -129,10 +130,10 @@ export default function BookingBox({
 
   const canSearch = useMemo(() => {
     if (!checkIn || !checkOut) return false;
-    if (!Number.isFinite(guests) || guests <= 0) return false;
+    if (!Number.isInteger(guests) || guests < 1 || guests > property.capacity) return false;
     if (new Date(checkOut) <= new Date(checkIn)) return false;
     return true;
-  }, [checkIn, checkOut, guests]);
+  }, [checkIn, checkOut, guests, property.capacity]);
 
   function updateCheckIn(value: string) {
     setCheckIn(value);
@@ -181,8 +182,8 @@ export default function BookingBox({
       return;
     }
 
-    if (!Number.isFinite(guests) || guests <= 0) {
-      setError("Ingresa un número válido de personas.");
+    if (!Number.isInteger(guests) || guests < 1 || guests > property.capacity) {
+      setError(`Ingresa entre 1 y ${property.capacity} personas.`);
       return;
     }
 
@@ -340,7 +341,11 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
               type="date"
               min={checkIn ? nextDay(checkIn) : minDate}
               value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
+              onChange={(e) => {
+                setCheckOut(e.target.value);
+                setError("");
+                setResult(null);
+              }}
               className="mt-2 block min-h-16 w-full min-w-0 appearance-none rounded-2xl border border-[#C6C0B1] bg-white px-5 py-4 text-xl font-black text-[#17332A] outline-none focus:ring-2 focus:ring-[#B8794A]"
             />
           </label>
@@ -349,13 +354,16 @@ Me ayudas a confirmar disponibilidad y el proceso para reservar?`;
         <label className="block text-lg font-black text-[#17332A]">
           Personas
           <input
-            type="number"
-            min={1}
-            max={property.capacity ?? 50}
-            value={guests}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={guestInput}
             onChange={(e) => {
-              const n = Number(e.target.value);
-              setGuests(Number.isFinite(n) ? n : 0);
+              const value = e.target.value;
+              if (!/^\d*$/.test(value)) return;
+              setGuestInput(value.replace(/^0+(?=\d)/, ""));
+              setError("");
+              setResult(null);
             }}
             className="mt-2 block min-h-16 w-full rounded-2xl border border-[#C6C0B1] bg-white px-5 py-4 text-xl font-black text-[#17332A] outline-none focus:ring-2 focus:ring-[#B8794A]"
           />

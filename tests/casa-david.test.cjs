@@ -54,7 +54,12 @@ test("six included guests, fixed discounted extras, cleaning and pets", async ()
   const thirteen = await quote("2026-11-20", "2026-11-22", 13);
   assert.equal(thirteen.subtotalCOP, 453764 * 2); assert.equal(thirteen.extraGuestFeeCOP, 7 * 90000 * 2);
   await assert.rejects(quote("2026-11-20", "2026-11-22", 14), /13 personas/);
-  await assert.rejects(quote("2026-11-16", "2026-11-17", 6, ["domestic_service"]), /consulta previa/);
+  const extras = await quote("2026-11-20", "2026-11-22", 6, ["pets", "domestic_service", "early_checkin", "late_checkout"]);
+  assert.equal(extras.petFeeCOP, 50000);
+  assert.equal(extras.domesticServiceFeeCOP, 180000);
+  assert.equal(extras.earlyCheckInFeeCOP, 226882);
+  assert.equal(extras.lateCheckoutFeeCOP, 226882);
+  assert.equal(extras.totalCOP, 1691292);
 });
 test("bridge and holiday Monday use agreed prices without stacking", async () => {
   const q = await quote("2026-11-13", "2026-11-17");
