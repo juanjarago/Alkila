@@ -1,6 +1,12 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { BrandLogo } from "./BrandLogo";
 
 export function Header() {
+  const pathname = usePathname();
+  const showBilliard = pathname === "/p/finca-anapoima-22-personas" || pathname.startsWith("/huespedes/billar");
+
   return (
     <header className="sticky top-0 z-40 border-b border-[#C6C0B1]/80 bg-[#D8D5C9]/88 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
@@ -13,9 +19,11 @@ export function Header() {
           <a className="transition hover:text-[#66752F]" href="/destinos/anapoima">
             Anapoima
           </a>
-          <a className="transition hover:text-[#66752F]" href="/huespedes/billar">
-            Huéspedes
-          </a>
+          {showBilliard ? (
+            <a className="transition hover:text-[#66752F]" href="/huespedes/billar">
+              Billar · Casa Grande
+            </a>
+          ) : null}
         </nav>
 
         <nav className="flex shrink-0 items-center gap-2 text-xs font-black text-[#17332A] md:hidden">

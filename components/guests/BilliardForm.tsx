@@ -22,11 +22,11 @@ export function BilliardForm() {
   }
 
   return (
-    <section aria-label="Formulario de entrega de billar">
+    <section aria-label="Formulario de entrega de billar de Casa Grande">
       <div className="overflow-hidden rounded-2xl border border-[#C6C0B1] bg-white shadow-sm sm:rounded-3xl">
         <iframe
           id={`JotFormIFrame-${FORM_ID}`}
-          title="Entrega de billar: revisión, fotos y firma"
+          title="Casa Grande · Entrega de billar: revisión, fotos y firma"
           src={`${BILLIARD_FORM_URL}?isIframeEmbed=1`}
           allow="camera"
           scrolling="yes"
